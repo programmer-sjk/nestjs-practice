@@ -1,73 +1,23 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 배드민턴 API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 요구사항 정리
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+### 레슨 예약
 
-## Description
+- 배드민턴 레슨은 1회성 레슨과 정규 레슨이 있다.
+- 레슨은 다음날부터 7일 이내에만 예약이 가능하다. 만약 오늘이 6월 20일이라면 6월 21일부터 6월 27일까지 레슨을 신청할 수 있다. 모든 레슨의 당일 예약은 불가능하다.
+- 배드민턴장은 월요일부터 일요일까지 오전 7시에 오픈 저녁 11시에 종료다. 즉 레슨 예약도 오전 7시부터 가능하며 마지막 레슨이 끝나는 시간도 저녁 11시까지 가능하다.
+- 모든 레슨 시간은 1시간이다. 고객이 레슨을 취소하지 않을때 까지 레슨은 지속 되며 레슨 사이에 쉬는 시간은 없다.
+- 코치의 레슨 시간은 겹칠 수 없다. 즉 A 코치가 무슨 요일 몇시에 일회성 레슨이 예약되었다면 그 날 다른 레슨을 예약할 수 없다.
+- 정기 레슨의 경우, 만약 오늘이 6월 20일(화)이라면 6월 21일(수)부터 정기레슨이 시작된다. 예를 들어 화, 목 10시 30분 시작 레슨이라면 6월 22일 목요일 10시 30분부터 1시간 동안 레슨이 시작된다.
+- 고객은 1대1 레슨만 신청할 수 있으며 정규 레슨은 주 1회, 2회, 3회까지 신청할 수 있다.
+- 레슨이 예약되면 취소할 때 사용하는 id와 password를 발급해서 고객에게 전달한다.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+### 레슨 일정 조회
 
-## Installation
+- 코치 정보, 레슨 타입(1회, 정규)과 레슨 시간 정보를 받아 레슨 받을 수 있는 응답을 받는다.
 
-```bash
-$ yarn install
-```
+### 레슨 취소
 
-## Running the app
-
-```bash
-# development
-$ yarn run start
-
-# watch mode
-$ yarn run start:dev
-
-# production mode
-$ yarn run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- 고객은 레슨 하루 전까지 레슨을 취소할 수 있다. 2월 22일 10시 레슨이라면 2월 22일 0시 이전까지 레슨을 취소할 수 있다. 즉 레슨을 하는 당일에는 취소 할 수 없다.
+- 고객은 레슨 신청 시에 id와 password를 부여받아 해당 id와 password로 레슨을 취소할 수 있다.
