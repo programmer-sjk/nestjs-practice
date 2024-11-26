@@ -9,8 +9,8 @@ export const connectionOptions: DataSourceOptions = {
   database: 'badminton',
   logging: false,
   synchronize: false,
-  entities: [__dirname + 'src/**/entities/*.{js,ts}'],
-  migrations: [__dirname + 'src/migrations/*.{js,ts}'],
+  entities: [__dirname + '/src/**/entities/*.{js,ts}'],
+  migrations: [__dirname + '/src/migrations/*.{js,ts}'],
   migrationsTableName: 'migrations',
 };
 
