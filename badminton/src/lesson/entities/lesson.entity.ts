@@ -3,8 +3,11 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Coach } from '../../coach/entities/coach.entity';
 import { LessonType } from '../enums/lesson-type.enum';
 
 @Entity()
@@ -32,4 +35,8 @@ export class Lesson {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @ManyToOne(() => Coach, { createForeignKeyConstraints: false, cascade: true })
+  @JoinColumn({ name: 'coachId', referencedColumnName: 'id' })
+  coach: Coach;
 }
