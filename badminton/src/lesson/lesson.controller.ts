@@ -1,13 +1,14 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
+import { LessonTimesRequest } from './dto/lesson-times-request';
 import { LessonService } from './lesson.service';
 
 @Controller('lesson')
 export class LessonController {
   constructor(private readonly lessonService: LessonService) {}
 
-  @Get()
-  async lessons(): Promise<string> {
-    await this.lessonService.findAvilableLessons();
+  @Get('/times')
+  async lessons(@Query() query: LessonTimesRequest): Promise<string> {
+    await this.lessonService.findAvilableLessons(query);
     return 'aaa';
   }
 }
