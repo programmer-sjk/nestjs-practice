@@ -1,4 +1,4 @@
-import { DataSourceOptions } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const connectionOptions: DataSourceOptions = {
   type: 'mysql',
@@ -13,3 +13,6 @@ export const connectionOptions: DataSourceOptions = {
   migrations: ['src/migration/*.{js,ts}'],
   migrationsTableName: 'migrations',
 };
+
+const dataSource = new DataSource(connectionOptions);
+export default dataSource;
