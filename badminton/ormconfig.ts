@@ -7,7 +7,7 @@ export const connectionOptions: DataSourceOptions = {
   username: 'root',
   password: 'password',
   database: 'badminton',
-  logging: false,
+  logging: true,
   synchronize: false,
   entities: [__dirname + '/src/**/entities/*.{js,ts}'],
   migrations: [__dirname + '/src/migrations/*.{js,ts}'],
