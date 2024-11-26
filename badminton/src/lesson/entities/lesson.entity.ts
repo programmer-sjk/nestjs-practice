@@ -5,10 +5,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Coach } from '../../coach/entities/coach.entity';
 import { LessonType } from '../enums/lesson-type.enum';
+import { LessonTime } from './lesson-time.entity';
 
 @Entity()
 export class Lesson {
@@ -39,4 +41,7 @@ export class Lesson {
   @ManyToOne(() => Coach, { createForeignKeyConstraints: false, cascade: true })
   @JoinColumn({ name: 'coachId', referencedColumnName: 'id' })
   coach: Coach;
+
+  @OneToMany(() => LessonTime, (lessonTime) => lessonTime.lesson)
+  lessonTimes: LessonTime[];
 }
