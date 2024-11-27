@@ -44,4 +44,12 @@ export class Lesson {
 
   @OneToMany(() => LessonTime, (lessonTime) => lessonTime.lesson)
   lessonTimes: LessonTime[];
+
+  isOneTimeLesson() {
+    return this.type === LessonType.ONE_TIME;
+  }
+
+  isRegularLesson() {
+    return this.type === LessonType.REGULAR;
+  }
 }
