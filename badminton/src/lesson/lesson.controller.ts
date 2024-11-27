@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { ReponseEntity } from './../common/response-entity';
 import { AddLessonRequest } from './dto/add-lesson-request';
+import { AddLessonResponse } from './dto/add-lesson-response';
 import { LessonTimesRequest } from './dto/lesson-times-request';
 import { LessonTimesResponse } from './dto/lesson-times-response';
 import { LessonService } from './lesson.service';
@@ -14,16 +15,22 @@ export class LessonController {
     @Query() request: LessonTimesRequest,
   ): Promise<ReponseEntity<LessonTimesResponse[] | string>> {
     try {
-      const lessons = await this.lessonService.findAvailableLessons(request);
-      return ReponseEntity.OK(lessons);
+      const data = await this.lessonService.findAvailableLessons(request);
+      return ReponseEntity.OK(data);
     } catch (e) {
       return ReponseEntity.ERROR(e.message);
     }
   }
 
   @Post()
-  async addLesson(@Body() request: AddLessonRequest): Promise<string> {
-    await this.lessonService.addLesson(request);
-    return 'aa';
+  async addLesson(
+    @Body() request: AddLessonRequest,
+  ): Promise<ReponseEntity<AddLessonResponse | string>> {
+    try {
+      const data = await this.lessonService.addLesson(request);
+      return ReponseEntity.OK(data);
+    } catch (e) {
+      return ReponseEntity.ERROR(e.message);
+    }
   }
 }

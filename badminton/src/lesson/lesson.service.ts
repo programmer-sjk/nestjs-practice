@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { hash, random } from '../common/crypt';
 import { DayUtil } from '../common/day-util';
 import { AddLessonRequest } from './dto/add-lesson-request';
+import { AddLessonResponse } from './dto/add-lesson-response';
 import { LessonTimePeriod } from './dto/lesson-time-period';
 import { LessonTimesRequest } from './dto/lesson-times-request';
 import { LessonTimesResponse } from './dto/lesson-times-response';
@@ -12,16 +14,13 @@ import { LessonRepository } from './lesson.repository';
 @Injectable()
 export class LessonService {
   private readonly LESSON_HOUR = 1;
+  private readonly PASSWORD_LENGTH = 8;
   private readonly ALL_LESSON_TIMES = this.getAllLessonTimes();
 
   constructor(private readonly lessonRepository: LessonRepository) {}
 
   async findAvailableLessons(request: LessonTimesRequest) {
-    const lessons = await this.lessonRepository.findInProgressLessons(
-      request.coachId,
-      DayUtil.addFromNow(ReservablePeriod.START).toDate(),
-      DayUtil.addFromNow(ReservablePeriod.END).toDate(),
-    );
+    const lessons = await this.findInProgressLessons(request.coachId);
 
     const lessonTimes = lessons.flatMap(this.convertLessonTimeByType);
     return this.ALL_LESSON_TIMES.filter((time) =>
@@ -31,7 +30,13 @@ export class LessonService {
 
   async addLesson(request: AddLessonRequest) {
     const newLesson = request.toEntity();
+    await this.validateAddLesson(newLesson);
 
+    const password = random(this.PASSWORD_LENGTH);
+    newLesson.updatePassword(hash(password));
+    await this.lessonRepository.save(newLesson);
+
+    return new AddLessonResponse(newLesson.customerPhone, password);
   }
 
   private getAllLessonTimes() {
@@ -54,6 +59,35 @@ export class LessonService {
       }
     }
     return result;
+  }
+
+  private async validateAddLesson(lesson: Lesson) {
+    const newLessonTimes = this.convertLessonTimeByType(lesson);
+    const existLessons = await this.findInProgressLessons(lesson.coach.id);
+    const lessonTimes = existLessons.flatMap(this.convertLessonTimeByType);
+
+    for (const newLessonTime of newLessonTimes) {
+      for (const lessonTime of lessonTimes) {
+        if (
+          this.isDateRangeOverlap(
+            newLessonTime.start,
+            newLessonTime.end,
+            lessonTime.start,
+            lessonTime.end,
+          )
+        ) {
+          throw new BadRequestException('이미 예약된 레슨 시간입니다.');
+        }
+      }
+    }
+  }
+
+  private findInProgressLessons(coachId: number) {
+    return this.lessonRepository.findInProgress(
+      coachId,
+      DayUtil.addFromNow(ReservablePeriod.START).toDate(),
+      DayUtil.addFromNow(ReservablePeriod.END).toDate(),
+    );
   }
 
   private convertLessonTimeByType(lesson: Lesson) {

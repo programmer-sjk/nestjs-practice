@@ -47,21 +47,21 @@ export class Lesson {
 
   static of(
     type: LessonType,
-    lessonMinute: number,
+    coachId: number,
     customerName: string,
     customerPhone: string,
   ) {
-    return new Lesson(type, lessonMinute, customerName, customerPhone);
+    return new Lesson(type, coachId, customerName, customerPhone);
   }
 
   private constructor(
     type: LessonType,
-    lessonMinute: number,
+    coachId: number,
     customerName: string,
     customerPhone: string,
   ) {
     this.type = type;
-    this.lessonMinute = lessonMinute;
+    this.coach.id = coachId;
     this.customerName = customerName;
     this.customerPhone = customerPhone;
   }
@@ -76,5 +76,9 @@ export class Lesson {
 
   updateLessonTimes(lessonTimes: LessonTime[]) {
     this.lessonTimes = lessonTimes;
+  }
+
+  updatePassword(password: string) {
+    this.password = password;
   }
 }

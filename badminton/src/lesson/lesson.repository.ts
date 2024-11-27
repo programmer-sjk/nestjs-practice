@@ -9,7 +9,7 @@ export class LessonRepository extends Repository<Lesson> {
     super(Lesson, dataSource.createEntityManager());
   }
 
-  async findInProgressLessons(coachId: number, start: Date, end: Date) {
+  async findInProgress(coachId: number, start: Date, end: Date) {
     return this.createQueryBuilder('lesson')
       .innerJoin('lesson.coach', 'coach')
       .innerJoinAndSelect('lesson.lessonTimes', 'lessonTimes')
