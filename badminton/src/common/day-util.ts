@@ -45,6 +45,14 @@ export class DayUtil {
     }
   }
 
+  static getHour(target: Date) {
+    return dayjs(target).hour();
+  }
+
+  static getMinute(target: Date) {
+    return dayjs(target).minute();
+  }
+
   static add(target: Dayjs, day: number, hour?: number) {
     return target
       .startOf('day')
@@ -63,4 +71,8 @@ export class DayUtil {
   static isSameOrBefore(date: Dayjs, end: Dayjs) {
     return date.isSameOrBefore(end);
   }
+
+  // static isBetween(target, min, max) {
+  //   return dayjs(target).isBetween(min, max, 'day', '[]');
+  // }
 }
