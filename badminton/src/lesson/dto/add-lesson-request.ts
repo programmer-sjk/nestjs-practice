@@ -39,10 +39,11 @@ export class AddLessonRequest {
   @Type(() => LessonTimeDto)
   lessonTimes: LessonTimeDto[];
 
-  toEntity() {
+  toEntity(lessonMinute: number) {
     const lesson = Lesson.of(
       this.type,
       this.coachId,
+      lessonMinute,
       this.customerName,
       this.customerPhone,
     );

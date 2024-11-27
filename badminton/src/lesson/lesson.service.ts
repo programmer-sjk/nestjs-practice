@@ -13,7 +13,7 @@ import { LessonRepository } from './lesson.repository';
 
 @Injectable()
 export class LessonService {
-  private readonly LESSON_HOUR = 1;
+  private readonly LESSON_MINUTE = 60;
   private readonly PASSWORD_LENGTH = 8;
   private readonly ALL_LESSON_TIMES = this.getAllLessonTimes();
 
@@ -29,7 +29,7 @@ export class LessonService {
   }
 
   async addLesson(request: AddLessonRequest) {
-    const newLesson = request.toEntity();
+    const newLesson = request.toEntity(this.LESSON_MINUTE);
     await this.validateAddLesson(newLesson);
 
     const password = random(this.PASSWORD_LENGTH);
@@ -48,14 +48,14 @@ export class LessonService {
       const end = DayUtil.add(now, day, LessonTime.END_HOUR);
 
       let currentStart = start;
-      let currentEnd = DayUtil.addHour(start, this.LESSON_HOUR);
+      let currentEnd = DayUtil.addMinute(start, this.LESSON_MINUTE);
 
       while (DayUtil.isSameOrBefore(currentEnd, end)) {
         result.push(
           new LessonTimePeriod(currentStart.toDate(), currentEnd.toDate()),
         );
         currentStart = currentEnd;
-        currentEnd = DayUtil.addHour(currentEnd, this.LESSON_HOUR);
+        currentEnd = DayUtil.addMinute(currentEnd, this.LESSON_MINUTE);
       }
     }
     return result;
@@ -96,13 +96,14 @@ export class LessonService {
   }
 
   private convertLessonTimeByType(lesson: Lesson) {
-    return lesson.lessonTimes.map(
-      (lessonTime) =>
-        new LessonTimePeriod(
-          lessonTime.getStartDate(),
-          lessonTime.getEndDate(),
-        ),
-    );
+    return lesson.lessonTimes.map((lessonTime) => {
+      lessonTime.updateLesson(lesson);
+
+      return new LessonTimePeriod(
+        lessonTime.getStartDate(),
+        lessonTime.getEndDate(),
+      );
+    });
   }
 
   private isAvailableTime(

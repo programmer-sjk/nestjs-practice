@@ -64,15 +64,15 @@ export class DayUtil {
     return dayjs().startOf('day').add(day, 'day');
   }
 
-  static addHour(target: Date | Dayjs, hour: number) {
-    return dayjs(target).add(hour, 'hour');
+  static addMinute(target: Date | Dayjs, minute: number) {
+    return dayjs(target).add(minute, 'minute');
   }
 
   static isSameOrBefore(date: Dayjs, end: Dayjs) {
     return date.isSameOrBefore(end);
   }
 
-  // static isBetween(target, min, max) {
-  //   return dayjs(target).isBetween(min, max, 'day', '[]');
-  // }
+  static toDate(target: Date) {
+    return dayjs(target).toDate();
+  }
 }

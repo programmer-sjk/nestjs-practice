@@ -19,13 +19,12 @@ export class LessonTime {
 
   @ManyToOne(() => Lesson, (lesson) => lesson.lessonTimes, {
     createForeignKeyConstraints: false,
-    cascade: true,
   })
   lesson: Lesson;
 
   static readonly START_HOUR = 7;
   static readonly END_HOUR = 23;
-  static readonly LESSON_HOUR = 1;
+  static readonly LESSON_MINUTE = 60;
 
   static of(
     lesson: Lesson,
@@ -56,7 +55,7 @@ export class LessonTime {
 
   getStartDate() {
     if (this.lesson.isOneTimeLesson()) {
-      return this.startDate;
+      return DayUtil.toDate(this.startDate);
     }
 
     if (this.lesson.isRegularLesson()) {
@@ -66,15 +65,22 @@ export class LessonTime {
 
   getEndDate() {
     if (this.lesson.isOneTimeLesson()) {
-      return DayUtil.addHour(this.startDate, LessonTime.LESSON_HOUR).toDate();
+      return DayUtil.addMinute(
+        this.startDate,
+        LessonTime.LESSON_MINUTE,
+      ).toDate();
     }
 
     if (this.lesson.isRegularLesson()) {
-      return DayUtil.addHour(
+      return DayUtil.addMinute(
         this.getStartDay(),
-        LessonTime.LESSON_HOUR,
+        LessonTime.LESSON_MINUTE,
       ).toDate();
     }
+  }
+
+  updateLesson(lesson: Lesson) {
+    this.lesson = lesson;
   }
 
   private getStartDay() {

@@ -38,21 +38,27 @@ export class Lesson {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  @ManyToOne(() => Coach, { createForeignKeyConstraints: false, cascade: true })
+  @ManyToOne(() => Coach, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn({ name: 'coachId', referencedColumnName: 'id' })
   coach: Coach;
 
-  @OneToMany(() => LessonTime, (lessonTime) => lessonTime.lesson)
+  @OneToMany(() => LessonTime, (lessonTime) => lessonTime.lesson, {
+    cascade: true,
+  })
   lessonTimes: LessonTime[];
 
   static of(
     type: LessonType,
     coachId: number,
+    lessonMinute: number,
     customerName: string,
     customerPhone: string,
   ) {
     const lesson = new Lesson();
     lesson.type = type;
+    lesson.lessonMinute = lessonMinute;
     lesson.customerName = customerName;
     lesson.customerPhone = customerPhone;
 
@@ -71,6 +77,9 @@ export class Lesson {
 
   updateLessonTimes(lessonTimes: LessonTime[]) {
     this.lessonTimes = lessonTimes;
+    for (const lessonTime of this.lessonTimes) {
+      lessonTime.updateLesson(this)
+    }
   }
 
   updatePassword(password: string) {
