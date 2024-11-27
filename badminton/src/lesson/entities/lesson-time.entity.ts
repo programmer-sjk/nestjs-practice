@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { DayOfWeek } from '../enums/day-of-week.enum';
-import { DayUtil } from './../../common/DayUtil';
+import { DayUtil } from '../../common/day-util';
 import { Lesson } from './lesson.entity';
 
 @Entity()

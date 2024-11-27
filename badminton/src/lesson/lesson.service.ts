@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { DayUtil } from './../common/DayUtil';
+import { DayUtil } from '../common/day-util';
 import { LessonTimePeriod } from './dto/lesson-time-period';
 import { LessonTimesRequest } from './dto/lesson-times-request';
 import { LessonTimesResponse } from './dto/lesson-times-response';
