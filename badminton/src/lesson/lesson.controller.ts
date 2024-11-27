@@ -8,7 +8,7 @@ export class LessonController {
 
   @Get('/times')
   async lessons(@Query() query: LessonTimesRequest): Promise<string> {
-    await this.lessonService.findAvilableLessons(query);
+    await this.lessonService.findAvailableLessons(query);
     return 'aaa';
   }
 }
