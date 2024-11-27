@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { DayUtil } from '../common/day-util';
+import { AddLessonRequest } from './dto/add-lesson-request';
 import { LessonTimePeriod } from './dto/lesson-time-period';
 import { LessonTimesRequest } from './dto/lesson-times-request';
 import { LessonTimesResponse } from './dto/lesson-times-response';
@@ -15,9 +16,9 @@ export class LessonService {
 
   constructor(private readonly lessonRepository: LessonRepository) {}
 
-  async findAvailableLessons(dto: LessonTimesRequest) {
+  async findAvailableLessons(request: LessonTimesRequest) {
     const lessons = await this.lessonRepository.findInProgressLessons(
-      dto.coachId,
+      request.coachId,
       DayUtil.addFromNow(ReservablePeriod.START).toDate(),
       DayUtil.addFromNow(ReservablePeriod.END).toDate(),
     );
@@ -26,6 +27,11 @@ export class LessonService {
     return this.ALL_LESSON_TIMES.filter((time) =>
       this.isAvailableTime(time, lessonTimes),
     ).map((time) => new LessonTimesResponse(time.start, time.end));
+  }
+
+  async addLesson(request: AddLessonRequest) {
+    const newLesson = request.toEntity();
+
   }
 
   private getAllLessonTimes() {
