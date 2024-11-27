@@ -62,6 +62,11 @@ export class LessonService {
   }
 
   private async validateAddLesson(lesson: Lesson) {
+    lesson.validateLessonTimes();
+    await this.validateDuplicateLesson(lesson);
+  }
+
+  private async validateDuplicateLesson(lesson: Lesson) {
     const newLessonTimes = this.convertLessonTimeByType(lesson);
     const existLessons = await this.findInProgressLessons(lesson.coach.id);
     const lessonTimes = existLessons.flatMap(this.convertLessonTimeByType);

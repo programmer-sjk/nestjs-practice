@@ -51,19 +51,14 @@ export class Lesson {
     customerName: string,
     customerPhone: string,
   ) {
-    return new Lesson(type, coachId, customerName, customerPhone);
-  }
+    const lesson = new Lesson();
+    lesson.type = type;
+    lesson.customerName = customerName;
+    lesson.customerPhone = customerPhone;
 
-  private constructor(
-    type: LessonType,
-    coachId: number,
-    customerName: string,
-    customerPhone: string,
-  ) {
-    this.type = type;
-    this.coach.id = coachId;
-    this.customerName = customerName;
-    this.customerPhone = customerPhone;
+    lesson.coach = new Coach();
+    lesson.coach.id = coachId;
+    return lesson;
   }
 
   isOneTimeLesson() {
@@ -80,5 +75,25 @@ export class Lesson {
 
   updatePassword(password: string) {
     this.password = password;
+  }
+
+  validateLessonTimes() {
+    const requiredLessonCount = 1;
+    if (this.isOneTimeLesson()) {
+      if (this.lessonTimes.length !== requiredLessonCount) {
+        throw new Error('1회성 레슨의 예약 횟수가 잘못되었습니다.');
+      }
+    }
+
+    const requiredRegularLessonMaxCount = 3;
+    if (this.isRegularLesson()) {
+      if (this.lessonTimes.length > requiredRegularLessonMaxCount) {
+        throw new Error('정규 레슨의 예약 횟수가 잘못되었습니다.');
+      }
+    }
+
+    for (const lessonTime of this.lessonTimes) {
+      lessonTime.validate();
+    }
   }
 }

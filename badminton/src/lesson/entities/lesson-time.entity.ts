@@ -25,6 +25,7 @@ export class LessonTime {
 
   static readonly START_HOUR = 7;
   static readonly END_HOUR = 23;
+  static readonly LESSON_HOUR = 1;
 
   static of(
     lesson: Lesson,
@@ -32,19 +33,25 @@ export class LessonTime {
     startDate?: Date,
     startTime?: string,
   ) {
-    return new LessonTime(lesson, dayOfWeek, startDate, startTime);
+    const lessonTime = new LessonTime();
+    lessonTime.dayOfWeek = dayOfWeek;
+    lessonTime.startDate = startDate;
+    lessonTime.startTime = startTime;
+    lessonTime.lesson = lesson;
+    return lessonTime;
   }
 
-  constructor(
-    lesson: Lesson,
-    dayOfWeek?: DayOfWeek,
-    startDate?: Date,
-    startTime?: string,
-  ) {
-    this.dayOfWeek = dayOfWeek;
-    this.startDate = startDate;
-    this.startTime = startTime;
-    this.lesson = lesson;
+  validate() {
+    const startHour = DayUtil.getHour(this.getStartDate());
+    const endHour = DayUtil.getHour(this.getEndDate());
+    const endMinute = DayUtil.getMinute(this.getEndDate());
+
+    if (
+      startHour < LessonTime.START_HOUR ||
+      (endHour >= LessonTime.END_HOUR && endMinute > 0)
+    ) {
+      throw new Error('레슨 시간은 아침 7시부터 저녁 11시까지 입니다.');
+    }
   }
 
   getStartDate() {
@@ -59,11 +66,14 @@ export class LessonTime {
 
   getEndDate() {
     if (this.lesson.isOneTimeLesson()) {
-      return DayUtil.addHour(this.startDate, 1).toDate();
+      return DayUtil.addHour(this.startDate, LessonTime.LESSON_HOUR).toDate();
     }
 
     if (this.lesson.isRegularLesson()) {
-      return DayUtil.addHour(this.getStartDay(), 1).toDate();
+      return DayUtil.addHour(
+        this.getStartDay(),
+        LessonTime.LESSON_HOUR,
+      ).toDate();
     }
   }
 
