@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { DayOfWeek } from '../enums/day-of-week.enum';
 import { DayUtil } from '../../common/day-util';
+import { DayOfWeek } from '../enums/day-of-week.enum';
 import { Lesson } from './lesson.entity';
 
 @Entity()
@@ -25,6 +25,27 @@ export class LessonTime {
 
   static readonly START_HOUR = 7;
   static readonly END_HOUR = 23;
+
+  static of(
+    lesson: Lesson,
+    dayOfWeek?: DayOfWeek,
+    startDate?: Date,
+    startTime?: string,
+  ) {
+    return new LessonTime(lesson, dayOfWeek, startDate, startTime);
+  }
+
+  constructor(
+    lesson: Lesson,
+    dayOfWeek?: DayOfWeek,
+    startDate?: Date,
+    startTime?: string,
+  ) {
+    this.dayOfWeek = dayOfWeek;
+    this.startDate = startDate;
+    this.startTime = startTime;
+    this.lesson = lesson;
+  }
 
   getStartDate() {
     if (this.lesson.isOneTimeLesson()) {

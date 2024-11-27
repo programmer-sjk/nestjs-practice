@@ -45,11 +45,36 @@ export class Lesson {
   @OneToMany(() => LessonTime, (lessonTime) => lessonTime.lesson)
   lessonTimes: LessonTime[];
 
+  static of(
+    type: LessonType,
+    lessonMinute: number,
+    customerName: string,
+    customerPhone: string,
+  ) {
+    return new Lesson(type, lessonMinute, customerName, customerPhone);
+  }
+
+  private constructor(
+    type: LessonType,
+    lessonMinute: number,
+    customerName: string,
+    customerPhone: string,
+  ) {
+    this.type = type;
+    this.lessonMinute = lessonMinute;
+    this.customerName = customerName;
+    this.customerPhone = customerPhone;
+  }
+
   isOneTimeLesson() {
     return this.type === LessonType.ONE_TIME;
   }
 
   isRegularLesson() {
     return this.type === LessonType.REGULAR;
+  }
+
+  updateLessonTimes(lessonTimes: LessonTime[]) {
+    this.lessonTimes = lessonTimes;
   }
 }
