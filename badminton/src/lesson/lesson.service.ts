@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { DayUtil } from './../common/DayUtil';
+import { LessonTimePeriod } from './dto/lesson-time-period';
 import { LessonTimesRequest } from './dto/lesson-times-request';
+import { LessonTimesResponse } from './dto/lesson-times-response';
 import { LessonTime } from './entities/lesson-time.entity';
 import { Lesson } from './entities/lesson.entity';
 import { ReservablePeriod } from './enums/reservable-period.enum';
@@ -20,14 +22,16 @@ export class LessonService {
       DayUtil.addFromNow(ReservablePeriod.END).toDate(),
     );
 
-    const lessonTimes = lessons.map(this.convertLessonTimeByType);
-    this.ALL_LESSON_TIMES.filter((time) => isAvailableTime(lessonTimes));
+    const lessonTimes = lessons.flatMap(this.convertLessonTimeByType);
+    return this.ALL_LESSON_TIMES.filter((time) =>
+      this.isAvailableTime(time, lessonTimes),
+    ).map((time) => new LessonTimesResponse(time.start, time.end));
   }
 
   private getAllLessonTimes() {
     const now = DayUtil.now();
 
-    const result = [];
+    const result: LessonTimePeriod[] = [];
     for (let day = ReservablePeriod.START; day < ReservablePeriod.END; day++) {
       const start = DayUtil.add(now, day, LessonTime.START_HOUR);
       const end = DayUtil.add(now, day, LessonTime.END_HOUR);
@@ -36,7 +40,9 @@ export class LessonService {
       let currentEnd = DayUtil.addHour(start, this.LESSON_HOUR);
 
       while (DayUtil.isSameOrBefore(currentEnd, end)) {
-        result.push({ start: currentStart.toDate(), end: currentEnd.toDate() });
+        result.push(
+          new LessonTimePeriod(currentStart.toDate(), currentEnd.toDate()),
+        );
         currentStart = currentEnd;
         currentEnd = DayUtil.addHour(currentEnd, this.LESSON_HOUR);
       }
@@ -45,10 +51,33 @@ export class LessonService {
   }
 
   private convertLessonTimeByType(lesson: Lesson) {
-    return lesson.lessonTimes.map((lessonTime) => ({
-      start: lessonTime.getStartDate(),
-      end: lessonTime.getEndDate(),
-    }));
+    return lesson.lessonTimes.map(
+      (lessonTime) =>
+        new LessonTimePeriod(
+          lessonTime.getStartDate(),
+          lessonTime.getEndDate(),
+        ),
+    );
+  }
+
+  private isAvailableTime(
+    time: LessonTimePeriod,
+    lessonTimes: LessonTimePeriod[],
+  ) {
+    for (const lessonTime of lessonTimes) {
+      if (
+        this.isDateRangeOverlap(
+          time.start,
+          time.end,
+          lessonTime.start,
+          lessonTime.end,
+        )
+      ) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   private isDateRangeOverlap(
