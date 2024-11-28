@@ -53,6 +53,11 @@ export class DayUtil {
     return dayjs(target).minute();
   }
 
+  static isToday(target: Date) {
+    const now = DayUtil.now();
+    return now.format('YYYY-MM-DD') === dayjs(target).format('YYYY-MM-DD');
+  }
+
   static add(target: Dayjs, day: number, hour?: number) {
     return target
       .startOf('day')
