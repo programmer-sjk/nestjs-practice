@@ -41,9 +41,16 @@ export class LessonTime {
   }
 
   validate() {
-    const startHour = DayUtil.getHour(this.getStartDate());
-    const endHour = DayUtil.getHour(this.getEndDate());
-    const endMinute = DayUtil.getMinute(this.getEndDate());
+    const startDate = this.getStartDate();
+    if (DayUtil.isToday(startDate)) {
+      throw new Error('당일 레슨 예약은 불가능합니다.');
+    }
+
+    const startHour = DayUtil.getHour(startDate);
+
+    const endDate = this.getEndDate();
+    const endHour = DayUtil.getHour(endDate);
+    const endMinute = DayUtil.getMinute(endDate);
 
     if (
       startHour < LessonTime.START_HOUR ||
