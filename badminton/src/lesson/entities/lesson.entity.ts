@@ -107,7 +107,8 @@ export class Lesson {
   }
 
   validateCredentials(phone: string, password: string) {
-    console.log(password, this.password);
-    return phone === this.customerPhone && password === this.password;
+    if (phone !== this.customerPhone || password !== this.password) {
+      throw new Error('id나 패스워드가 일치하지 않습니다.');
+    }
   }
 }

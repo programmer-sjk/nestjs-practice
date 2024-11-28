@@ -51,17 +51,11 @@ export class LessonService {
       },
       relations: ['lessonTimes'],
     });
-    console.log(lesson);
-    console.log(lesson.lessonTimes);
     if (!lesson) {
       throw new BadRequestException('존재하지 않는 레슨입니다.');
     }
 
-    if (
-      !lesson.validateCredentials(request.customerPhone, hash(request.password))
-    ) {
-      throw new BadRequestException('id나 패스워드가 일치하지 않습니다.');
-    }
+    lesson.validateCredentials(request.customerPhone, hash(request.password));
 
     await this.dataSource.transaction(async (manager) => {
       await manager.remove(lesson.lessonTimes);
