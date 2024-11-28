@@ -102,4 +102,22 @@ describe('Lesson', () => {
       new Error('정규 레슨의 예약 횟수가 잘못되었습니다.'),
     );
   });
+
+  it('phone과 password가 일치하는지 확인할 수 있다.', () => {
+    // given
+    const lesson = TestLessonCreator.createOneTimeLesson();
+
+    // when & then
+    lesson.validateCredentials(lesson.customerPhone, lesson.password);
+  });
+
+  it('phone과 password가 다르면 예외가 발생한다.', () => {
+    // given
+    const lesson = TestLessonCreator.createOneTimeLesson();
+
+    // when & then
+    expect(() => lesson.validateCredentials('', '')).toThrow(
+      new Error('id나 패스워드가 일치하지 않습니다.'),
+    );
+  });
 });
