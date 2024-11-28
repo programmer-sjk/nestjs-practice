@@ -21,8 +21,8 @@ export class LessonService {
 
   async findAvailableLessons(request: LessonTimesRequest) {
     const lessons = await this.findInProgressLessons(request.coachId);
-
     const lessonTimes = lessons.flatMap(this.convertLessonTimeByType);
+
     return this.ALL_LESSON_TIMES.filter((time) =>
       this.isAvailableTime(time, lessonTimes),
     ).map((time) => new LessonTimesResponse(time.start, time.end));
@@ -41,6 +41,7 @@ export class LessonService {
 
   private getAllLessonTimes() {
     const now = DayUtil.now();
+    const lessonTerm = 30;
 
     const result: LessonTimePeriod[] = [];
     for (let day = ReservablePeriod.START; day < ReservablePeriod.END; day++) {
@@ -54,8 +55,8 @@ export class LessonService {
         result.push(
           new LessonTimePeriod(currentStart.toDate(), currentEnd.toDate()),
         );
-        currentStart = currentEnd;
-        currentEnd = DayUtil.addMinute(currentEnd, this.LESSON_MINUTE);
+        currentStart = DayUtil.addMinute(currentStart, lessonTerm);
+        currentEnd = DayUtil.addMinute(currentStart, this.LESSON_MINUTE);
       }
     }
     return result;
@@ -119,11 +120,11 @@ export class LessonService {
           lessonTime.end,
         )
       ) {
-        return true;
+        return false;
       }
     }
 
-    return false;
+    return true;
   }
 
   private isDateRangeOverlap(
