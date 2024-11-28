@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { DataSource } from 'typeorm';
 import { hash, random } from '../common/crypt';
 import { DayUtil } from '../common/day-util';
 import { AddLessonRequest } from './dto/add-lesson-request';
@@ -6,6 +7,7 @@ import { AddLessonResponse } from './dto/add-lesson-response';
 import { LessonTimePeriod } from './dto/lesson-time-period';
 import { LessonTimesRequest } from './dto/lesson-times-request';
 import { LessonTimesResponse } from './dto/lesson-times-response';
+import { RemoveLessonRequest } from './dto/remove-lesson-request';
 import { LessonTime } from './entities/lesson-time.entity';
 import { Lesson } from './entities/lesson.entity';
 import { ReservablePeriod } from './enums/reservable-period.enum';
@@ -17,7 +19,10 @@ export class LessonService {
   private readonly PASSWORD_LENGTH = 8;
   private readonly ALL_LESSON_TIMES = this.getAllLessonTimes();
 
-  constructor(private readonly lessonRepository: LessonRepository) {}
+  constructor(
+    private dataSource: DataSource,
+    private readonly lessonRepository: LessonRepository,
+  ) {}
 
   async findAvailableLessons(request: LessonTimesRequest) {
     const lessons = await this.findInProgressLessons(request.coachId);
@@ -37,6 +42,31 @@ export class LessonService {
     await this.lessonRepository.save(newLesson);
 
     return new AddLessonResponse(newLesson.customerPhone, password);
+  }
+
+  async remove(request: RemoveLessonRequest) {
+    const lesson = await this.lessonRepository.findOne({
+      where: {
+        id: request.lessonId,
+      },
+      relations: ['lessonTimes'],
+    });
+    console.log(lesson);
+    console.log(lesson.lessonTimes);
+    if (!lesson) {
+      throw new BadRequestException('존재하지 않는 레슨입니다.');
+    }
+
+    if (
+      !lesson.validateCredentials(request.customerPhone, hash(request.password))
+    ) {
+      throw new BadRequestException('id나 패스워드가 일치하지 않습니다.');
+    }
+
+    await this.dataSource.transaction(async (manager) => {
+      await manager.remove(lesson.lessonTimes);
+      await manager.remove(lesson);
+    });
   }
 
   private getAllLessonTimes() {
