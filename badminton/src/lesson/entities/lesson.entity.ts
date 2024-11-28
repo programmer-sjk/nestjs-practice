@@ -78,7 +78,7 @@ export class Lesson {
   updateLessonTimes(lessonTimes: LessonTime[]) {
     this.lessonTimes = lessonTimes;
     for (const lessonTime of this.lessonTimes) {
-      lessonTime.updateLesson(this)
+      lessonTime.updateLesson(this);
     }
   }
 
@@ -104,5 +104,10 @@ export class Lesson {
     for (const lessonTime of this.lessonTimes) {
       lessonTime.validate();
     }
+  }
+
+  validateCredentials(phone: string, password: string) {
+    console.log(password, this.password);
+    return phone === this.customerPhone && password === this.password;
   }
 }
