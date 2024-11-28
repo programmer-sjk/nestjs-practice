@@ -65,8 +65,11 @@ export class DayUtil {
       .hour(hour ?? 0);
   }
 
-  static addFromNow(day: number) {
-    return dayjs().startOf('day').add(day, 'day');
+  static addFromNow(day: number, hour?: number) {
+    return dayjs()
+      .startOf('day')
+      .add(day, 'day')
+      .hour(hour ?? 0);
   }
 
   static addMinute(target: Date | Dayjs, minute: number) {
