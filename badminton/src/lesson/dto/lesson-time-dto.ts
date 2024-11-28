@@ -21,8 +21,8 @@ export class LessonTimeDto {
   toEntity(lesson: Lesson): LessonTime {
     return LessonTime.of(
       lesson,
-      this.dayOfWeek,
       this.startDate,
+      this.dayOfWeek,
       this.startTime,
     );
   }

@@ -28,8 +28,8 @@ export class LessonTime {
 
   static of(
     lesson: Lesson,
-    dayOfWeek?: DayOfWeek,
     startDate?: Date,
+    dayOfWeek?: DayOfWeek,
     startTime?: string,
   ) {
     const lessonTime = new LessonTime();
