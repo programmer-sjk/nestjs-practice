@@ -15,7 +15,7 @@ export class Coach {
   name: string;
 
   @CreateDateColumn()
-  createdAt: boolean;
+  createdAt: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;
