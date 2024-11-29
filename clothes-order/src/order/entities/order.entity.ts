@@ -19,9 +19,6 @@ export class Order {
   customerId: number;
 
   @Column()
-  storeId: number;
-
-  @Column()
   price: number;
 
   @Column()
@@ -33,14 +30,17 @@ export class Order {
   @Column()
   storeStatus: StoreStatus;
 
-  @Column()
-  pickUpDate: Date;
-
   @Column({ length: 32 })
   customerAddress: string;
 
   @Column({ length: 16 })
   customerAddressDetail: string;
+
+  @Column({ nullable: true })
+  returnRequestAt?: Date;
+
+  @Column({ nullable: true })
+  completedAt: Date;
 
   @CreateDateColumn()
   createdAt: Date;
