@@ -6,6 +6,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { DeliveryStatus } from '../enum/delivery-status.enum';
+import { OrderStatus } from '../enum/order-status.enum';
+import { StoreStatus } from '../enum/store-status.enum';
 
 @Entity()
 export class Order {
@@ -22,13 +25,13 @@ export class Order {
   price: number;
 
   @Column()
-  status: number;
+  status: OrderStatus;
 
   @Column()
-  deliveryStatus: number;
+  deliveryStatus: DeliveryStatus;
 
   @Column()
-  storeStatus: number;
+  storeStatus: StoreStatus;
 
   @Column()
   pickUpDate: Date;

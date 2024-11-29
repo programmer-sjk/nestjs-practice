@@ -6,18 +6,24 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Billing {
+export class OrderLocation {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  storeId: number;
 
   @Column()
   orderId: number;
 
   @Column()
-  billingKey: string;
+  section: string;
 
   @Column()
-  status: string;
+  rowNum: number;
+
+  @Column()
+  colNum: number;
 
   @CreateDateColumn()
   createdAt: Date;
