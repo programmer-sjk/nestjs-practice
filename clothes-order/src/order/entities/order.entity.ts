@@ -40,7 +40,7 @@ export class Order {
   returnRequestAt?: Date;
 
   @Column({ nullable: true })
-  completedAt: Date;
+  completedAt?: Date;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -50,4 +50,25 @@ export class Order {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  static of(
+    customerId: number,
+    price: number,
+    status: OrderStatus,
+    deliveryStatus: DeliveryStatus,
+    storeStatus: StoreStatus,
+    customerAddress: string,
+    customerAddressDetail: string,
+  ) {
+    const order = new Order();
+    order.customerId = customerId;
+    order.price = price;
+    order.status = status;
+    order.deliveryStatus = deliveryStatus;
+    order.storeStatus = storeStatus;
+    order.customerAddress = customerAddress;
+    order.customerAddressDetail = customerAddressDetail;
+
+    return order;
+  }
 }

@@ -27,4 +27,21 @@ export class OrderItem {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  static of(
+    orderId: number,
+    type: string,
+    category: string,
+    subCategory: string,
+    count: number,
+  ) {
+    const orderItem = new OrderItem();
+    orderItem.orderId = orderId;
+    orderItem.type = type;
+    orderItem.category = category;
+    orderItem.subCategory = subCategory;
+    orderItem.count = count;
+
+    return orderItem;
+  }
 }
