@@ -22,6 +22,9 @@ export class OrderItem {
   @Column()
   subCategory: string;
 
+  @Column()
+  count: number;
+
   @CreateDateColumn()
   createdAt: Date;
 }
