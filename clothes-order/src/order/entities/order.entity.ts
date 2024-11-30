@@ -3,12 +3,14 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { DeliveryStatus } from '../enum/delivery-status.enum';
 import { OrderStatus } from '../enum/order-status.enum';
 import { StoreStatus } from '../enum/store-status.enum';
+import { OrderItem } from './order-item.entity';
 
 @Entity()
 export class Order {
@@ -50,6 +52,9 @@ export class Order {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
+  orderItems: OrderItem[];
 
   static of(
     customerId: number,

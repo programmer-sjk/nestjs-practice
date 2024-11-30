@@ -2,8 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Order } from './order.entity';
 
 @Entity()
 export class OrderLocation {
@@ -27,4 +30,8 @@ export class OrderLocation {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToOne(() => Order)
+  @JoinColumn({ name: 'order_id', referencedColumnName: 'id' })
+  order: Order;
 }

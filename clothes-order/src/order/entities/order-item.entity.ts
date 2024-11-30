@@ -2,16 +2,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Order } from './order.entity';
 
 @Entity()
 export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  orderId: number;
 
   @Column()
   type: string;
@@ -27,6 +26,9 @@ export class OrderItem {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => Order, (order) => order.orderItems)
+  order: Order;
 
   static of(
     orderId: number,
