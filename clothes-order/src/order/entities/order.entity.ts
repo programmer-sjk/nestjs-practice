@@ -32,6 +32,9 @@ export class Order {
   @Column()
   storeStatus: StoreStatus;
 
+  @Column({ length: 16 })
+  customerZipCode: string;
+
   @Column({ length: 32 })
   customerAddress: string;
 
@@ -66,16 +69,15 @@ export class Order {
     status: OrderStatus,
     deliveryStatus: DeliveryStatus,
     storeStatus: StoreStatus,
-    customerAddress: string,
-    customerAddressDetail: string,
   ) {
     const order = new Order();
     order.price = price;
     order.status = status;
     order.deliveryStatus = deliveryStatus;
     order.storeStatus = storeStatus;
-    order.customerAddress = customerAddress;
-    order.customerAddressDetail = customerAddressDetail;
+    order.customerZipCode = customer.zipCode;
+    order.customerAddress = customer.address;
+    order.customerAddressDetail = customer.addressDetail;
     order.customer = customer;
 
     return order;
