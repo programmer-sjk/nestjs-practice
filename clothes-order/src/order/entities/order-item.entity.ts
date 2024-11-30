@@ -31,14 +31,14 @@ export class OrderItem {
   order: Order;
 
   static of(
-    orderId: number,
+    order: Order,
     type: string,
     category: string,
     subCategory: string,
     count: number,
   ) {
     const orderItem = new OrderItem();
-    orderItem.orderId = orderId;
+    orderItem.order = order;
     orderItem.type = type;
     orderItem.category = category;
     orderItem.subCategory = subCategory;

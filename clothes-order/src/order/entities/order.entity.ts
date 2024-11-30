@@ -3,6 +3,8 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -10,15 +12,13 @@ import {
 import { DeliveryStatus } from '../enum/delivery-status.enum';
 import { OrderStatus } from '../enum/order-status.enum';
 import { StoreStatus } from '../enum/store-status.enum';
+import { Customer } from './../../customer/entities/customer.entity';
 import { OrderItem } from './order-item.entity';
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
-
-  @Column()
-  customerId: number;
 
   @Column()
   price: number;
@@ -56,8 +56,12 @@ export class Order {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
 
+  @ManyToOne(() => Customer)
+  @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })
+  customer: Customer;
+
   static of(
-    customerId: number,
+    customer: Customer,
     price: number,
     status: OrderStatus,
     deliveryStatus: DeliveryStatus,
@@ -66,14 +70,18 @@ export class Order {
     customerAddressDetail: string,
   ) {
     const order = new Order();
-    order.customerId = customerId;
     order.price = price;
     order.status = status;
     order.deliveryStatus = deliveryStatus;
     order.storeStatus = storeStatus;
     order.customerAddress = customerAddress;
     order.customerAddressDetail = customerAddressDetail;
+    order.customer = customer;
 
     return order;
+  }
+
+  updateOrderItems(orderItems: OrderItem[]) {
+    this.orderItems = orderItems;
   }
 }
