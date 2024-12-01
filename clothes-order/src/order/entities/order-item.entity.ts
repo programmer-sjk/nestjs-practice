@@ -5,6 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { OrderItemType } from '../enum/order-item-type.enum';
 import { Order } from './order.entity';
 
 @Entity()
@@ -13,7 +14,7 @@ export class OrderItem {
   id: number;
 
   @Column()
-  type: string;
+  type: OrderItemType;
 
   @Column()
   category: string;
@@ -32,7 +33,7 @@ export class OrderItem {
 
   static of(
     order: Order,
-    type: string,
+    type: OrderItemType,
     category: string,
     subCategory: string,
     count: number,

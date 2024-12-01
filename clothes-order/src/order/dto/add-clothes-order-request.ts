@@ -1,13 +1,14 @@
 import { Type } from 'class-transformer';
-import { ArrayMinSize, IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { ArrayMinSize, IsArray, IsEnum, IsNotEmpty } from 'class-validator';
 import { Order } from '../entities/order.entity';
+import { OrderType } from '../enum/order-type.enum';
 import { Customer } from './../../customer/entities/customer.entity';
 import { OrderItemDto } from './order-item-dto';
 
 export class AddClothesOrderRequest {
   @IsNotEmpty()
-  @IsString()
-  type: string;
+  @IsEnum(OrderType)
+  type: OrderType;
 
   @IsNotEmpty()
   @ArrayMinSize(1)

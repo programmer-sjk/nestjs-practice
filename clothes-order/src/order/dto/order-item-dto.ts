@@ -1,11 +1,12 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { OrderItem } from '../entities/order-item.entity';
+import { OrderItemType } from '../enum/order-item-type.enum';
 import { Order } from './../entities/order.entity';
 
 export class OrderItemDto {
   @IsNotEmpty()
   @IsString()
-  type: string;
+  type: OrderItemType;
 
   @IsNotEmpty()
   @IsString()
