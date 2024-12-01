@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { DayUtil } from './../../common/day-util';
 
 @Entity()
 export class Customer {
@@ -47,4 +48,11 @@ export class Customer {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  private readonly NEW_MEMBER_PERIOD = 90;
+
+  isNewMember() {
+    const signedUpDay = DayUtil.diff(this.createdAt);
+    return signedUpDay <= this.NEW_MEMBER_PERIOD;
+  }
 }
