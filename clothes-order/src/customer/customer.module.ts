@@ -1,4 +1,8 @@
 import { Module } from '@nestjs/common';
+import { CustomerRepository } from './customer.repository';
 
-@Module({})
+@Module({
+  providers: [CustomerRepository],
+  exports: [CustomerRepository],
+})
 export class CustomerModule {}
