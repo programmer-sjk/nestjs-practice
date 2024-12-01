@@ -1,15 +1,19 @@
 export class Price {
+  private static readonly DEFAULT_PRICE = 1_000;
+  private static readonly DISCOUNT_RATE = 0.5;
+
   private value;
 
   private constructor() {}
 
-  static of(value: number, isDiscount: boolean) {
-    if (value <= 0) {
-      throw new Error('가격은 0 보다 커야 합니다.');
+  static of(count: number, isDiscount: boolean) {
+    if (count <= 0) {
+      throw new Error('수량은 0 보다 커야 합니다.');
     }
 
     const price = new Price();
-    price.value = isDiscount ? value / 2 : value;
+    const totalPrice = count * this.DEFAULT_PRICE;
+    price.value = isDiscount ? totalPrice * this.DISCOUNT_RATE : totalPrice;
     return price;
   }
 
