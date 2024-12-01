@@ -14,6 +14,7 @@ import { OrderStatus } from '../enum/order-status.enum';
 import { StoreStatus } from '../enum/store-status.enum';
 import { Customer } from './../../customer/entities/customer.entity';
 import { OrderItem } from './order-item.entity';
+import { Price } from './price';
 
 @Entity()
 export class Order {
@@ -63,18 +64,11 @@ export class Order {
   @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })
   customer: Customer;
 
-  static of(
-    customer: Customer,
-    price: number,
-    status: OrderStatus,
-    deliveryStatus: DeliveryStatus,
-    storeStatus: StoreStatus,
-  ) {
+  static createNew(customer: Customer) {
     const order = new Order();
-    order.price = price;
-    order.status = status;
-    order.deliveryStatus = deliveryStatus;
-    order.storeStatus = storeStatus;
+    order.status = OrderStatus.IN_PROGRESS;
+    order.deliveryStatus = DeliveryStatus.IN_PROGRESS;
+    order.storeStatus = StoreStatus.NOT_STORED;
     order.customerZipCode = customer.zipCode;
     order.customerAddress = customer.address;
     order.customerAddressDetail = customer.addressDetail;
@@ -85,5 +79,13 @@ export class Order {
 
   updateOrderItems(orderItems: OrderItem[]) {
     this.orderItems = orderItems;
+  }
+
+  updatePrice(price: Price) {
+    this.price = price.get();
+  }
+
+  itemCount() {
+    return this.orderItems.reduce((acc, item) => acc + item.count, 0);
   }
 }
