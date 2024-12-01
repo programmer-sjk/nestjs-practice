@@ -1,9 +1,6 @@
 import { Type } from 'class-transformer';
 import { ArrayMinSize, IsArray, IsNotEmpty, IsString } from 'class-validator';
 import { Order } from '../entities/order.entity';
-import { DeliveryStatus } from '../enum/delivery-status.enum';
-import { OrderStatus } from '../enum/order-status.enum';
-import { StoreStatus } from '../enum/store-status.enum';
 import { Customer } from './../../customer/entities/customer.entity';
 import { OrderItemDto } from './order-item-dto';
 
@@ -18,20 +15,8 @@ export class AddClothesOrderRequest {
   @IsArray()
   orderItemDtos: OrderItemDto[];
 
-  toEntity(
-    customer: Customer,
-    price: number,
-    status: OrderStatus,
-    deliveryStatus: DeliveryStatus,
-    storeStatus: StoreStatus,
-  ) {
-    const order = Order.of(
-      customer,
-      price,
-      status,
-      deliveryStatus,
-      storeStatus,
-    );
+  toEntity(customer: Customer) {
+    const order = Order.createNew(customer);
 
     const orderItems = this.orderItemDtos.map((dto) => dto.toEntity(order));
     order.updateOrderItems(orderItems);
