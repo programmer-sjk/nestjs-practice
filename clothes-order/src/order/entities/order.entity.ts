@@ -3,7 +3,6 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -19,6 +18,9 @@ import { Price } from './price';
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  customerId: number;
 
   @Column()
   price: number;
@@ -56,8 +58,7 @@ export class Order {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, { cascade: true })
   orderItems: OrderItem[];
 
-  @ManyToOne(() => Customer)
-  @JoinColumn({ name: 'customer_id', referencedColumnName: 'id' })
+  @ManyToOne(() => Customer, (customer) => customer)
   customer: Customer;
 
   static createNew(customer: Customer) {
