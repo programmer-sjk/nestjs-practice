@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CustomerRepository } from './../customer/customer.repository';
 import { AddClothesOrderRequest } from './dto/add-clothes-order-request';
+import { OrderResponse } from './dto/order-response';
 import { Price } from './entities/price';
+import { OrderStatus } from './enum/order-status.enum';
 import { OrderRepository } from './order.repository';
 
 @Injectable()
@@ -11,9 +13,17 @@ export class OrderService {
     private readonly orderRepository: OrderRepository,
   ) {}
 
-  async addOrder(request: AddClothesOrderRequest) {
-    // 원래 세션에서 userId를 가져와야 하지만 로그인 기능이 없으므로 상수로 대체
-    const customer = await this.customerRepository.findOneBy({ id: 1 });
+  async findOrders(userId: number) {
+    const orders = await this.orderRepository.find({
+      where: { customerId: userId, status: OrderStatus.IN_PROGRESS },
+      relations: ['orderItems'],
+    });
+
+    return orders.map((order) => new OrderResponse(order));
+  }
+
+  async addOrder(userId: number, request: AddClothesOrderRequest) {
+    const customer = await this.customerRepository.findOneBy({ id: userId });
     const order = request.toEntity(customer);
     order.updatePrice(Price.of(order.itemCount(), customer.isNewMember()));
 

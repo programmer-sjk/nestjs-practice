@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AddClothesOrderRequest } from './dto/add-clothes-order-request';
 import { OrderService } from './order.service';
 
@@ -6,11 +6,18 @@ import { OrderService } from './order.service';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
-  @Post('/clothes')
-  async addClothesOrder(@Body() request: AddClothesOrderRequest) {
-    await this.orderService.addOrder(request);
+  @Get()
+  async orders() {
+    const userId = 1;
+    return this.orderService.findOrders(userId);
   }
 
-  // @Post('/clothes/return')
-  // async returnClothes(@Body() request: ReturnOrderRequest) {}
+  @Post()
+  async addOrder(@Body() request: AddClothesOrderRequest) {
+    const userId = 1;
+    await this.orderService.addOrder(userId, request);
+  }
+
+  // @Post('/return')
+  // async returnOrder(@Body() request: ReturnOrderRequest) {}
 }
