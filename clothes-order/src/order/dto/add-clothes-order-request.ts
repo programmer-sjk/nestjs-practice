@@ -18,9 +18,9 @@ export class AddClothesOrderRequest {
 
   toEntity(customer: Customer) {
     const order = Order.createNew(customer);
-
     const orderItems = this.orderItemDtos.map((dto) => dto.toEntity(order));
     order.updateOrderItems(orderItems);
+
     return order;
   }
 }

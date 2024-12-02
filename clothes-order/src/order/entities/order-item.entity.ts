@@ -29,6 +29,9 @@ export class OrderItem {
   @Column()
   count: number;
 
+  @Column({ nullable: true })
+  requestedAt?: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 
