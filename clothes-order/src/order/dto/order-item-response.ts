@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import { OrderItemStatus } from '../enum/order-item-status.enum';
 import { OrderItemType } from '../enum/order-item-type.enum';
@@ -20,31 +21,43 @@ export class OrderItemResponse {
     this._count = item.count;
   }
 
+  @ApiProperty({ example: 1, description: '주문 아이템 id' })
   @Expose()
   get id(): number {
     return this._id;
   }
 
+  @ApiProperty({ enum: OrderItemStatus, description: '주문 아이템 상태' })
   @Expose()
   get status(): OrderItemStatus {
     return this._status;
   }
 
+  @ApiProperty({ enum: OrderItemType, description: '주문 아이템 타입' })
   @Expose()
   get type(): OrderItemType {
     return this._type;
   }
 
+  @ApiProperty({
+    example: 'One Of [TOP, BOTTOM, SOCKS, CAP, PANTS]',
+    description: '카테고리',
+  })
   @Expose()
   get category(): string {
     return this._category;
   }
 
+  @ApiProperty({
+    example: 'One Of [T-SHIRTS, SHIRTS, SWEATER, PADDING, JEAN]',
+    description: '하위 카테고리',
+  })
   @Expose()
   get subCategory(): string {
     return this._subCategory;
   }
 
+  @ApiProperty({ example: 1, description: '동일한 하위 카테고리일 때 개수' })
   @Expose()
   get count(): number {
     return this._count;
