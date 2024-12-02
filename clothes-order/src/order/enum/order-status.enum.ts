@@ -1,4 +1,4 @@
 export enum OrderStatus {
-  IN_PROGRESS = 'IN_PROGESS',
+  IN_PROGRESS = 'IN_PROGRESS',
   COMPLETED = 'COMPLETED',
 }
