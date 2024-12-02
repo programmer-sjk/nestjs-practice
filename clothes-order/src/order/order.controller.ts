@@ -2,7 +2,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 import { AddClothesOrderRequest } from './dto/add-clothes-order-request';
 import { OrderService } from './order.service';
 
-@Controller('order')
+@Controller('orders')
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
