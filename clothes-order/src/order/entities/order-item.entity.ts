@@ -44,6 +44,7 @@ export class OrderItem {
   ) {
     const orderItem = new OrderItem();
     orderItem.order = order;
+    orderItem.status = OrderItemStatus.IN_PROGRESS;
     orderItem.type = type;
     orderItem.category = category;
     orderItem.subCategory = subCategory;
