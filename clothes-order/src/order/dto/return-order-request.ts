@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsNumber } from 'class-validator';
+import { ArrayMinSize, IsArray, IsNotEmpty } from 'class-validator';
 
 export class ReturnOrderRequest {
   @IsNotEmpty()
-  @IsNumber()
-  orderId: number;
+  @ArrayMinSize(1)
+  @IsArray()
+  orderItemIds: number[];
 }
