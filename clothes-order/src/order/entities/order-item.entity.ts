@@ -5,6 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { OrderItemStatus } from '../enum/order-item-status.enum';
 import { OrderItemType } from '../enum/order-item-type.enum';
 import { Order } from './order.entity';
 
@@ -12,6 +13,9 @@ import { Order } from './order.entity';
 export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column()
+  status: OrderItemStatus;
 
   @Column()
   type: OrderItemType;

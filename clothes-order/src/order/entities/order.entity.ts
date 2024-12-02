@@ -11,7 +11,6 @@ import {
 } from 'typeorm';
 import { DeliveryStatus } from '../enum/delivery-status.enum';
 import { OrderStatus } from '../enum/order-status.enum';
-import { StoreStatus } from '../enum/store-status.enum';
 import { Customer } from './../../customer/entities/customer.entity';
 import { OrderItem } from './order-item.entity';
 import { Price } from './price';
@@ -29,9 +28,6 @@ export class Order {
 
   @Column()
   deliveryStatus: DeliveryStatus;
-
-  @Column()
-  storeStatus: StoreStatus;
 
   @Column({ length: 16 })
   customerZipCode: string;
@@ -68,7 +64,6 @@ export class Order {
     const order = new Order();
     order.status = OrderStatus.IN_PROGRESS;
     order.deliveryStatus = DeliveryStatus.IN_PROGRESS;
-    order.storeStatus = StoreStatus.NOT_STORED;
     order.customerZipCode = customer.zipCode;
     order.customerAddress = customer.address;
     order.customerAddressDetail = customer.addressDetail;
