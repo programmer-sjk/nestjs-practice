@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
 import { OrderItem } from '../entities/order-item.entity';
 import { OrderItemType } from '../enum/order-item-type.enum';
@@ -12,7 +12,7 @@ export class OrderItemDto {
     description: '주문 아이템 타입',
   })
   @IsNotEmpty()
-  @IsString()
+  @IsEnum(OrderItemType)
   type: OrderItemType;
 
   @ApiProperty({
