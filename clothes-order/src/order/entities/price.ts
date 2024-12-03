@@ -6,14 +6,13 @@ export class Price {
 
   private constructor() {}
 
-  static of(count: number, isDiscount: boolean) {
-    if (count <= 0) {
-      throw new Error('수량은 0 보다 커야 합니다.');
+  static of(value: number, isDiscount?: boolean) {
+    if (value <= 0) {
+      throw new Error('금액은 0 보다 커야 합니다.');
     }
 
     const price = new Price();
-    const totalPrice = count * this.DEFAULT_PRICE;
-    price.value = isDiscount ? totalPrice * this.DISCOUNT_RATE : totalPrice;
+    price.value = isDiscount ? value * this.DISCOUNT_RATE : value;
     return price;
   }
 
