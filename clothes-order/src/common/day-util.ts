@@ -10,4 +10,8 @@ export class DayUtil {
   static diff(target: Date) {
     return dayjs().diff(target, 'day');
   }
+
+  static add(numOfDay: number, target?: Date) {
+    return dayjs(target).add(numOfDay, 'day');
+  }
 }
