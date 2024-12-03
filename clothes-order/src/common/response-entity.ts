@@ -1,15 +1,17 @@
+import { Exclude, Expose } from 'class-transformer';
+
 export class ResponseEntity<T> {
   private static readonly SUCCESS = true;
   private static readonly FAIL = true;
 
-  readonly success: boolean;
-  readonly message: string;
-  readonly data: T;
+  @Exclude() readonly _success: boolean;
+  @Exclude() readonly _message: string;
+  @Exclude() readonly _data: T;
 
   private constructor(success: boolean, message: string, data: T) {
-    this.success = success;
-    this.message = message;
-    this.data = data;
+    this._success = success;
+    this._message = message;
+    this._data = data;
   }
 
   static OK<T>(data?: T) {
@@ -18,5 +20,20 @@ export class ResponseEntity<T> {
 
   static ERROR(message: string) {
     return new ResponseEntity(ResponseEntity.FAIL, message, '');
+  }
+
+  @Expose()
+  get success(): boolean {
+    return this._success;
+  }
+
+  @Expose()
+  get message(): string {
+    return this._message;
+  }
+
+  @Expose()
+  get data(): T {
+    return this._data;
   }
 }
