@@ -16,7 +16,7 @@ export class Customer {
   @Column({ length: 16 })
   name: string;
 
-  @Column({ length: 10 })
+  @Column({ length: 32 })
   accountName: string;
 
   @Column()
