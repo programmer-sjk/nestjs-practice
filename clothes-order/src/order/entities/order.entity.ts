@@ -25,13 +25,13 @@ export class Order {
   @Column()
   price: number;
 
-  @Column()
+  @Column({ length: 16 })
   status: OrderStatus;
 
-  @Column()
+  @Column({ length: 16 })
   deliveryStatus: DeliveryStatus;
 
-  @Column({ length: 16 })
+  @Column({ length: 5 })
   customerZipCode: string;
 
   @Column({ length: 32 })
@@ -39,9 +39,6 @@ export class Order {
 
   @Column({ length: 16 })
   customerAddressDetail: string;
-
-  @Column({ nullable: true })
-  returnRequestAt?: Date;
 
   @Column({ nullable: true })
   completedAt?: Date;

@@ -14,16 +14,16 @@ export class OrderItem {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 16 })
   status: OrderItemStatus;
 
-  @Column()
+  @Column({ length: 16 })
   type: OrderItemType;
 
-  @Column()
+  @Column({ length: 16 })
   category: string;
 
-  @Column()
+  @Column({ length: 16 })
   subCategory: string;
 
   @Column()

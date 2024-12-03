@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Store } from './../../store/entities/store.entity';
 import { Order } from './order.entity';
 
 @Entity()
@@ -19,7 +21,7 @@ export class OrderLocation {
   @Column()
   orderId: number;
 
-  @Column()
+  @Column({ length: 32 })
   section: string;
 
   @Column()
@@ -34,4 +36,8 @@ export class OrderLocation {
   @OneToOne(() => Order)
   @JoinColumn({ name: 'order_id', referencedColumnName: 'id' })
   order: Order;
+
+  @ManyToOne(() => Store)
+  @JoinColumn({ name: 'store_id', referencedColumnName: 'id' })
+  store: Store;
 }
