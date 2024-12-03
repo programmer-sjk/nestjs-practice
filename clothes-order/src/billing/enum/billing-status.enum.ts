@@ -1,5 +1,5 @@
 export enum BillingStatus {
-  WILL_BE = 'WILL_BE',
+  WAIT = 'WAIT',
   COMPLETED = 'COMPLETED',
   FAIL = 'FAIL',
 }
