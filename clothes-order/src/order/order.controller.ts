@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ApiOkResponse } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response-entity';
-import { AddClothesOrderRequest } from './dto/add-clothes-order-request';
+import { AddOrderRequest } from './dto/add-order-request';
 import { OrderResponse } from './dto/order-response';
 import { ReturnOrderRequest } from './dto/return-order-request';
 import { OrderService } from './order.service';
@@ -9,6 +10,7 @@ import { OrderService } from './order.service';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
+  @ApiOkResponse({ isArray: true, type: OrderResponse })
   @Get()
   async orders(): Promise<ResponseEntity<OrderResponse[] | string>> {
     const userId = 1;
@@ -22,7 +24,7 @@ export class OrderController {
 
   @Post()
   async addOrder(
-    @Body() request: AddClothesOrderRequest,
+    @Body() request: AddOrderRequest,
   ): Promise<ResponseEntity<string>> {
     const userId = 1;
     await this.orderService.addOrder(userId, request);
