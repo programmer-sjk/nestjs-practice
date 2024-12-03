@@ -27,7 +27,11 @@ export class OrderItemResponse {
     return this._id;
   }
 
-  @ApiProperty({ enum: OrderItemStatus, description: '주문 아이템 상태' })
+  @ApiProperty({
+    enum: OrderItemStatus,
+    example: OrderItemStatus.STORED,
+    description: '주문 아이템 상태',
+  })
   @Expose()
   get status(): OrderItemStatus {
     return this._status;
