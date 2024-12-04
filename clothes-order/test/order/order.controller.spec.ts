@@ -1,12 +1,8 @@
-import {
-  ClassSerializerInterceptor,
-  INestApplication,
-  ValidationPipe,
-} from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
+import { setNestApp } from '../../src/common/set-nest-app';
 import { CustomerModule } from '../../src/customer/customer.module';
 import { CustomerRepository } from '../../src/customer/customer.repository';
 import { OrderController } from '../../src/order/order.controller';
@@ -43,10 +39,7 @@ describe('OrderController', () => {
     customerRepository = module.get<CustomerRepository>(CustomerRepository);
 
     app = module.createNestApplication();
-    app.useGlobalInterceptors(
-      new ClassSerializerInterceptor(app.get(Reflector)),
-    );
-    app.useGlobalPipes(new ValidationPipe({ transform: true }));
+    setNestApp(app);
     await app.init();
   });
 
@@ -74,7 +67,7 @@ describe('OrderController', () => {
 
       // when
       const response = await request(app.getHttpServer())
-        .get('/orders')
+        .get('/api/v1/orders')
         .send(TestOrdersRequest.of(customer.id))
         .expect(200);
 
@@ -94,7 +87,7 @@ describe('OrderController', () => {
 
       // when
       await request(app.getHttpServer())
-        .post('/orders')
+        .post('/api/v1/orders')
         .send(requestDto)
         .expect(201);
 
@@ -119,7 +112,7 @@ describe('OrderController', () => {
 
       // when
       await request(app.getHttpServer())
-        .post('/orders/return')
+        .post('/api/v1/orders/return')
         .send(requestDto)
         .expect(201);
 
