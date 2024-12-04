@@ -26,7 +26,6 @@ describe('OrderController', () => {
   let app: INestApplication;
   let module: TestingModule;
   let controller: OrderController;
-  let service: OrderService;
   let orderRepository: OrderRepository;
   let orderItemRepository: OrderItemRepository;
   let customerRepository: CustomerRepository;
@@ -39,7 +38,6 @@ describe('OrderController', () => {
     }).compile();
 
     controller = module.get<OrderController>(OrderController);
-    service = module.get<OrderService>(OrderService);
     orderRepository = module.get<OrderRepository>(OrderRepository);
     orderItemRepository = module.get<OrderItemRepository>(OrderItemRepository);
     customerRepository = module.get<CustomerRepository>(CustomerRepository);
