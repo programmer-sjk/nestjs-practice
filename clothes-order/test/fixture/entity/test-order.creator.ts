@@ -1,8 +1,8 @@
-import { Order } from '../../src/order/entities/order.entity';
-import { Price } from '../../src/order/entities/price';
-import { DeliveryStatus } from '../../src/order/enum/delivery-status.enum';
-import { OrderStatus } from '../../src/order/enum/order-status.enum';
-import { Customer } from './../../src/customer/entities/customer.entity';
+import { Order } from '../../../src/order/entities/order.entity';
+import { Price } from '../../../src/order/entities/price';
+import { DeliveryStatus } from '../../../src/order/enum/delivery-status.enum';
+import { OrderStatus } from '../../../src/order/enum/order-status.enum';
+import { Customer } from '../../../src/customer/entities/customer.entity';
 
 export class TestOrderCreator {
   private constructor() {}

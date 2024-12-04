@@ -1,6 +1,6 @@
-import { OrderItemStatus } from '../../src/order/enum/order-item-status.enum';
-import { OrderItemType } from '../../src/order/enum/order-item-type.enum';
-import { OrderItem } from './../../src/order/entities/order-item.entity';
+import { OrderItemStatus } from '../../../src/order/enum/order-item-status.enum';
+import { OrderItemType } from '../../../src/order/enum/order-item-type.enum';
+import { OrderItem } from '../../../src/order/entities/order-item.entity';
 
 export class TestOrderItemCreator {
   private constructor() {}
