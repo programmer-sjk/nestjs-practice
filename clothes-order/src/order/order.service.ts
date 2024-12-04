@@ -29,9 +29,9 @@ export class OrderService {
     return orders.map((order) => new OrderResponse(order));
   }
 
-  async addOrder(userId: number, request: AddOrderRequest) {
+  async addOrder(request: AddOrderRequest) {
     const customer = await this.customerRepository.findOneByOrFail({
-      id: userId,
+      id: request.customerId,
     });
     const order = request.toEntity(customer);
     order.updatePrice(
@@ -41,9 +41,12 @@ export class OrderService {
     await this.orderRepository.save(order);
   }
 
-  async returnClothes(userId: number, request: ReturnOrderRequest) {
+  async returnClothes(request: ReturnOrderRequest) {
     const itemIds = request.orderItemIds;
-    const orders = await this.orderRepository.findWithItems(userId, itemIds);
+    const orders = await this.orderRepository.findWithItems(
+      request.customerId,
+      itemIds,
+    );
 
     const orderItems = orders.flatMap((order) => order.orderItems);
     if (orderItems.length !== itemIds.length) {

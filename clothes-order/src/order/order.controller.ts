@@ -3,6 +3,7 @@ import { ApiOkResponse } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response-entity';
 import { AddOrderRequest } from './dto/add-order-request';
 import { OrderResponse } from './dto/order-response';
+import { OrdersRequest } from './dto/orders-request';
 import { ReturnOrderRequest } from './dto/return-order-request';
 import { OrderService } from './order.service';
 
@@ -12,10 +13,11 @@ export class OrderController {
 
   @ApiOkResponse({ isArray: true, type: OrderResponse })
   @Get()
-  async orders(): Promise<ResponseEntity<OrderResponse[] | string>> {
-    const userId = 1;
+  async orders(
+    @Body() request: OrdersRequest,
+  ): Promise<ResponseEntity<OrderResponse[] | string>> {
     try {
-      const orders = await this.orderService.findOrders(userId);
+      const orders = await this.orderService.findOrders(request.customerId);
       return ResponseEntity.OK(orders);
     } catch (e) {
       return ResponseEntity.ERROR(e.message);
@@ -26,8 +28,7 @@ export class OrderController {
   async addOrder(
     @Body() request: AddOrderRequest,
   ): Promise<ResponseEntity<string>> {
-    const userId = 1;
-    await this.orderService.addOrder(userId, request);
+    await this.orderService.addOrder(request);
     return ResponseEntity.OK();
   }
 
@@ -35,8 +36,7 @@ export class OrderController {
   async returnOrder(
     @Body() request: ReturnOrderRequest,
   ): Promise<ResponseEntity<string>> {
-    const userId = 1;
-    await this.orderService.returnClothes(userId, request);
+    await this.orderService.returnClothes(request);
     return ResponseEntity.OK();
   }
 }
