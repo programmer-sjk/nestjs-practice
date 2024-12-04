@@ -12,8 +12,8 @@ export class OrderRepository extends Repository<Order> {
   findWithItems(customerId: number, orderItemIds: number[]) {
     return this.createQueryBuilder('order')
       .innerJoinAndSelect('order.orderItems', 'orderItems')
-      .where('order.customerId := customerId', { customerId })
-      .andWhere('orderItems.id IN (:orderItemIds)', { orderItemIds })
+      .where('order.customerId = :customerId', { customerId })
+      .andWhere('orderItems.id IN (:...orderItemIds)', { orderItemIds })
       .andWhere('orderItems.status = :status', {
         status: OrderItemStatus.STORED,
       })
