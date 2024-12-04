@@ -85,10 +85,11 @@ describe('OrderService', () => {
       const savedOrder = await orderRepository.save(order);
 
       const dto = new ReturnOrderRequest();
+      dto.customerId = customer.id;
       dto.orderItemIds = savedOrder.orderItems.map((item) => item.id);
 
       // when
-      const result = await service.returnClothes(customer.id, dto);
+      const result = await service.returnClothes(dto);
 
       // then
       const items = await orderItemRepository.find();

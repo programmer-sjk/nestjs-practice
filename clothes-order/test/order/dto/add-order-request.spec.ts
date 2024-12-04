@@ -3,6 +3,25 @@ import { OrderType } from '../../../src/order/enum/order-type.enum';
 import { AddOrderRequest } from './../../../src/order/dto/add-order-request';
 
 describe('AddOrderRequest', () => {
+  it('customerid는 숫자형이며 필수값이다.', async () => {
+    // given
+    const dto = new AddOrderRequest();
+    dto.customerId = undefined;
+
+    // when
+    const errors = await validate(dto);
+
+    // then
+    const customerIdErrors = errors.find(
+      (err) => err.property === 'customerId',
+    );
+    expect(customerIdErrors.constraints).toHaveProperty('isNumber');
+    expect(customerIdErrors.constraints).toHaveProperty('isNotEmpty');
+
+    const constraintsKeys = Object.keys(customerIdErrors.constraints);
+    expect(constraintsKeys).toHaveLength(2);
+  });
+
   it('type은 Enum OrderType이며 필수값이다.', async () => {
     // given
     const dto = new AddOrderRequest();
