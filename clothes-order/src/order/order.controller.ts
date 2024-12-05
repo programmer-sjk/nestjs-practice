@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ApiOkResponse } from '@nestjs/swagger';
 import { ResponseEntity } from '../common/response-entity';
 import { AddOrderRequest } from './dto/add-order-request';
@@ -37,6 +37,14 @@ export class OrderController {
     @Body() request: ReturnOrderRequest,
   ): Promise<ResponseEntity<string>> {
     await this.orderService.returnClothes(request);
+    return ResponseEntity.OK();
+  }
+
+  @Delete(':id')
+  async remove(
+    @Param('id') id: number,
+  ): Promise<ResponseEntity<string>> {
+    await this.orderService.remove(id);
     return ResponseEntity.OK();
   }
 }

@@ -60,4 +60,8 @@ export class OrderService {
       { requestedAt: DayUtil.toDate() },
     );
   }
+
+  async remove(id: number) {
+    await this.orderRepository.delete(id);
+  }
 }
