@@ -64,7 +64,7 @@ describe('Lesson', () => {
     ];
 
     // when & then
-    lesson.validateLessonTimes();
+    expect(() => lesson.validateLessonTimes()).not.toThrowError();
   });
 
   it('1회성 레슨의 시간이 한개가 아니라면 예외가 발생한다.', () => {
@@ -108,7 +108,9 @@ describe('Lesson', () => {
     const lesson = TestLessonCreator.createOneTimeLesson();
 
     // when & then
-    lesson.validateCredentials(lesson.customerPhone, lesson.password);
+    expect(() =>
+      lesson.validateCredentials(lesson.customerPhone, lesson.password),
+    ).not.toThrowError();
   });
 
   it('phone과 password가 다르면 예외가 발생한다.', () => {
