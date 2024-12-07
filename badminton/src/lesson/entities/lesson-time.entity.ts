@@ -54,6 +54,7 @@ export class LessonTime {
 
     if (
       startHour < LessonTime.START_HOUR ||
+      startHour >= LessonTime.END_HOUR ||
       (endHour >= LessonTime.END_HOUR && endMinute > 0)
     ) {
       throw new Error('레슨 시간은 아침 7시부터 저녁 11시까지 입니다.');
