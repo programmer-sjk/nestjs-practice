@@ -17,6 +17,9 @@ export class Lesson {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Column()
+  coachId: number;
+
   @Column({ type: 'enum', enum: LessonType })
   type: LessonType;
 
