@@ -5,25 +5,29 @@ import { LessonTime } from './../../../src/lesson/entities/lesson-time.entity';
 export class TestLessonCreator {
   private constructor() {}
 
-  static createOneTimeLesson() {
-    const coachId = 1;
-    return Lesson.of(
+  static createOneTimeLesson(coachId?: number) {
+    const lesson = Lesson.of(
       LessonType.ONE_TIME,
-      coachId,
+      coachId ?? 1,
       LessonTime.LESSON_MINUTE,
       'customerName',
-      'customerPhone',
+      '01012345678',
     );
+    lesson.updatePassword('password');
+
+    return lesson;
   }
 
-  static createRegularLesson() {
-    const coachId = 1;
-    return Lesson.of(
+  static createRegularLesson(coachId?: number) {
+    const lesson = Lesson.of(
       LessonType.REGULAR,
-      coachId,
+      coachId ?? 1,
       LessonTime.LESSON_MINUTE,
       'customerName',
-      'customerPhone',
+      '01012345678',
     );
+    lesson.updatePassword('password');
+
+    return lesson;
   }
 }
