@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { DataSource, Repository } from 'typeorm';
-import { Lesson } from './entities/lesson.entity';
-import { LessonType } from './enums/lesson-type.enum';
+import { Lesson } from '../entities/lesson.entity';
+import { LessonType } from '../enums/lesson-type.enum';
 
 @Injectable()
 export class LessonRepository extends Repository<Lesson> {

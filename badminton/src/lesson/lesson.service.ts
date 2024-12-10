@@ -11,7 +11,7 @@ import { RemoveLessonRequest } from './dto/remove-lesson-request';
 import { LessonTime } from './entities/lesson-time.entity';
 import { Lesson } from './entities/lesson.entity';
 import { ReservablePeriod } from './enums/reservable-period.enum';
-import { LessonRepository } from './lesson.repository';
+import { LessonRepository } from './repositories/lesson.repository';
 
 @Injectable()
 export class LessonService {
