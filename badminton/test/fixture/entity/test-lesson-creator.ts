@@ -5,7 +5,7 @@ import { LessonTime } from './../../../src/lesson/entities/lesson-time.entity';
 export class TestLessonCreator {
   private constructor() {}
 
-  static createOneTimeLesson(coachId?: number) {
+  static createOneTimeLesson(coachId?: number, password?: string) {
     const lesson = Lesson.of(
       LessonType.ONE_TIME,
       coachId ?? 1,
@@ -13,7 +13,7 @@ export class TestLessonCreator {
       'customerName',
       '01012345678',
     );
-    lesson.updatePassword('password');
+    lesson.updatePassword(password ?? 'password');
 
     return lesson;
   }

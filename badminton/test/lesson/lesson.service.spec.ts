@@ -1,10 +1,13 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { hash } from '../../src/common/crypt';
 import { DayUtil } from '../../src/common/day-util';
+import { RemoveLessonRequest } from '../../src/lesson/dto/remove-lesson-request';
 import { LessonType } from '../../src/lesson/enums/lesson-type.enum';
-import { LessonTimeRepository } from '../../src/lesson/repositories/lesson-time.repository';
 import { LessonService } from '../../src/lesson/lesson.service';
+import { LessonTimeRepository } from '../../src/lesson/repositories/lesson-time.repository';
+import { LessonRepository } from '../../src/lesson/repositories/lesson.repository';
 import { TestAddLessonRequest } from '../fixture/dto/test-add-lesson-request';
 import { TestCoachCreator } from '../fixture/entity/test-coach-creator';
 import { TestLessonCreator } from '../fixture/entity/test-lesson-creator';
@@ -12,7 +15,6 @@ import { TestLessonTimeCreator } from '../fixture/entity/test-lesson-time-creato
 import { CoachModule } from './../../src/coach/coach.module';
 import { CoachRepository } from './../../src/coach/coach.repository';
 import { LessonTimesRequest } from './../../src/lesson/dto/lesson-times-request';
-import { LessonRepository } from '../../src/lesson/repositories/lesson.repository';
 import { testConnectionOptions } from './../test-ormconfig';
 
 describe('LessonService', () => {
@@ -123,6 +125,63 @@ describe('LessonService', () => {
       // when & then
       await expect(() => service.addLesson(dto)).rejects.toThrow(
         new BadRequestException('이미 예약된 레슨 시간입니다.'),
+      );
+    });
+  });
+
+  describe('remove', () => {
+    it('예약을 삭제할 수 있다.', async () => {
+      // given
+      const hashedPassword = hash('hahahaha');
+      const coach = await coachRepository.save(TestCoachCreator.of());
+      const lesson = TestLessonCreator.createOneTimeLesson(
+        coach.id,
+        hashedPassword,
+      );
+      lesson.lessonTimes = [
+        TestLessonTimeCreator.createOneTimeLessonTimes(
+          lesson,
+          DayUtil.addFromNow(1, 10).toDate(),
+        ),
+      ];
+      const savedLesson = await lessonRepository.save(lesson);
+
+      const dto = new RemoveLessonRequest();
+      dto.lessonId = savedLesson.id;
+      dto.customerPhone = savedLesson.customerPhone;
+      dto.password = 'hahahaha';
+
+      // when
+      await service.remove(dto);
+
+      // then
+      const result = await lessonRepository.find();
+      expect(result).toHaveLength(0);
+
+      const lessonTimes = await lessonTimeRepository.find();
+      expect(lessonTimes).toHaveLength(0);
+    });
+
+    it('핸드폰 번호, 패스워드가 일치하지 않으면 삭제할 수 없다.', async () => {
+      // given
+      const coach = await coachRepository.save(TestCoachCreator.of());
+      const lesson = TestLessonCreator.createOneTimeLesson(coach.id);
+      lesson.lessonTimes = [
+        TestLessonTimeCreator.createOneTimeLessonTimes(
+          lesson,
+          DayUtil.addFromNow(1, 10).toDate(),
+        ),
+      ];
+      const savedLesson = await lessonRepository.save(lesson);
+
+      const dto = new RemoveLessonRequest();
+      dto.lessonId = savedLesson.id;
+      dto.customerPhone = '';
+      dto.password = '';
+
+      // when & then
+      await expect(() => service.remove(dto)).rejects.toThrow(
+        new Error('id나 패스워드가 일치하지 않습니다.'),
       );
     });
   });
