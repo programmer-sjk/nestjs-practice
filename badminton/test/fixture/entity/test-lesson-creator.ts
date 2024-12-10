@@ -1,3 +1,4 @@
+import { hash } from '../../../src/common/crypt';
 import { Lesson } from '../../../src/lesson/entities/lesson.entity';
 import { LessonType } from '../../../src/lesson/enums/lesson-type.enum';
 import { LessonTime } from './../../../src/lesson/entities/lesson-time.entity';
@@ -13,7 +14,7 @@ export class TestLessonCreator {
       'customerName',
       '01012345678',
     );
-    lesson.updatePassword(password ?? 'password');
+    lesson.updatePassword(hash(password ?? 'password'));
 
     return lesson;
   }

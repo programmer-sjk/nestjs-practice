@@ -4,8 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
 import { CoachModule } from '../../src/coach/coach.module';
 import { CoachRepository } from '../../src/coach/coach.repository';
+import { DayUtil } from '../../src/common/day-util';
 import { setNestApp } from '../../src/common/set-nest-app';
 import { LessonTimesRequest } from '../../src/lesson/dto/lesson-times-request';
+import { RemoveLessonRequest } from '../../src/lesson/dto/remove-lesson-request';
 import { LessonType } from '../../src/lesson/enums/lesson-type.enum';
 import { LessonController } from '../../src/lesson/lesson.controller';
 import { LessonService } from '../../src/lesson/lesson.service';
@@ -13,13 +15,14 @@ import { LessonTimeRepository } from '../../src/lesson/repositories/lesson-time.
 import { LessonRepository } from '../../src/lesson/repositories/lesson.repository';
 import { TestAddLessonRequest } from '../fixture/dto/test-add-lesson-request';
 import { TestCoachCreator } from '../fixture/entity/test-coach-creator';
+import { TestLessonCreator } from '../fixture/entity/test-lesson-creator';
+import { TestLessonTimeCreator } from '../fixture/entity/test-lesson-time-creator';
 import { testConnectionOptions } from './../test-ormconfig';
 
 describe('LessonController', () => {
   let module: TestingModule;
   let app: INestApplication;
   let controller: LessonController;
-  let service: LessonService;
   let lessonRepository: LessonRepository;
   let lessonTimeRepository: LessonTimeRepository;
   let coachRepository: CoachRepository;
@@ -32,7 +35,6 @@ describe('LessonController', () => {
     }).compile();
 
     controller = module.get<LessonController>(LessonController);
-    service = module.get<LessonService>(LessonService);
     lessonRepository = module.get<LessonRepository>(LessonRepository);
     lessonTimeRepository =
       module.get<LessonTimeRepository>(LessonTimeRepository);
@@ -51,6 +53,7 @@ describe('LessonController', () => {
 
   afterAll(async () => {
     await module.close();
+    await app.close();
   });
 
   it('should be defined', () => {
@@ -96,5 +99,37 @@ describe('LessonController', () => {
     expect(result[0].coachId).toBe(coach.id);
     expect(result[0].customerName).toBe('예약자 이름');
     expect(result[0].customerPhone).toBe('01012345678');
+  });
+
+  it('DELETE /lesson 레슨을 삭제할 수 있다.', async () => {
+    // given
+    const password = 'password';
+    const coach = await coachRepository.save(TestCoachCreator.of());
+    const lesson = TestLessonCreator.createOneTimeLesson(coach.id, password);
+    lesson.lessonTimes = [
+      TestLessonTimeCreator.createOneTimeLessonTimes(
+        lesson,
+        DayUtil.addFromNow(1, 10).toDate(),
+      ),
+    ];
+    const savedLesson = await lessonRepository.save(lesson);
+
+    const requestDto = new RemoveLessonRequest();
+    requestDto.lessonId = savedLesson.id;
+    requestDto.customerPhone = savedLesson.customerPhone;
+    requestDto.password = password;
+
+    // when
+    await request(app.getHttpServer())
+      .delete('/lesson')
+      .send(requestDto)
+      .expect(200);
+
+    // then
+    const result = await lessonRepository.find();
+    expect(result).toHaveLength(0);
+
+    const lessonTimes = await lessonTimeRepository.find();
+    expect(lessonTimes).toHaveLength(0);
   });
 });

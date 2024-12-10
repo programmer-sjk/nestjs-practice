@@ -1,7 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { hash } from '../../src/common/crypt';
 import { DayUtil } from '../../src/common/day-util';
 import { RemoveLessonRequest } from '../../src/lesson/dto/remove-lesson-request';
 import { LessonType } from '../../src/lesson/enums/lesson-type.enum';
@@ -132,12 +131,9 @@ describe('LessonService', () => {
   describe('remove', () => {
     it('예약을 삭제할 수 있다.', async () => {
       // given
-      const hashedPassword = hash('hahahaha');
+      const password = 'hahaha';
       const coach = await coachRepository.save(TestCoachCreator.of());
-      const lesson = TestLessonCreator.createOneTimeLesson(
-        coach.id,
-        hashedPassword,
-      );
+      const lesson = TestLessonCreator.createOneTimeLesson(coach.id, password);
       lesson.lessonTimes = [
         TestLessonTimeCreator.createOneTimeLessonTimes(
           lesson,
@@ -149,7 +145,7 @@ describe('LessonService', () => {
       const dto = new RemoveLessonRequest();
       dto.lessonId = savedLesson.id;
       dto.customerPhone = savedLesson.customerPhone;
-      dto.password = 'hahahaha';
+      dto.password = 'hahaha';
 
       // when
       await service.remove(dto);
