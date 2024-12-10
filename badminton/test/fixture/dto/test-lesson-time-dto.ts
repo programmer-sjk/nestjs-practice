@@ -1,5 +1,5 @@
 import { DayUtil } from '../../../src/common/day-util';
-import { LessonTimeDto } from './../../../src/lesson/dto/lesson-time-dto';
+import { LessonTimeDto } from '../../../src/lesson/dto/lesson-time-dto';
 
 export class TestLessonTimeDto {
   private constructor() {}

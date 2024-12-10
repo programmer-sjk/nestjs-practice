@@ -1,5 +1,5 @@
+import { AddLessonRequest } from '../../../src/lesson/dto/add-lesson-request';
 import { LessonType } from '../../../src/lesson/enums/lesson-type.enum';
-import { AddLessonRequest } from './../../../src/lesson/dto/add-lesson-request';
 import { TestLessonTimeDto } from './test-lesson-time-dto';
 
 export class TestAddLessonRequest {
