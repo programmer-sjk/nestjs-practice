@@ -20,7 +20,7 @@ export class LessonService {
   private readonly ALL_LESSON_TIMES = this.getAllLessonTimes();
 
   constructor(
-    private dataSource: DataSource,
+    private readonly dataSource: DataSource,
     private readonly lessonRepository: LessonRepository,
   ) {}
 
