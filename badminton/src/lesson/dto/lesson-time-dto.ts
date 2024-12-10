@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsOptional, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsOptional, IsString, Length } from 'class-validator';
 import { LessonTime } from '../entities/lesson-time.entity';
 import { Lesson } from '../entities/lesson.entity';
 import { DayOfWeek } from '../enums/day-of-week.enum';
@@ -13,6 +13,7 @@ export class LessonTimeDto {
   startDate?: Date;
 
   @IsOptional()
+  @Length(5)
   @IsString()
   startTime?: string;
 
