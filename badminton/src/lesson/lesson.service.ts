@@ -68,7 +68,7 @@ export class LessonService {
     const lessonTerm = 30;
 
     const result: LessonTimePeriod[] = [];
-    for (let day = ReservablePeriod.START; day < ReservablePeriod.END; day++) {
+    for (let day = ReservablePeriod.START; day <= ReservablePeriod.END; day++) {
       const start = DayUtil.add(now, day, LessonTime.START_HOUR);
       const end = DayUtil.add(now, day, LessonTime.END_HOUR);
 
