@@ -3,7 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DayUtil } from '../../src/common/day-util';
 import { LessonType } from '../../src/lesson/enums/lesson-type.enum';
-import { LessonTimeRepository } from '../../src/lesson/lesson-time.repository';
+import { LessonTimeRepository } from '../../src/lesson/repositories/lesson-time.repository';
 import { LessonService } from '../../src/lesson/lesson.service';
 import { TestAddLessonRequest } from '../fixture/dto/test-add-lesson-request';
 import { TestCoachCreator } from '../fixture/entity/test-coach-creator';
@@ -12,7 +12,7 @@ import { TestLessonTimeCreator } from '../fixture/entity/test-lesson-time-creato
 import { CoachModule } from './../../src/coach/coach.module';
 import { CoachRepository } from './../../src/coach/coach.repository';
 import { LessonTimesRequest } from './../../src/lesson/dto/lesson-times-request';
-import { LessonRepository } from './../../src/lesson/lesson.repository';
+import { LessonRepository } from '../../src/lesson/repositories/lesson.repository';
 import { testConnectionOptions } from './../test-ormconfig';
 
 describe('LessonService', () => {
