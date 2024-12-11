@@ -33,7 +33,9 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dayjs": "^1.11.13",
+    "ioredis": "^5.4.1",
     "mysql2": "^3.11.4",
+    "redlock": "^5.0.0-beta.2",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.20"
