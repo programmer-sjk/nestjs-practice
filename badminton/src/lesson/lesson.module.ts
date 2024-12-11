@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { RedisModule } from '../redis/redis.module';
 import { Lesson } from './entities/lesson.entity';
-import { LessonTimeRepository } from './repositories/lesson-time.repository';
 import { LessonController } from './lesson.controller';
-import { LessonRepository } from './repositories/lesson.repository';
 import { LessonService } from './lesson.service';
+import { LessonTimeRepository } from './repositories/lesson-time.repository';
+import { LessonRepository } from './repositories/lesson.repository';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Lesson])],
+  imports: [TypeOrmModule.forFeature([Lesson]), RedisModule],
   controllers: [LessonController],
   providers: [LessonService, LessonRepository, LessonTimeRepository],
 })
