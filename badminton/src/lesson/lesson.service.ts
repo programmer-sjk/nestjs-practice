@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Injectable,
+} from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { hash, random } from '../common/crypt';
 import { DayUtil } from '../common/day-util';
@@ -125,7 +129,7 @@ export class LessonService {
             lessonTime.end,
           )
         ) {
-          throw new BadRequestException('이미 예약된 레슨 시간입니다.');
+          throw new ConflictException('이미 예약된 레슨 시간입니다.');
         }
       }
     }
