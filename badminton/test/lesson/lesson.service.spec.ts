@@ -1,4 +1,4 @@
-import { BadRequestException } from '@nestjs/common';
+import { ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DayUtil } from '../../src/common/day-util';
@@ -14,6 +14,7 @@ import { TestLessonTimeCreator } from '../fixture/entity/test-lesson-time-creato
 import { CoachModule } from './../../src/coach/coach.module';
 import { CoachRepository } from './../../src/coach/coach.repository';
 import { LessonTimesRequest } from './../../src/lesson/dto/lesson-times-request';
+import { RedisModule } from './../../src/redis/redis.module';
 import { testConnectionOptions } from './../test-ormconfig';
 
 describe('LessonService', () => {
@@ -25,7 +26,12 @@ describe('LessonService', () => {
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(testConnectionOptions), CoachModule],
+      imports: [
+        TypeOrmModule.forRoot(testConnectionOptions),
+        CoachModule,
+        RedisModule,
+      ],
+
       providers: [LessonService, LessonRepository, LessonTimeRepository],
     }).compile();
 
@@ -123,8 +129,33 @@ describe('LessonService', () => {
 
       // when & then
       await expect(() => service.addLesson(dto)).rejects.toThrow(
-        new BadRequestException('이미 예약된 레슨 시간입니다.'),
+        new ConflictException('이미 예약된 레슨 시간입니다.'),
       );
+    });
+
+    it('레슨 등록은 동시에 접근할 수 없다.', async () => {
+      // given
+      const coach = await coachRepository.save(TestCoachCreator.of());
+      const dto = TestAddLessonRequest.oneTime(
+        coach.id,
+        '예약자 이름',
+        '01012345678',
+      );
+
+      // when
+      await expect(
+        Promise.all([
+          service.addLesson(dto),
+          service.addLesson(dto),
+          service.addLesson(dto),
+          service.addLesson(dto),
+          service.addLesson(dto),
+        ]),
+      ).rejects.toThrow(new ConflictException('이미 예약된 레슨 시간입니다.'));
+
+      // then
+      const lessons = await lessonRepository.find();
+      expect(lessons).toHaveLength(1);
     });
   });
 
