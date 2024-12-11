@@ -17,6 +17,9 @@ export class LessonTime {
   @Column({ nullable: true, length: 5 })
   startTime?: string;
 
+  @Column()
+  lessonId: number;
+
   @ManyToOne(() => Lesson, (lesson) => lesson.lessonTimes, {
     createForeignKeyConstraints: false,
   })
