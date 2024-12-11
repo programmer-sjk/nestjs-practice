@@ -1,3 +1,4 @@
+import { RedisModule as IORedisModule } from '@nestjs-modules/ioredis';
 import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
 import { redisStore } from 'cache-manager-redis-yet';
@@ -18,6 +19,10 @@ import { RedisService } from './redis.service';
           store: store as unknown as CacheStore,
         };
       },
+    }),
+    IORedisModule.forRoot({
+      type: 'single',
+      url: 'localhost',
     }),
   ],
 
