@@ -1,6 +1,7 @@
 import { ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { hash } from '../../src/common/crypt';
 import { DayUtil } from '../../src/common/day-util';
 import { RemoveLessonRequest } from '../../src/lesson/dto/remove-lesson-request';
 import { LessonType } from '../../src/lesson/enums/lesson-type.enum';
@@ -163,6 +164,8 @@ describe('LessonService', () => {
     it('예약을 삭제할 수 있다.', async () => {
       // given
       const password = 'hahaha';
+      console.log(hash(password));
+      console.log(hash('password'));
       const coach = await coachRepository.save(TestCoachCreator.of());
       const lesson = TestLessonCreator.createOneTimeLesson(coach.id, password);
       lesson.lessonTimes = [
@@ -182,10 +185,12 @@ describe('LessonService', () => {
       await service.remove(dto);
 
       // then
-      const result = await lessonRepository.find();
+      const result = await lessonRepository.findBy({ id: savedLesson.id });
       expect(result).toHaveLength(0);
 
-      const lessonTimes = await lessonTimeRepository.find();
+      const lessonTimes = await lessonTimeRepository.findBy({
+        lessonId: savedLesson.id,
+      });
       expect(lessonTimes).toHaveLength(0);
     });
 

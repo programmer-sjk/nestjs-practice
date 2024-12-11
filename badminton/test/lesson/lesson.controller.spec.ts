@@ -13,6 +13,7 @@ import { LessonController } from '../../src/lesson/lesson.controller';
 import { LessonService } from '../../src/lesson/lesson.service';
 import { LessonTimeRepository } from '../../src/lesson/repositories/lesson-time.repository';
 import { LessonRepository } from '../../src/lesson/repositories/lesson.repository';
+import { RedisModule } from '../../src/redis/redis.module';
 import { TestAddLessonRequest } from '../fixture/dto/test-add-lesson-request';
 import { TestCoachCreator } from '../fixture/entity/test-coach-creator';
 import { TestLessonCreator } from '../fixture/entity/test-lesson-creator';
@@ -29,7 +30,11 @@ describe('LessonController', () => {
 
   beforeEach(async () => {
     module = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(testConnectionOptions), CoachModule],
+      imports: [
+        TypeOrmModule.forRoot(testConnectionOptions),
+        CoachModule,
+        RedisModule,
+      ],
       controllers: [LessonController],
       providers: [LessonService, LessonRepository, LessonTimeRepository],
     }).compile();
