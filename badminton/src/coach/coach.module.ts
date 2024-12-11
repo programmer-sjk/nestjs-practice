@@ -6,5 +6,6 @@ import { Coach } from './entities/coach.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Coach])],
   providers: [CoachRepository],
+  exports: [CoachRepository],
 })
 export class CoachModule {}

@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { Lock } from 'redlock';
 import { DataSource } from 'typeorm';
+import { CoachRepository } from '../coach/coach.repository';
 import { hash, random } from '../common/crypt';
 import { DayUtil } from '../common/day-util';
 import { RedisService } from '../redis/redis.service';
@@ -31,18 +32,22 @@ export class LessonService {
     private readonly dataSource: DataSource,
     private readonly redisService: RedisService,
     private readonly lessonRepository: LessonRepository,
+    private readonly coachRepository: CoachRepository,
   ) {}
 
   async findAvailableLessons(request: LessonTimesRequest) {
-    const coachId = request.coachId;
-    const cacheKey = `${this.CACHE_LESSON_TIME_PREFIX}:${coachId}`;
+    const coach = await this.coachRepository.findOneByOrFail({
+      id: request.coachId,
+    });
+
+    const cacheKey = `${this.CACHE_LESSON_TIME_PREFIX}:${coach.id}`;
     const cached = await this.redisService.get(cacheKey);
 
     if (cached) {
       return cached;
     }
 
-    const lessons = await this.findInProgressLessons(coachId);
+    const lessons = await this.findInProgressLessons(coach.id);
     const lessonTimes = lessons.flatMap(this.convertLessonTimeByType);
 
     const avaliableTimes = this.ALL_LESSON_TIMES.filter((time) =>
@@ -56,6 +61,9 @@ export class LessonService {
 
   async addLesson(request: AddLessonRequest) {
     const newLesson = request.toEntity(this.LESSON_MINUTE);
+    const coach = await this.coachRepository.findOneByOrFail({
+      id: request.coachId,
+    });
 
     let lock: Lock;
     try {
@@ -65,7 +73,7 @@ export class LessonService {
       const password = random(this.PASSWORD_LENGTH);
       newLesson.updatePassword(hash(password));
       await this.lessonRepository.save(newLesson);
-      const cacheKey = `${this.CACHE_LESSON_TIME_PREFIX}:${request.coachId}`;
+      const cacheKey = `${this.CACHE_LESSON_TIME_PREFIX}:${coach.id}`;
       await this.redisService.del(cacheKey);
 
       return new AddLessonResponse(newLesson.customerPhone, password);
