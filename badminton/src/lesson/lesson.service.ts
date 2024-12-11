@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 import { hash, random } from '../common/crypt';
 import { DayUtil } from '../common/day-util';
+import { RedisService } from '../redis/redis.service';
 import { AddLessonRequest } from './dto/add-lesson-request';
 import { AddLessonResponse } from './dto/add-lesson-response';
 import { LessonTimePeriod } from './dto/lesson-time-period';
@@ -18,19 +19,34 @@ export class LessonService {
   private readonly LESSON_MINUTE = 60;
   private readonly PASSWORD_LENGTH = 8;
   private readonly ALL_LESSON_TIMES = this.getAllLessonTimes();
+  private readonly CACHE_LESSON_TIME_PREFIX = 'lesson-time';
+  private readonly CACHE_TTL = 60 * 60 * 1000; // 1h
 
   constructor(
     private readonly dataSource: DataSource,
+    private readonly redisService: RedisService,
     private readonly lessonRepository: LessonRepository,
   ) {}
 
   async findAvailableLessons(request: LessonTimesRequest) {
-    const lessons = await this.findInProgressLessons(request.coachId);
+    const coachId = request.coachId;
+    const cacheKey = `${this.CACHE_LESSON_TIME_PREFIX}:${coachId}`;
+    const cached = await this.redisService.get(cacheKey);
+
+    if (cached) {
+      return cached;
+    }
+
+    const lessons = await this.findInProgressLessons(coachId);
     const lessonTimes = lessons.flatMap(this.convertLessonTimeByType);
 
-    return this.ALL_LESSON_TIMES.filter((time) =>
+    const avaliableTimes = this.ALL_LESSON_TIMES.filter((time) =>
       this.isAvailableTime(time, lessonTimes),
-    ).map((time) => new LessonTimesResponse(time.start, time.end));
+    );
+    await this.redisService.set(cacheKey, avaliableTimes, this.CACHE_TTL);
+    return avaliableTimes.map(
+      (time) => new LessonTimesResponse(time.start, time.end),
+    );
   }
 
   async addLesson(request: AddLessonRequest) {
@@ -40,6 +56,9 @@ export class LessonService {
     const password = random(this.PASSWORD_LENGTH);
     newLesson.updatePassword(hash(password));
     await this.lessonRepository.save(newLesson);
+
+    const cacheKey = `${this.CACHE_LESSON_TIME_PREFIX}:${request.coachId}`;
+    await this.redisService.del(cacheKey);
 
     return new AddLessonResponse(newLesson.customerPhone, password);
   }
