@@ -3,6 +3,7 @@ import {
   ConflictException,
   Injectable,
 } from '@nestjs/common';
+import { Lock } from 'redlock';
 import { DataSource } from 'typeorm';
 import { hash, random } from '../common/crypt';
 import { DayUtil } from '../common/day-util';
@@ -55,16 +56,24 @@ export class LessonService {
 
   async addLesson(request: AddLessonRequest) {
     const newLesson = request.toEntity(this.LESSON_MINUTE);
-    await this.validateAddLesson(newLesson);
 
-    const password = random(this.PASSWORD_LENGTH);
-    newLesson.updatePassword(hash(password));
-    await this.lessonRepository.save(newLesson);
+    let lock: Lock;
+    try {
+      lock = await this.redisService.acquireLock(`add-lesson`);
+      await this.validateAddLesson(newLesson);
 
-    const cacheKey = `${this.CACHE_LESSON_TIME_PREFIX}:${request.coachId}`;
-    await this.redisService.del(cacheKey);
+      const password = random(this.PASSWORD_LENGTH);
+      newLesson.updatePassword(hash(password));
+      await this.lessonRepository.save(newLesson);
+      const cacheKey = `${this.CACHE_LESSON_TIME_PREFIX}:${request.coachId}`;
+      await this.redisService.del(cacheKey);
 
-    return new AddLessonResponse(newLesson.customerPhone, password);
+      return new AddLessonResponse(newLesson.customerPhone, password);
+    } catch (err) {
+      throw err;
+    } finally {
+      await lock.release();
+    }
   }
 
   async remove(request: RemoveLessonRequest) {
