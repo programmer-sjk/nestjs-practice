@@ -15,7 +15,6 @@ export class Lesson1733986425232 implements MigrationInterface {
         \`password\` varchar(255) NOT NULL, 
         \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), 
         \`deleted_at\` datetime(6) NULL, 
-        \`coachId\` int NULL, 
         PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
   }
