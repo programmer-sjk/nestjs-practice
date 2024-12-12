@@ -1,4 +1,5 @@
 import { DataSourceOptions } from 'typeorm';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
 export const testConnectionOptions: DataSourceOptions = {
   type: 'mysql',
@@ -12,4 +13,5 @@ export const testConnectionOptions: DataSourceOptions = {
   entities: [__dirname + '/../src/**/*.entity{.ts,.js}'],
   migrations: [__dirname + '/../src/migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations',
+  namingStrategy: new SnakeNamingStrategy(),
 };
