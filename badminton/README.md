@@ -29,20 +29,20 @@
 ## 기술
 
 - Typescript, NestJS, TypeORM, MySQL을 사용한다.
-- 어플리케이션 서버를 제외한 다른 DB 들은 docker를 이용한다.
-- Open API 명세를 제공한다.
+- 어플리케이션 서버를 제외한 다른 저장소는 docker를 이용한다.
 - 서버 실행 방법을 제공한다.
 - 테스트 코드를 작성한다.
 - 동시성 문제를 해결한다.
 
-## 할것
+## 실행 방법
 
-- 테스트 코드 추가
-- seed data 추가하기
-- mysql 한국어 반영
-- 삭제 기능 개발
-- cache 반영
-- 동시성 제어 반영
-- 만약 코치가 탈퇴하면 레슨과 레슨 타임도 모두 삭제되나? cascade에 의해
+- docker-compose up -d 명령어로 DB, Redis를 컨테이너로 실행한다.
+- yarn migration:run 명령어로 테이블을 생성한다.
+- yarn seed:run 명령어로 coach에 대한 초기 데이터를 생성한다.
+- yarn start:dev 명령어로 서버를 실행한다.
+
+## 더 해 볼것
+
+- 테스트 시에 redis mock으로 보통 하는지 확인. 맞으면 mock 기반 테스트로 수정
 - DB조회시 자식이 부모를 모르는 현상에 대해 탐구
 - 현재 두개의 프로젝트 mono repo

@@ -73,6 +73,7 @@ export class LessonService {
       const password = random(this.PASSWORD_LENGTH);
       newLesson.updatePassword(hash(password));
       await this.lessonRepository.save(newLesson);
+
       const cacheKey = `${this.CACHE_LESSON_TIME_PREFIX}:${coach.id}`;
       await this.redisService.del(cacheKey);
 
