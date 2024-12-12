@@ -44,7 +44,7 @@ export class Lesson {
   @ManyToOne(() => Coach, {
     createForeignKeyConstraints: false,
   })
-  @JoinColumn({ name: 'coachId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'coach_id', referencedColumnName: 'id' })
   coach: Coach;
 
   @OneToMany(() => LessonTime, (lessonTime) => lessonTime.lesson, {
@@ -64,9 +64,7 @@ export class Lesson {
     lesson.lessonMinute = lessonMinute;
     lesson.customerName = customerName;
     lesson.customerPhone = customerPhone;
-
-    lesson.coach = new Coach();
-    lesson.coach.id = coachId;
+    lesson.coachId = coachId;
     return lesson;
   }
 
