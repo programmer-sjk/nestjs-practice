@@ -1,16 +1,16 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class LessonTime1732621263655 implements MigrationInterface {
-  name = 'LessonTime1732621263655';
+export class LessonTime1733986496018 implements MigrationInterface {
+  name = 'LessonTime1733986496018';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `CREATE TABLE \`lesson_time\` (
         \`id\` int NOT NULL AUTO_INCREMENT, 
-        \`dayOfWeek\` enum ('SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FIRDAY', 'SATURDAY') NULL, 
-        \`startDate\` datetime NULL, 
-        \`startTime\` varchar(5) NULL, 
-        \`lessonId\` int NOT NULL, 
+        \`day_of_week\` enum ('SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FIRDAY', 'SATURDAY') NULL, 
+        \`start_date\` datetime NULL, 
+        \`start_time\` varchar(5) NULL, 
+        \`lesson_id\` int NOT NULL, 
         PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
   }

@@ -1,20 +1,21 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Lesson1732602044742 implements MigrationInterface {
-  name = 'Lesson1732602044742';
+export class Lesson1733986425232 implements MigrationInterface {
+  name = 'Lesson1733986425232';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `CREATE TABLE \`lesson\` (
         \`id\` int NOT NULL AUTO_INCREMENT, 
-        \`coachId\` int NOT NULL, 
+        \`coach_id\` int NOT NULL, 
         \`type\` enum ('ONE_TIME', 'REGULAR') NOT NULL, 
-        \`lessonMinute\` int NOT NULL, 
-        \`customerName\` varchar(18) NOT NULL, 
-        \`customerPhone\` varchar(11) NOT NULL, 
+        \`lesson_minute\` int NOT NULL, 
+        \`customer_name\` varchar(18) NOT NULL, 
+        \`customer_phone\` varchar(11) NOT NULL, 
         \`password\` varchar(255) NOT NULL, 
-        \`createdAt\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), 
-        \`deletedAt\` datetime(6) NULL, 
+        \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), 
+        \`deleted_at\` datetime(6) NULL, 
+        \`coachId\` int NULL, 
         PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
   }
