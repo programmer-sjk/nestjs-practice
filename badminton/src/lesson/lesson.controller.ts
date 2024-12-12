@@ -40,7 +40,7 @@ export class LessonController {
     @Body() request: RemoveLessonRequest,
   ): Promise<ReponseEntity<AddLessonResponse | string>> {
     try {
-      const data = await this.lessonService.remove(request);
+      await this.lessonService.remove(request);
       return ReponseEntity.OK();
     } catch (e) {
       return ReponseEntity.ERROR(e.message);

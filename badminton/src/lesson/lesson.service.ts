@@ -86,22 +86,37 @@ export class LessonService {
   }
 
   async remove(request: RemoveLessonRequest) {
-    const lesson = await this.lessonRepository.findOne({
+    const lesson = await this.lessonRepository.findOneOrFail({
       where: {
         id: request.lessonId,
       },
       relations: ['lessonTimes'],
     });
-    if (!lesson) {
-      throw new BadRequestException('존재하지 않는 레슨입니다.');
-    }
 
-    lesson.validateCredentials(request.customerPhone, hash(request.password));
+    lesson.updateLessonTimes(lesson.lessonTimes);
+    await this.validateRemoveLesson(
+      lesson,
+      request.customerPhone,
+      request.password,
+    );
 
     await this.dataSource.transaction(async (manager) => {
       await manager.remove(lesson.lessonTimes);
       await manager.remove(lesson);
     });
+  }
+
+  private async validateRemoveLesson(
+    lesson: Lesson,
+    customerPhone: string,
+    password: string,
+  ) {
+    const recentLessonTime = lesson.recentLessonTime();
+    if (DayUtil.isToday(recentLessonTime.getStartDate())) {
+      throw new BadRequestException('당일 예약은 삭제할 수 없습니다.');
+    }
+
+    lesson.validateCredentials(customerPhone, hash(password));
   }
 
   private getAllLessonTimes() {
@@ -134,7 +149,7 @@ export class LessonService {
 
   private async validateDuplicateLesson(lesson: Lesson) {
     const newLessonTimes = this.convertLessonTimeByType(lesson);
-    const existLessons = await this.findInProgressLessons(lesson.coach.id);
+    const existLessons = await this.findInProgressLessons(lesson.coachId);
     const lessonTimes = existLessons.flatMap(this.convertLessonTimeByType);
 
     for (const newLessonTime of newLessonTimes) {

@@ -80,10 +80,6 @@ export class DayUtil {
     return date.isSameOrBefore(end);
   }
 
-  static isAfter(target: Date, condition: Date) {
-    return dayjs(target).isAfter(condition);
-  }
-
   static toDate(target: Date) {
     return dayjs(target).toDate();
   }
