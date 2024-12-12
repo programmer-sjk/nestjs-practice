@@ -78,6 +78,14 @@ export class Lesson {
     return this.type === LessonType.REGULAR;
   }
 
+  recentLessonTime() {
+    const recentOffset = 0;
+    return this.lessonTimes.sort(
+      (timeA, timeB) =>
+        timeA.getStartDate().valueOf() - timeB.getStartDate().valueOf(),
+    )[recentOffset];
+  }
+
   updateLessonTimes(lessonTimes: LessonTime[]) {
     this.lessonTimes = lessonTimes;
     for (const lessonTime of this.lessonTimes) {
