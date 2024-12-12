@@ -1,6 +1,6 @@
 export class ReponseEntity<T> {
   private static readonly SUCCESS = true;
-  private static readonly FAIL = true;
+  private static readonly FAIL = false;
 
   readonly success: boolean;
   readonly message: string;
