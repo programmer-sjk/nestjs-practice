@@ -1,4 +1,4 @@
-import { ConflictException } from '@nestjs/common';
+import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DayUtil } from '../../src/common/day-util';
@@ -189,6 +189,30 @@ describe('LessonService', () => {
         lessonId: savedLesson.id,
       });
       expect(lessonTimes).toHaveLength(0);
+    });
+
+    it('당일 예약은 삭제할 수 없다.', async () => {
+      // given
+      const password = 'hahaha';
+      const coach = await coachRepository.save(TestCoachCreator.of());
+      const lesson = TestLessonCreator.createOneTimeLesson(coach.id, password);
+      lesson.lessonTimes = [
+        TestLessonTimeCreator.createOneTimeLessonTimes(
+          lesson,
+          DayUtil.addFromNow(0, 7).toDate(),
+        ),
+      ];
+      const savedLesson = await lessonRepository.save(lesson);
+
+      const dto = new RemoveLessonRequest();
+      dto.lessonId = savedLesson.id;
+      dto.customerPhone = savedLesson.customerPhone;
+      dto.password = 'hahaha';
+
+      // when & then
+      await expect(() => service.remove(dto)).rejects.toThrow(
+        new BadRequestException('당일 예약은 삭제할 수 없습니다.'),
+      );
     });
 
     it('핸드폰 번호, 패스워드가 일치하지 않으면 삭제할 수 없다.', async () => {
