@@ -1,18 +1,16 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Customer1733139727952 implements MigrationInterface {
-  name = 'Customer1733139727952';
+export class Customer1734077668734 implements MigrationInterface {
+  name = 'Customer1734077668734';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `CREATE TABLE \`customer\` (
         \`id\` int NOT NULL AUTO_INCREMENT, 
         \`name\` varchar(16) NOT NULL, 
-        \`account_name\` varchar(10) NOT NULL, 
+        \`account_name\` varchar(32) NOT NULL, 
         \`password\` varchar(255) NOT NULL, 
         \`phone\` varchar(11) NOT NULL, 
-        \`card_number\` varchar(16) NULL, 
-        \`billing_key\` varchar(255) NULL, 
         \`zip_code\` varchar(5) NOT NULL, 
         \`address\` varchar(32) NOT NULL, 
         \`address_detail\` varchar(16) NOT NULL, 
