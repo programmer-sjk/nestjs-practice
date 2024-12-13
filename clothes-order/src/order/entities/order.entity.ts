@@ -75,7 +75,7 @@ export class Order {
   }
 
   updatePrice(price: Price) {
-    this.price = price.get();
+    this.price = price.value();
   }
 
   itemCount() {

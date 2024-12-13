@@ -1,8 +1,7 @@
 export class Price {
-  private static readonly DEFAULT_PRICE = 1_000;
   private static readonly DISCOUNT_RATE = 0.5;
 
-  private value;
+  private _value;
 
   private constructor() {}
 
@@ -12,11 +11,11 @@ export class Price {
     }
 
     const price = new Price();
-    price.value = isDiscount ? value * this.DISCOUNT_RATE : value;
+    price._value = isDiscount ? value * this.DISCOUNT_RATE : value;
     return price;
   }
 
-  get() {
-    return this.value;
+  value() {
+    return this._value;
   }
 }

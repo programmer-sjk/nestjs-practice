@@ -12,7 +12,7 @@ import { OrderRepository } from './repositories/order.repository';
 
 @Injectable()
 export class OrderService {
-  private readonly ORDER_PRICE = 1_000;
+  private readonly DEFAULT_PRICE = 1_000;
 
   constructor(
     private readonly customerRepository: CustomerRepository,
@@ -35,7 +35,7 @@ export class OrderService {
     });
     const order = request.toEntity(customer);
     order.updatePrice(
-      Price.of(order.itemCount() * this.ORDER_PRICE, customer.isNewMember()),
+      Price.of(order.itemCount() * this.DEFAULT_PRICE, customer.isNewMember()),
     );
 
     await this.orderRepository.save(order);
