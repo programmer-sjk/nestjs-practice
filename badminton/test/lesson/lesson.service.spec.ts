@@ -1,6 +1,7 @@
 import { BadRequestException, ConflictException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import Redis from 'ioredis';
 import { DayUtil } from '../../src/common/day-util';
 import { RemoveLessonRequest } from '../../src/lesson/dto/remove-lesson-request';
 import { LessonType } from '../../src/lesson/enums/lesson-type.enum';
@@ -23,6 +24,7 @@ describe('LessonService', () => {
   let lessonRepository: LessonRepository;
   let lessonTimeRepository: LessonTimeRepository;
   let coachRepository: CoachRepository;
+  let redisClient: Redis;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -40,15 +42,19 @@ describe('LessonService', () => {
     lessonTimeRepository =
       module.get<LessonTimeRepository>(LessonTimeRepository);
     coachRepository = module.get<CoachRepository>(CoachRepository);
+
+    redisClient = Redis.createClient();
   });
 
   beforeEach(async () => {
     await lessonRepository.clear();
     await lessonTimeRepository.clear();
     await coachRepository.clear();
+    await redisClient.flushall();
   });
 
   afterAll(async () => {
+    await redisClient.quit();
     await module.close();
   });
 
