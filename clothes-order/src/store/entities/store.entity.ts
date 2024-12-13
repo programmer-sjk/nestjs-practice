@@ -14,6 +14,9 @@ export class Store {
   @Column({ length: 32 })
   address: string;
 
+  @Column({ nullable: true })
+  description?: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
