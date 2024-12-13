@@ -2,7 +2,7 @@ import { Exclude, Expose } from 'class-transformer';
 
 export class ResponseEntity<T> {
   private static readonly SUCCESS = true;
-  private static readonly FAIL = true;
+  private static readonly FAIL = false;
 
   @Exclude() readonly _success: boolean;
   @Exclude() readonly _message: string;
