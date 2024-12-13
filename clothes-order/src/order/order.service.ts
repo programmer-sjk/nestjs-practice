@@ -4,7 +4,7 @@ import { DayUtil } from '../common/day-util';
 import { CustomerRepository } from './../customer/customer.repository';
 import { AddOrderRequest } from './dto/add-order-request';
 import { OrderResponse } from './dto/order-response';
-import { ReturnOrderRequest } from './dto/return-order-request';
+import { TakeOrderRequest } from './dto/take-order-request';
 import { Price } from './entities/price';
 import { OrderStatus } from './enum/order-status.enum';
 import { OrderItemRepository } from './repositories/order-item.repository';
@@ -41,7 +41,7 @@ export class OrderService {
     await this.orderRepository.save(order);
   }
 
-  async returnClothes(request: ReturnOrderRequest) {
+  async takeOrderItems(request: TakeOrderRequest) {
     const itemIds = request.orderItemIds;
     const orders = await this.orderRepository.findWithItems(
       request.customerId,

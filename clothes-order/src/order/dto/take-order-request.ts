@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { ArrayMinSize, IsArray, IsNotEmpty, IsNumber } from 'class-validator';
 
-export class ReturnOrderRequest {
+export class TakeOrderRequest {
   @ApiProperty({
     type: Number,
     description: '세션 기능이 없으므로 client에게 받는 사용자 ID',

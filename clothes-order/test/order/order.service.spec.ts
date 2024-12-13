@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ReturnOrderRequest } from '../../src/order/dto/return-order-request';
+import { TakeOrderRequest } from '../../src/order/dto/take-order-request';
 import { OrderService } from '../../src/order/order.service';
 import { OrderItemRepository } from '../../src/order/repositories/order-item.repository';
 import { TestCustomerCreator } from '../fixture/entity/test-customer-creator';
@@ -84,12 +84,12 @@ describe('OrderService', () => {
       order.orderItems = [TestOrderItemCreator.of()];
       const savedOrder = await orderRepository.save(order);
 
-      const dto = new ReturnOrderRequest();
+      const dto = new TakeOrderRequest();
       dto.customerId = customer.id;
       dto.orderItemIds = savedOrder.orderItems.map((item) => item.id);
 
       // when
-      const result = await service.returnClothes(dto);
+      const result = await service.takeOrderItems(dto);
 
       // then
       const items = await orderItemRepository.find();

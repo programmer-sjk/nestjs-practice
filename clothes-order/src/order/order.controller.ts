@@ -4,7 +4,7 @@ import { ResponseEntity } from '../common/response-entity';
 import { AddOrderRequest } from './dto/add-order-request';
 import { OrderResponse } from './dto/order-response';
 import { OrdersRequest } from './dto/orders-request';
-import { ReturnOrderRequest } from './dto/return-order-request';
+import { TakeOrderRequest } from './dto/take-order-request';
 import { OrderService } from './order.service';
 
 @Controller('orders')
@@ -33,17 +33,15 @@ export class OrderController {
   }
 
   @Post('/return')
-  async returnOrder(
-    @Body() request: ReturnOrderRequest,
+  async takeOrderItems(
+    @Body() request: TakeOrderRequest,
   ): Promise<ResponseEntity<string>> {
-    await this.orderService.returnClothes(request);
+    await this.orderService.takeOrderItems(request);
     return ResponseEntity.OK();
   }
 
   @Delete(':id')
-  async remove(
-    @Param('id') id: number,
-  ): Promise<ResponseEntity<string>> {
+  async remove(@Param('id') id: number): Promise<ResponseEntity<string>> {
     await this.orderService.remove(id);
     return ResponseEntity.OK();
   }

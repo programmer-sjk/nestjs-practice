@@ -1,10 +1,10 @@
 import { validate } from 'class-validator';
-import { ReturnOrderRequest } from '../../../src/order/dto/return-order-request';
+import { TakeOrderRequest } from '../../../src/order/dto/take-order-request';
 
 describe('ReturnOrderRequest', () => {
   it('customerid는 숫자형이며 필수값이다.', async () => {
     // given
-    const dto = new ReturnOrderRequest();
+    const dto = new TakeOrderRequest();
     dto.customerId = undefined;
 
     // when
@@ -23,7 +23,7 @@ describe('ReturnOrderRequest', () => {
 
   it('orderItemIds은 숫자형 배열로 최소 하나의 요소를 가지며 필수값이다.', async () => {
     // given
-    const dto = new ReturnOrderRequest();
+    const dto = new TakeOrderRequest();
     dto.orderItemIds = undefined;
 
     // when
