@@ -10,7 +10,7 @@ export class LessonRepository extends Repository<Lesson> {
   }
 
   async findInProgress(coachId: number, start: Date, end: Date) {
-    return this.createQueryBuilder('lesson')
+    const lessons = await this.createQueryBuilder('lesson')
       .innerJoin('lesson.coach', 'coach')
       .innerJoinAndSelect('lesson.lessonTimes', 'lessonTimes')
       .where('coach.id = :coachId', { coachId })
@@ -19,5 +19,8 @@ export class LessonRepository extends Repository<Lesson> {
         { type: LessonType.REGULAR, start, end },
       )
       .getMany();
+
+    lessons.map((lesson) => lesson.updateLessonTimes(lesson.lessonTimes));
+    return lessons;
   }
 }

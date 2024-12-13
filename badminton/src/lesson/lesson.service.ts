@@ -177,14 +177,13 @@ export class LessonService {
   }
 
   private convertLessonTimeByType(lesson: Lesson) {
-    return lesson.lessonTimes.map((lessonTime) => {
-      lessonTime.updateLesson(lesson);
-
-      return new LessonTimePeriod(
-        lessonTime.getStartDate(),
-        lessonTime.getEndDate(),
-      );
-    });
+    return lesson.lessonTimes.map(
+      (lessonTime) =>
+        new LessonTimePeriod(
+          lessonTime.getStartDate(),
+          lessonTime.getEndDate(),
+        ),
+    );
   }
 
   private isAvailableTime(
