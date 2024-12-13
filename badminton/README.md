@@ -43,6 +43,4 @@
 
 ## 더 해 볼것
 
-- 테스트 시에 redis mock으로 보통 하는지 확인. 맞으면 mock 기반 테스트로 수정
-- DB조회시 자식이 부모를 모르는 현상에 대해 탐구 (tree parent?)
-- 현재 두개의 프로젝트 mono repo
+- 프로젝트 mono repo로 구성
