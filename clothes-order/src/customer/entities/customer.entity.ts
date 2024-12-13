@@ -25,12 +25,6 @@ export class Customer {
   @Column({ length: 11 })
   phone: string;
 
-  @Column({ nullable: true, length: 16 })
-  card_number?: string;
-
-  @Column({ nullable: true })
-  billingKey?: string;
-
   @Column({ length: 5 })
   zipCode: string;
 
