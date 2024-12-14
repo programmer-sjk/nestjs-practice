@@ -1,7 +1,8 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { SeederOptions } from 'typeorm-extension';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 
-export const connectionOptions: DataSourceOptions = {
+export const connectionOptions: DataSourceOptions & SeederOptions = {
   type: 'mysql',
   host: 'localhost',
   port: 3306,
@@ -13,6 +14,7 @@ export const connectionOptions: DataSourceOptions = {
   entities: [__dirname + '/src/**/entities/*.{js,ts}'],
   migrations: [__dirname + '/src/migrations/*.{js,ts}'],
   migrationsTableName: 'migrations',
+  seeds: [__dirname + '/src/migrations/seeds/*.{js,ts}'],
   namingStrategy: new SnakeNamingStrategy(),
 };
 
