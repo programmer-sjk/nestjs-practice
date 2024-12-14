@@ -8,7 +8,7 @@ export class TestAddOrderRequest {
   static of(customerId: number, orderItemDtos: OrderItemDto[]) {
     const dto = new AddOrderRequest();
     dto.customerId = customerId;
-    dto.type = OrderType.CLOTHES_KEEPING;
+    dto.type = OrderType.PRODUCT_KEEPING;
     dto.orderItemDtos = orderItemDtos;
     return dto;
   }

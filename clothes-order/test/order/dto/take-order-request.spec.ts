@@ -1,7 +1,7 @@
 import { validate } from 'class-validator';
 import { TakeOrderRequest } from '../../../src/order/dto/take-order-request';
 
-describe('ReturnOrderRequest', () => {
+describe('TakeOrderRequest', () => {
   it('customerid는 숫자형이며 필수값이다.', async () => {
     // given
     const dto = new TakeOrderRequest();

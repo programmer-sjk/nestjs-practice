@@ -6,7 +6,7 @@ export class TestOrderItemDto {
 
   static of() {
     const dto = new OrderItemDto();
-    dto.type = OrderItemType.CLOTHES;
+    dto.type = OrderItemType.PRODUCT;
     dto.category = 'TOP';
     dto.subCategory = 'SWEATER';
     dto.count = 3;

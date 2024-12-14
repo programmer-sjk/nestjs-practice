@@ -1,3 +1,3 @@
 export enum OrderItemType {
-  CLOTHES = 'CLOTHES',
+  PRODUCT = 'PRODUCT',
 }

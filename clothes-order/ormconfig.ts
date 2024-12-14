@@ -8,7 +8,7 @@ export const connectionOptions: DataSourceOptions & SeederOptions = {
   port: 3306,
   username: 'root',
   password: 'password',
-  database: 'clothes',
+  database: 'product',
   logging: true,
   synchronize: false,
   entities: [__dirname + '/src/**/entities/*.{js,ts}'],

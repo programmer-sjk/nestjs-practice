@@ -6,11 +6,11 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - clothes_order_vol:/var/lib/mysql
+      - product_order_vol:/var/lib/mysql
       - './scripts:/docker-entrypoint-initdb.d'
     environment:
-      MYSQL_DATABASE: 'clothes'
+      MYSQL_DATABASE: 'product'
       MYSQL_ROOT_PASSWORD: password
 
 volumes:
-  clothes_order_vol:
+  product_order_vol:

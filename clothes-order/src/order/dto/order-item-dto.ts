@@ -8,25 +8,19 @@ import { Order } from './../entities/order.entity';
 export class OrderItemDto {
   @ApiProperty({
     enum: OrderItemType,
-    example: 'CLOTHES',
+    example: 'PRODUCT',
     description: '주문 아이템 타입',
   })
   @IsNotEmpty()
   @IsEnum(OrderItemType)
   type: OrderItemType;
 
-  @ApiProperty({
-    example: `One Of [TOP, BOTTOM, SOCKS, CAP, PANTS]`,
-    description: '상의 카테고리',
-  })
+  @ApiProperty({ description: '상위 카테고리' })
   @IsNotEmpty()
   @IsString()
   category: string;
 
-  @ApiProperty({
-    example: 'One Of [T-SHIRTS, SHIRTS, SWEATER, PADDING, JEAN]',
-    description: '하위 카테고리',
-  })
+  @ApiProperty({ description: '하위 카테고리' })
   @IsNotEmpty()
   @IsString()
   subCategory: string;

@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AddOrderRequest } from '../../src/order/dto/add-order-request';
 import { TakeOrderRequest } from '../../src/order/dto/take-order-request';
+import { OrderType } from '../../src/order/enum/order-type.enum';
 import { OrderService } from '../../src/order/order.service';
 import { OrderItemRepository } from '../../src/order/repositories/order-item.repository';
 import { TestCustomerCreator } from '../fixture/entity/test-customer-creator';
@@ -66,9 +68,12 @@ describe('OrderService', () => {
       const customer = await customerRepository.save(TestCustomerCreator.of());
       const order = TestOrderCreator.of(customer);
       order.orderItems = [TestOrderItemCreator.of()];
+      const dto = new AddOrderRequest();
+      dto.customerId = customer.id;
+      dto.type = OrderType.PRODUCT_KEEPING;
 
       // when
-      const result = await orderRepository.save(order);
+      const result = await service.addOrder(order);
 
       // then
       const orders = await orderRepository.find();
@@ -76,8 +81,8 @@ describe('OrderService', () => {
     });
   });
 
-  describe('returnClothes', () => {
-    it('의류 주문을 반환 신청할 수 있다.', async () => {
+  describe('takeOrderItems', () => {
+    it('주문을 반환 신청할 수 있다.', async () => {
       // given
       const customer = await customerRepository.save(TestCustomerCreator.of());
       const order = TestOrderCreator.of(customer);
