@@ -16,6 +16,7 @@
     "migration:generate": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:generate -d ormconfig.ts",
     "migration:run": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:run -d ormconfig.ts",
     "migration:revert": "./node_modules/.bin/ts-node ./node_modules/.bin/typeorm migration:revert -d ormconfig.ts",
+    "seed:run": "./node_modules/.bin/ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d ormconfig.ts",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
