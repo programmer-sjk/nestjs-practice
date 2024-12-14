@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import { Order } from '../entities/order.entity';
+import { OrderStatus } from '../enum/order-status.enum';
 import { OrderItemResponse } from './order-item-response';
 
 export class OrderResponse {
   @Exclude() private readonly _id: number;
+  @Exclude() private readonly _status: OrderStatus;
   @Exclude() private readonly _orderItems: OrderItemResponse[];
 
   constructor(order: Order) {
@@ -18,6 +20,12 @@ export class OrderResponse {
   @Expose()
   get id(): number {
     return this._id;
+  }
+
+  @ApiProperty({ enum: OrderStatus, description: '주문 상태' })
+  @Expose()
+  get status(): OrderStatus {
+    return this._status;
   }
 
   @ApiProperty({
