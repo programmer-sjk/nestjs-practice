@@ -6,6 +6,7 @@ import { AddOrderRequest } from './dto/add-order-request';
 import { OrderResponse } from './dto/order-response';
 import { TakeOrderRequest } from './dto/take-order-request';
 import { Price } from './entities/price';
+import { OrderItemStatus } from './enum/order-item-status.enum';
 import { OrderStatus } from './enum/order-status.enum';
 import { OrderItemRepository } from './repositories/order-item.repository';
 import { OrderRepository } from './repositories/order.repository';
@@ -57,7 +58,10 @@ export class OrderService {
 
     await this.orderItemRepository.update(
       { id: In(itemIds) },
-      { requestedAt: DayUtil.toDate() },
+      {
+        requestedAt: DayUtil.toDate(),
+        status: OrderItemStatus.RETURN_PROGRESS,
+      },
     );
   }
 
