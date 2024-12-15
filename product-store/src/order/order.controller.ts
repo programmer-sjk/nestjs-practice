@@ -13,7 +13,7 @@ export class OrderController {
 
   @ApiOkResponse({ isArray: true, type: OrderResponse })
   @Get()
-  async orders(
+  async findAll(
     @Body() request: OrdersRequest,
   ): Promise<ResponseEntity<OrderResponse[] | string>> {
     try {
