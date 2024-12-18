@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ShortUrlController } from '../src/short-url/short-url.controller';
+import { ShortUrlController } from '../../src/short-url/short-url.controller';
 
 describe('ShortUrlController', () => {
   let controller: ShortUrlController;
