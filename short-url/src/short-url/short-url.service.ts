@@ -48,20 +48,4 @@ export class ShortUrlService {
   private async shortUrlByBaseCalculation(longUrl: string) {}
 
   private async shortUrlByBase62(longUrl: string) {}
-
-  test() {
-    const t = 8;
-    const base = 2;
-
-    const result = [];
-    let current = t;
-    while (current >= base) {
-      result.push(current % base);
-      current = Math.floor(current / base);
-    }
-
-    result.push(current);
-
-    console.log(result);
-  }
 }

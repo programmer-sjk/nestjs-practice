@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { AddShortUrlRequest } from './dto/add-short-url-request';
 import { CreateType } from './enums/create-type.enum';
 import { ShortUrlService } from './short-url.service';
@@ -13,10 +13,5 @@ export class ShortUrlController {
     @Body() request: AddShortUrlRequest,
   ) {
     return this.shortUrlService.addShortUrl(type, request.longUrl);
-  }
-
-  @Get()
-  async test() {
-    return this.shortUrlService.test();
   }
 }
