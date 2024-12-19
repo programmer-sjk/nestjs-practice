@@ -1,12 +1,25 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
+import { hash } from './../common/hash';
+import { ShortUrl } from './entities/short-url.entity';
 import { CreateType } from './enums/create-type.enum';
+import { ShortUrlRepository } from './short-url.repository';
 
 @Injectable()
 export class ShortUrlService {
+  private readonly SHORT_URL_LENGTH = 7;
+  private readonly MAX_HASH_COLLISION = 3;
+
+  constructor(private readonly shortUrlRepository: ShortUrlRepository) {}
+
   async addShortUrl(type: CreateType, longUrl: string) {
     switch (type) {
       case CreateType.HASH:
-        return this.shortUrlByHash(longUrl);
+        const retryCnt = 0;
+        return this.shortUrlByHash(longUrl, retryCnt);
       case CreateType.RAW:
         return this.shortUrlByBaseCalculation(longUrl);
       case CreateType.LIB:
@@ -16,7 +29,22 @@ export class ShortUrlService {
     }
   }
 
-  private async shortUrlByHash(longUrl: string) {}
+  private async shortUrlByHash(longUrl: string, retryCnt: number) {
+    if (retryCnt >= this.MAX_HASH_COLLISION) {
+      throw new InternalServerErrorException('에러가 발생했습니다.');
+    }
+
+    const newShortUrl = hash(longUrl).slice(0, this.SHORT_URL_LENGTH);
+    const shortUrl = await this.shortUrlRepository.findOneBy({
+      url: newShortUrl,
+    });
+
+    if (shortUrl) {
+      await this.shortUrlByHash(longUrl, retryCnt++);
+    }
+
+    await this.shortUrlRepository.save(ShortUrl.of(longUrl, newShortUrl));
+  }
 
   private async shortUrlByBaseCalculation(longUrl: string) {}
 
