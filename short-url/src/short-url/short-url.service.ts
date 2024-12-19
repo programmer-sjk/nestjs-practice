@@ -23,8 +23,8 @@ export class ShortUrlService {
         return this.shortUrlByHash(longUrl);
       case CreateType.RAW:
         return this.shortUrlByBaseCalculation(longUrl);
-      case CreateType.LIB:
-        return this.shortUrlByBase62(longUrl);
+      case CreateType.SNOW_FLAKE:
+        return this.shortUrlBySnowFlake(longUrl);
       default:
         throw new BadRequestException('허용하지 않는 생성 타입입니다.');
     }
@@ -59,5 +59,5 @@ export class ShortUrlService {
     await this.shortUrlRepository.save(shortUrl);
   }
 
-  private async shortUrlByBase62(longUrl: string) {}
+  private async shortUrlBySnowFlake(longUrl: string) {}
 }
