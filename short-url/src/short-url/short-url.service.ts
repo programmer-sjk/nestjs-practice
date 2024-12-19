@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { Snowflake } from 'nodejs-snowflake';
 import { Base62Converter } from '../common/base-62-converter';
 import { hash } from './../common/hash';
 import { ShortUrl } from './entities/short-url.entity';
@@ -14,8 +15,11 @@ export class ShortUrlService {
   private readonly DEFAULT_SHORT_URL_LENGTH = 7;
   private readonly MAX_HASH_COLLISION = 3;
   private readonly DOMAIN = 'https://short.com';
+  private readonly SNOW_FLAKE: Snowflake;
 
-  constructor(private readonly shortUrlRepository: ShortUrlRepository) {}
+  constructor(private readonly shortUrlRepository: ShortUrlRepository) {
+    this.SNOW_FLAKE = new Snowflake();
+  }
 
   async addShortUrl(type: CreateType, longUrl: string) {
     switch (type) {
@@ -59,5 +63,9 @@ export class ShortUrlService {
     await this.shortUrlRepository.save(shortUrl);
   }
 
-  private async shortUrlBySnowFlake(longUrl: string) {}
+  private async shortUrlBySnowFlake(longUrl: string) {
+    const uniqueId = this.SNOW_FLAKE.getUniqueID();
+    const url = `${this.DOMAIN}/${Base62Converter.encode(Number(uniqueId))}`;
+    await this.shortUrlRepository.save(ShortUrl.of(longUrl, url));
+  }
 }
