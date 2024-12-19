@@ -18,4 +18,12 @@ export class ShortUrl {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  static of(longUrl: string, shortUrl: string) {
+    const entity = new ShortUrl();
+    entity.original = longUrl;
+    entity.url = shortUrl;
+
+    return entity;
+  }
 }
