@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
+import { Base62Converter } from '../common/base-62-converter';
 import { hash } from './../common/hash';
 import { ShortUrl } from './entities/short-url.entity';
 import { CreateType } from './enums/create-type.enum';
@@ -12,6 +13,7 @@ import { ShortUrlRepository } from './short-url.repository';
 export class ShortUrlService {
   private readonly DEFAULT_SHORT_URL_LENGTH = 7;
   private readonly MAX_HASH_COLLISION = 3;
+  private readonly DOMAIN = 'https://short.com';
 
   constructor(private readonly shortUrlRepository: ShortUrlRepository) {}
 
@@ -45,7 +47,17 @@ export class ShortUrlService {
     throw new InternalServerErrorException('short url 생성에 실패했습니다.');
   }
 
-  private async shortUrlByBaseCalculation(longUrl: string) {}
+  // 트랜잭션 걸었다고 가정
+  private async shortUrlByBaseCalculation(longUrl: string) {
+    const emptyShortUrl = '';
+    const shortUrl = await this.shortUrlRepository.save(
+      ShortUrl.of(longUrl, emptyShortUrl),
+    );
+
+    const url = `${this.DOMAIN}/${Base62Converter.encode(shortUrl.id)}`;
+    shortUrl.updateShortUrl(url);
+    await this.shortUrlRepository.save(shortUrl);
+  }
 
   private async shortUrlByBase62(longUrl: string) {}
 }
