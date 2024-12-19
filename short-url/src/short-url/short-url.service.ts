@@ -10,7 +10,7 @@ import { ShortUrlRepository } from './short-url.repository';
 
 @Injectable()
 export class ShortUrlService {
-  private readonly SHORT_URL_LENGTH = 7;
+  private readonly DEFAULT_SHORT_URL_LENGTH = 7;
   private readonly MAX_HASH_COLLISION = 3;
 
   constructor(private readonly shortUrlRepository: ShortUrlRepository) {}
@@ -18,8 +18,7 @@ export class ShortUrlService {
   async addShortUrl(type: CreateType, longUrl: string) {
     switch (type) {
       case CreateType.HASH:
-        const retryCnt = 0;
-        return this.shortUrlByHash(longUrl, retryCnt);
+        return this.shortUrlByHash(longUrl);
       case CreateType.RAW:
         return this.shortUrlByBaseCalculation(longUrl);
       case CreateType.LIB:
@@ -29,21 +28,21 @@ export class ShortUrlService {
     }
   }
 
-  private async shortUrlByHash(longUrl: string, retryCnt: number) {
-    if (retryCnt >= this.MAX_HASH_COLLISION) {
-      throw new InternalServerErrorException('에러가 발생했습니다.');
+  private async shortUrlByHash(longUrl: string) {
+    for (let i = 0; i <= this.MAX_HASH_COLLISION; i++) {
+      const urlLength = this.DEFAULT_SHORT_URL_LENGTH + i;
+      const newShortUrl = hash(longUrl).slice(0, urlLength);
+      const shortUrl = await this.shortUrlRepository.findOneBy({
+        url: newShortUrl,
+      });
+
+      if (!shortUrl) {
+        await this.shortUrlRepository.save(ShortUrl.of(longUrl, newShortUrl));
+        break;
+      }
     }
 
-    const newShortUrl = hash(longUrl).slice(0, this.SHORT_URL_LENGTH);
-    const shortUrl = await this.shortUrlRepository.findOneBy({
-      url: newShortUrl,
-    });
-
-    if (shortUrl) {
-      await this.shortUrlByHash(longUrl, retryCnt++);
-    }
-
-    await this.shortUrlRepository.save(ShortUrl.of(longUrl, newShortUrl));
+    throw new InternalServerErrorException('short url 생성에 실패했습니다.');
   }
 
   private async shortUrlByBaseCalculation(longUrl: string) {}
