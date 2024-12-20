@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { Snowflake } from 'nodejs-snowflake';
 import { Base62Converter } from '../common/base-62-converter';
@@ -26,7 +27,11 @@ export class ShortUrlService {
       url: shortUrl,
     });
 
-    return url ? url.original : undefined;
+    if (!url) {
+      throw new NotFoundException('url 정보가 없습니다.');
+    }
+
+    return url.original;
   }
 
   async addShortUrl(type: CreateType, longUrl: string) {
