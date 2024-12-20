@@ -11,7 +11,7 @@ export class ShortUrlController {
   async addShortUrl(
     @Param('type') type: CreateType,
     @Body() request: AddShortUrlRequest,
-  ) {
+  ): Promise<string> {
     return this.shortUrlService.addShortUrl(type, request.longUrl);
   }
 }

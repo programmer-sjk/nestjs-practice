@@ -24,7 +24,7 @@ export class ShortUrlService {
   async addShortUrl(type: CreateType, longUrl: string) {
     const existUrl = await this.getShortUrlByOriginal(longUrl);
     if (existUrl) {
-      return existUrl;
+      return existUrl.url;
     }
 
     switch (type) {
@@ -49,7 +49,7 @@ export class ShortUrlService {
 
       if (!shortUrl) {
         await this.shortUrlRepository.save(ShortUrl.of(longUrl, newShortUrl));
-        break;
+        return newShortUrl;
       }
     }
 
@@ -66,12 +66,14 @@ export class ShortUrlService {
     const url = `${this.DOMAIN}/${Base62Converter.encode(shortUrl.id)}`;
     shortUrl.updateShortUrl(url);
     await this.shortUrlRepository.save(shortUrl);
+    return url;
   }
 
   private async shortUrlBySnowFlake(longUrl: string) {
     const uniqueId = this.SNOW_FLAKE.getUniqueID();
     const url = `${this.DOMAIN}/${Base62Converter.encode(Number(uniqueId))}`;
     await this.shortUrlRepository.save(ShortUrl.of(longUrl, url));
+    return url;
   }
 
   private async getShortUrlByOriginal(original: string) {
