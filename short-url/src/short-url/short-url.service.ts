@@ -42,7 +42,7 @@ export class ShortUrlService {
   private async shortUrlByHash(longUrl: string) {
     for (let i = 0; i <= this.MAX_HASH_COLLISION; i++) {
       const urlLength = this.DEFAULT_SHORT_URL_LENGTH + i;
-      const newShortUrl = hash(longUrl).slice(0, urlLength);
+      const newShortUrl = `${this.DOMAIN}/${hash(longUrl).slice(0, urlLength)}`;
       const shortUrl = await this.shortUrlRepository.findOneBy({
         url: newShortUrl,
       });
