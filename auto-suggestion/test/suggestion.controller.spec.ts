@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { SuggestionController } from './suggestion.controller';
+import { SuggestionController } from '../src/suggestion/suggestion.controller';
 
 describe('SuggestionController', () => {
   let controller: SuggestionController;
