@@ -9,7 +9,7 @@ export class SearchDailySum1734669995763 implements MigrationInterface {
         \`id\` int NOT NULL AUTO_INCREMENT, 
         \`keyword\` varchar(255) NOT NULL, 
         \`count\` int NOT NULL, 
-        \`date\` datetime NOT NULL, 
+        \`date\` varchar(10) NOT NULL, 
         \`createdAt\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), 
         PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );

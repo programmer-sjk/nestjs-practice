@@ -14,4 +14,7 @@
 
 ## 해야 할 것
 
+- https://github.com/moroshko/autosuggest-trie 패키지 설치
+- API 호출하면 trie에 넣는 로직
+- API 호출하면 trie에서 자동 키워드 검색하는 API
 - 한국어로 바꿔도 잘 되는지?

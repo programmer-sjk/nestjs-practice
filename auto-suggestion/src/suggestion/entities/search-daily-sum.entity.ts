@@ -16,8 +16,8 @@ export class SearchDailySum {
   @Column()
   count: number;
 
-  @Column()
-  date: Date;
+  @Column({ length: 10 })
+  date: string;
 
   @CreateDateColumn()
   createdAt: Date;
