@@ -21,10 +21,20 @@ export class ShortUrlService {
     this.SNOW_FLAKE = new Snowflake();
   }
 
+  async getOriginalUrl(shortUrl: string) {
+    const url = await this.shortUrlRepository.findOneBy({
+      url: shortUrl,
+    });
+
+    return url ? url.original : undefined;
+  }
+
   async addShortUrl(type: CreateType, longUrl: string) {
-    const existUrl = await this.getShortUrlByOriginal(longUrl);
-    if (existUrl) {
-      return existUrl.url;
+    const url = await this.shortUrlRepository.findOneBy({
+      original: longUrl,
+    });
+    if (url) {
+      return url.url;
     }
 
     switch (type) {
@@ -74,9 +84,5 @@ export class ShortUrlService {
     const url = `${this.DOMAIN}/${Base62Converter.encode(Number(uniqueId))}`;
     await this.shortUrlRepository.save(ShortUrl.of(longUrl, url));
     return url;
-  }
-
-  private async getShortUrlByOriginal(original: string) {
-    return this.shortUrlRepository.findOneBy({ original });
   }
 }
