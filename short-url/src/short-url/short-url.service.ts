@@ -22,6 +22,11 @@ export class ShortUrlService {
   }
 
   async addShortUrl(type: CreateType, longUrl: string) {
+    const existUrl = await this.getShortUrlByOriginal(longUrl);
+    if (existUrl) {
+      return existUrl;
+    }
+
     switch (type) {
       case CreateType.HASH:
         return this.shortUrlByHash(longUrl);
@@ -67,5 +72,9 @@ export class ShortUrlService {
     const uniqueId = this.SNOW_FLAKE.getUniqueID();
     const url = `${this.DOMAIN}/${Base62Converter.encode(Number(uniqueId))}`;
     await this.shortUrlRepository.save(ShortUrl.of(longUrl, url));
+  }
+
+  private async getShortUrlByOriginal(original: string) {
+    return this.shortUrlRepository.findOneBy({ original });
   }
 }
