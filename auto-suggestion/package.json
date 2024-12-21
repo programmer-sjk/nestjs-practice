@@ -28,6 +28,7 @@
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^10.0.2",
+    "autosuggest-trie": "^2.1.1",
     "mysql2": "^3.11.5",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
