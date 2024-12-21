@@ -30,15 +30,15 @@ export class SuggestionService {
   }
 
   private calculatePopulaiton(dailySum: SearchDailySum[]) {
-    const populaitonMap = {};
-    for (const sum of dailySum) {
-      if (populaitonMap[sum.keyword]) {
-        populaitonMap[sum.keyword] += sum.count;
+    const populaitonMap = dailySum.reduce((acc, value) => {
+      if (acc[value.keyword]) {
+        acc[value.keyword] += value.count;
       } else {
-        populaitonMap[sum.keyword] = sum.count;
-        console.log(populaitonMap);
+        acc[value.keyword] = value.count;
       }
-    }
+
+      return acc;
+    }, {});
 
     return Object.keys(populaitonMap).map((key) => ({
       name: key,
