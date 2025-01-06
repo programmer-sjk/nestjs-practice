@@ -1,7 +1,11 @@
-import { Url } from '../interface/url.interface';
+import { hash } from '../../common/hash';
+import { ShortUrl } from '../entities/short-url.entity';
+import { Url } from './url';
 
-export class HashUrl implements Url {
+export class HashUrl extends Url {
+  private readonly URL_LENGTH = 7;
+
   createUrl(longUrl: string): string {
-    return '';
+    return `${this.DOMAIN}/${hash(longUrl).slice(0, this.URL_LENGTH)}`;
   }
 }

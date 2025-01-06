@@ -5,7 +5,8 @@ import {
 } from '@nestjs/common';
 import { Snowflake } from 'nodejs-snowflake';
 import { Base62Converter } from '../common/base-62-converter';
-import { hash } from './../common/hash';
+import { HashUrl } from './classes/hash-url';
+import { SnowFlake } from './classes/snow-flake';
 import { ShortUrl } from './entities/short-url.entity';
 import { CreateType } from './enums/create-type.enum';
 import { ShortUrlRepository } from './short-url.repository';
@@ -41,27 +42,26 @@ export class ShortUrlService {
       return existShortUrl.url;
     }
 
-    const shortUrl = await this.createShortUrlByType(type, longUrl);
-    await this.shortUrlRepository.save(shortUrl);
-    return shortUrl.url;
+    // base 62 계산은 DB id가 필요하기에 로직이 완전 달라서 구분
+    if (type === CreateType.BASE62) {
+      return this.shortUrlByBaseCalculation(longUrl);
+    }
+
+    const urlGenerator = this.getShortUrlGenerator(type);
+    const shortUrl = urlGenerator.createUrl(longUrl);
+    await this.shortUrlRepository.save(ShortUrl.of(longUrl, shortUrl));
+    return shortUrl;
   }
 
-  private async createShortUrlByType(type: CreateType, longUrl: string) {
+  private getShortUrlGenerator(type: CreateType) {
     switch (type) {
       case CreateType.HASH:
-        return this.shortUrlByHash(longUrl);
-      case CreateType.RAW:
-        return this.shortUrlByBaseCalculation(longUrl);
+        return new HashUrl();
       case CreateType.SNOW_FLAKE:
-        return this.shortUrlBySnowFlake(longUrl);
+        return new SnowFlake();
       default:
         throw new BadRequestException('허용하지 않는 생성 타입입니다.');
     }
-  }
-
-  private async shortUrlByHash(longUrl: string) {
-    const newUrl = `${this.DOMAIN}/${hash(longUrl).slice(0, this.URL_LENGTH)}`;
-    return ShortUrl.of(longUrl, newUrl);
   }
 
   private async shortUrlByBaseCalculation(longUrl: string) {
@@ -72,12 +72,8 @@ export class ShortUrlService {
 
     const url = `${this.DOMAIN}/${Base62Converter.encode(shortUrl.id)}`;
     shortUrl.updateShortUrl(url);
-    return shortUrl;
-  }
+    await this.shortUrlRepository.save(shortUrl);
 
-  private async shortUrlBySnowFlake(longUrl: string) {
-    const uniqueId = this.SNOW_FLAKE.getUniqueID();
-    const url = `${this.DOMAIN}/${Number(uniqueId)}`;
-    return ShortUrl.of(longUrl, url);
+    return shortUrl.url;
   }
 }
