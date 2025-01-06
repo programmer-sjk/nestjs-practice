@@ -35,11 +35,12 @@ export class ShortUrlService {
   }
 
   async addShortUrl(type: CreateType, longUrl: string) {
-    const url = await this.shortUrlRepository.findOneBy({
+    const existShortUrl = await this.shortUrlRepository.findOneBy({
       original: longUrl,
     });
-    if (url) {
-      return url.url;
+
+    if (existShortUrl) {
+      return existShortUrl.url;
     }
 
     switch (type) {
