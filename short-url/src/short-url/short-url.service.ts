@@ -87,7 +87,7 @@ export class ShortUrlService {
 
   private async shortUrlBySnowFlake(longUrl: string) {
     const uniqueId = this.SNOW_FLAKE.getUniqueID();
-    const url = `${this.DOMAIN}/${Base62Converter.encode(Number(uniqueId))}`;
+    const url = `${this.DOMAIN}/${Number(uniqueId)}`;
     await this.shortUrlRepository.save(ShortUrl.of(longUrl, url));
     return url;
   }
