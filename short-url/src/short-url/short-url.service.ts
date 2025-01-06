@@ -1,5 +1,4 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Snowflake } from 'nodejs-snowflake';
 import { Base62Converter } from '../common/base-62-converter';
 import { UrlFactory } from './classes/url-factory';
 import { ShortUrl } from './entities/short-url.entity';
@@ -8,13 +7,9 @@ import { ShortUrlRepository } from './short-url.repository';
 
 @Injectable()
 export class ShortUrlService {
-  private readonly URL_LENGTH = 7;
   private readonly DOMAIN = 'https://short.com';
-  private readonly SNOW_FLAKE: Snowflake;
 
-  constructor(private readonly shortUrlRepository: ShortUrlRepository) {
-    this.SNOW_FLAKE = new Snowflake();
-  }
+  constructor(private readonly shortUrlRepository: ShortUrlRepository) {}
 
   async getOriginalUrl(shortUrl: string) {
     const url = await this.shortUrlRepository.findOneBy({
@@ -42,8 +37,7 @@ export class ShortUrlService {
       return this.shortUrlByBaseCalculation(longUrl);
     }
 
-    const urlGenerator = UrlFactory.of(type);
-    const shortUrl = urlGenerator.createUrl(longUrl);
+    const shortUrl = UrlFactory.of(type).createUrl(longUrl);
     await this.shortUrlRepository.save(ShortUrl.of(longUrl, shortUrl));
     return shortUrl;
   }
