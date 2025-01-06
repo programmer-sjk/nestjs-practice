@@ -1,5 +1,4 @@
 import { hash } from '../../common/hash';
-import { ShortUrl } from '../entities/short-url.entity';
 import { Url } from './url';
 
 export class HashUrl extends Url {
