@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -13,6 +14,7 @@ export class ShortUrl {
   @Column()
   original: string;
 
+  @Index({ unique: true })
   @Column()
   url: string;
 
