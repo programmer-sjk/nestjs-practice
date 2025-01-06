@@ -1,3 +1,3 @@
 export interface Url {
-  createUrl(): String;
+  createUrl(longUrl: string): string;
 }
