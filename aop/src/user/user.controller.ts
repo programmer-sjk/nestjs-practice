@@ -6,11 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseInterceptors,
 } from '@nestjs/common';
+import { LogInterceptor } from '../common/log-interceptor';
 import { AddUserRequest } from './dto/add-user-request';
 import { UpdateNameRequest } from './dto/update-name-request';
 import { UserService } from './user.service';
 
+@UseInterceptors(LogInterceptor)
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
