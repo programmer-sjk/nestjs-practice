@@ -1,12 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { AddUserRequest } from './dto/add-user-request';
+import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  async findOne(id: number) {}
+  private constructor(private readonly userRepository: UserRepository) {}
 
-  async add(id: number) {}
+  async findOne(id: number) {
+    return this.userRepository.findOneBy({ id });
+  }
 
-  async updateName(id: number, name: string) {}
+  async add(request: AddUserRequest) {
+    await this.userRepository.save(request.toEntity());
+  }
 
-  async remove(id: number) {}
+  async updateName(id: number, name: string) {
+    await this.userRepository.update(id, { name });
+  }
+
+  async remove(id: number) {
+    const user = await this.findOne(id);
+    await this.userRepository.remove(user);
+  }
 }
