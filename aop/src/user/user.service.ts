@@ -4,7 +4,7 @@ import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  private constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async findOne(id: number) {
     return this.userRepository.findOneBy({ id });
