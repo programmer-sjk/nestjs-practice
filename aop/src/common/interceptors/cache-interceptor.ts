@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 import { RedisService } from '../../redis/redis.service';
 
 /**
- * 실무에서는 이렇게 하지 않지만, 굳이 인터셉트로 캐시를 적용해보는 예시
+ * 실무에서는 이렇게 하지 않지만, 굳이 인터셉트로 캐시를 적용한다면 어떨까? 라는 생각으로 접근
  */
 
 @Injectable()
