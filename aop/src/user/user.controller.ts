@@ -9,7 +9,6 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { LogInterceptor } from '../common/interceptors/log-interceptor';
-import { CacheInterceptor } from '../common/interceptors/cache-interceptor';
 import { AddUserRequest } from './dto/add-user-request';
 import { UpdateNameRequest } from './dto/update-name-request';
 import { UserService } from './user.service';
@@ -19,7 +18,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseInterceptors(CacheInterceptor)
+  //@UseInterceptors(CacheInterceptor)
   @Get(':id')
   async findUser(@Param('id') id: number) {
     return this.userService.findOne(id);

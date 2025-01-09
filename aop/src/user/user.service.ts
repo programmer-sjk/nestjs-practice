@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { LogDecorator } from '../common/decorators/log-decorator';
 import { AddUserRequest } from './dto/add-user-request';
 import { UserRepository } from './user.repository';
 
@@ -6,6 +7,7 @@ import { UserRepository } from './user.repository';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  @LogDecorator()
   async findOne(id: number) {
     return this.userRepository.findOneBy({ id });
   }
