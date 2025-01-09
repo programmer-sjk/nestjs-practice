@@ -8,8 +8,8 @@ import {
   Put,
   UseInterceptors,
 } from '@nestjs/common';
-import { LogInterceptor } from '../common/log-interceptor';
-import { CacheInterceptor } from './../common/cache-interceptor';
+import { LogInterceptor } from '../common/interceptors/log-interceptor';
+import { CacheInterceptor } from '../common/interceptors/cache-interceptor';
 import { AddUserRequest } from './dto/add-user-request';
 import { UpdateNameRequest } from './dto/update-name-request';
 import { UserService } from './user.service';

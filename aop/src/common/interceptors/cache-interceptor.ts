@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { RedisService } from '../redis/redis.service';
+import { RedisService } from '../../redis/redis.service';
 
 /**
  * 실무에서는 이렇게 하지 않지만, 굳이 인터셉트로 캐시를 적용해보는 예시
