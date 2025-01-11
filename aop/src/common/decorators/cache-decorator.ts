@@ -1,4 +1,3 @@
-import { Logger } from '@nestjs/common';
 
 export function CacheDecorator({ key: string, ttl: number }) {
   return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
@@ -8,11 +7,6 @@ export function CacheDecorator({ key: string, ttl: number }) {
       const now = Date.now();
       const result = await methodRef.call(this, ...args);
 
-      logger.log(
-        `service method totalTime: ${Date.now() - now}ms, args=${JSON.stringify(
-          args,
-        )}`,
-      );
       return result;
     };
   };
