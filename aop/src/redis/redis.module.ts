@@ -1,6 +1,8 @@
 import { CacheModule, CacheStore } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
+import { DiscoveryModule } from '@nestjs/core';
 import { redisStore } from 'cache-manager-redis-yet';
+import { CacheRegister } from './cache-register';
 import { RedisService } from './redis.service';
 
 @Module({
@@ -19,9 +21,10 @@ import { RedisService } from './redis.service';
         };
       },
     }),
+    DiscoveryModule,
   ],
 
-  providers: [RedisService],
+  providers: [RedisService, CacheRegister],
   exports: [RedisService],
 })
 export class RedisModule {}
