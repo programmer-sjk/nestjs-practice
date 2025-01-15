@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { CacheDecorator } from '../common/decorators/cache-decorator';
-import { LogDecorator } from '../common/decorators/log-decorator';
+import { Cacheable } from '../common/decorators/cache-decorator';
 import { AddUserRequest } from './dto/add-user-request';
 import { UserRepository } from './user.repository';
 
+@Cacheable({ key: 'user', ttl: 60 })
 @Injectable()
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
-  @LogDecorator()
-  @CacheDecorator({ key: 'user', ttl: 60 * 60 * 1000 })
+  // @LogDecorator()
+  @Cacheable({ key: 'user', ttl: 60 })
   async findOne(id: number) {
     return this.userRepository.findOneBy({ id });
   }
