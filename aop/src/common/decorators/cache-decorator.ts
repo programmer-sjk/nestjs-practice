@@ -1,9 +1,10 @@
-export function CacheDecorator({ key: string, ttl: number }) {
-  return (target: any, propertyKey: string, descriptor: PropertyDescriptor) => {
-    const methodRef = descriptor.value;
+import { SetMetadata } from '@nestjs/common';
 
-    descriptor.value = async function (...args: any[]) {
-      return methodRef.call(this, ...args);
-    };
-  };
+interface CacheOptions {
+  key: string;
+  ttl: number;
 }
+
+export const CACHEABLE_KEY = 'cacheable';
+export const Cacheable = (options: CacheOptions) =>
+  SetMetadata(CACHEABLE_KEY, options);
