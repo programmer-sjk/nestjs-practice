@@ -50,35 +50,6 @@ export class RedisCacheRegister implements OnModuleInit {
             };
           });
       });
-
-    // this.metadataScanner.scanFromPrototype(
-    //   instance,
-    //   Object.getPrototypeOf(instance),
-    //   (methodName) => {
-    //     const cacheOptions = this.reflector.get(
-    //       CACHEABLE_KEY,
-    //       instance[methodName],
-    //     );
-    //     if (!cacheOptions) {
-    //       return;
-    //     }
-    //     const methodRef = instance[methodName];
-    //     instance[methodName] = async function (...args: any[]) {
-    //       const cacheKey = CacheRegister.isIdentifier(args)
-    //         ? `${cacheOptions.key}:${args[0]}`
-    //         : cacheOptions.key;
-    //       const cached = await this.redisService.get(cacheKey);
-    //       if (cached) {
-    //         console.log('cached', cached);
-    //       }
-    //       console.log(this.redisService);
-    //       // const result = await methodRef.call(instance, ...args);
-    //       // await this.redisService.set(cacheKey, result,)
-    //       console.log(cacheKey);
-    //       console.log(cacheOptions, instance[methodName]);
-    //     };
-    //   },
-    // );
   }
 
   isIdentifier(args) {
