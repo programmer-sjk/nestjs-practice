@@ -41,7 +41,6 @@ export class RedisCacheRegister implements OnModuleInit {
                 : cacheOptions.key;
               const cached = await redisServiceRef.get(cacheKey);
               if (cached) {
-                console.log('cached!');
                 return cached;
               }
               const result = await methodRef.call(instance, ...args);
