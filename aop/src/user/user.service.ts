@@ -9,7 +9,7 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   // @LogDecorator()
-  @Cacheable({ key: 'user', ttl: 60 })
+  @Cacheable({ key: 'user', ttl: 10 * 1000 })
   async findOne(id: number) {
     return this.userRepository.findOneBy({ id });
   }
