@@ -1,0 +1,14 @@
+version: '3.1'
+services:
+  db:
+    image: mysql
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - calendarvol:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: 'calendar'
+      MYSQL_ROOT_PASSWORD: password
+volumes:
+  calendarvol:
