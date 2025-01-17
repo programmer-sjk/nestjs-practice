@@ -6,7 +6,7 @@ export const connectionOptions: DataSourceOptions = {
   port: 3306,
   username: 'root',
   password: 'password',
-  database: 'product',
+  database: 'calendar',
   logging: true,
   synchronize: false,
   entities: [__dirname + '/src/**/entities/*.{js,ts}'],
