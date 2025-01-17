@@ -26,4 +26,12 @@ export class Calendar {
 
   @OneToMany(() => CalendarUser, (calendarUser) => calendarUser.calendar)
   calendarUsers: CalendarUser[];
+
+  static of(title: string, startDate: Date, endDate: Date) {
+    const calendar = new Calendar();
+    calendar.title = title;
+    calendar.startDate = startDate;
+    calendar.endDate = endDate;
+    return calendar;
+  }
 }
