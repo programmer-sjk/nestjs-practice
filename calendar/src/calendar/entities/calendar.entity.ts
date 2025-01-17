@@ -2,8 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { CalendarUser } from './calendar-user.entity';
 
 @Entity()
 export class Calendar {
@@ -21,4 +23,7 @@ export class Calendar {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => CalendarUser, (calendarUser) => calendarUser.calendar)
+  calendarUsers: CalendarUser[];
 }

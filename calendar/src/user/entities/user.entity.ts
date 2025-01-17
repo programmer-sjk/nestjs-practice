@@ -3,8 +3,10 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { CalendarUser } from '../../calendar/entities/calendar-user.entity';
 
 @Entity()
 export class User {
@@ -19,6 +21,9 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  @OneToMany(() => CalendarUser, (calendarUser) => calendarUser.user)
+  calendarUsers: CalendarUser[];
 
   static of(name: string) {
     const user = new User();
