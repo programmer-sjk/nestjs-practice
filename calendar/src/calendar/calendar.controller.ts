@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { ResponseEntity } from './../../../product-store/src/common/response-entity';
+import { ResponseEntity } from '../common/response-entity';
 import { CalendarService } from './calendar.service';
 import { RegisterCalendarRequest } from './dto/register-calendar.reuqest';
 
