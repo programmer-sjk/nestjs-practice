@@ -22,4 +22,11 @@ export class CalendarUser {
     createForeignKeyConstraints: false,
   })
   user: User;
+
+  static of(calendarId: number, userId: number) {
+    const calendarUser = new CalendarUser();
+    calendarUser.calendarId = calendarId;
+    calendarUser.userId = userId;
+    return calendarUser;
+  }
 }
