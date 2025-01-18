@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ResponseEntity } from './../../../product-store/src/common/response-entity';
 import { CalendarService } from './calendar.service';
 import { RegisterCalendarRequest } from './dto/register-calendar.reuqest';
 
@@ -12,7 +13,10 @@ export class CalendarController {
   }
 
   @Post()
-  async register(@Body() request: RegisterCalendarRequest) {
-    return this.calendarService.addCalendar(request);
+  async register(
+    @Body() request: RegisterCalendarRequest,
+  ): Promise<ResponseEntity<string>> {
+    await this.calendarService.addCalendar(request);
+    return ResponseEntity.OK();
   }
 }
