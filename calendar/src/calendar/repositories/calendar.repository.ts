@@ -10,7 +10,7 @@ export class CalendarRepository extends Repository<Calendar> {
 
   async findAll() {
     return this.createQueryBuilder('calendar')
-      .innerJoin('calendar.calendarUsers', 'calendarUsers')
+      .innerJoinAndSelect('calendar.calendarUsers', 'calendarUsers')
       .innerJoinAndSelect('calendarUsers.user', 'user')
       .getMany();
   }
