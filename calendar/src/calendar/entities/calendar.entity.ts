@@ -34,4 +34,10 @@ export class Calendar {
     calendar.endDate = endDate;
     return calendar;
   }
+
+  update(title: string, startDate: Date, endDate: Date) {
+    this.title = title;
+    this.startDate = startDate;
+    this.endDate = endDate;
+  }
 }
