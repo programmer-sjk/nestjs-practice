@@ -1,5 +1,12 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import {
+  IsArray,
+  IsDate,
+  IsInt,
+  IsNotEmpty,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 import { Calendar } from './../entities/calendar.entity';
 
 export class RegisterCalendarRequest {
@@ -17,6 +24,11 @@ export class RegisterCalendarRequest {
   @Type(() => Date)
   @IsDate()
   endDate: Date;
+
+  @IsNotEmpty()
+  @IsArray()
+  @IsInt({ each: true })
+  userIds: number[];
 
   toEntity() {
     return Calendar.of(this.title, this.startDate, this.endDate);
