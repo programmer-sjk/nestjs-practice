@@ -1,6 +1,8 @@
+import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
 import { DataSource, DataSourceOptions } from 'typeorm';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 
-export const connectionOptions: DataSourceOptions = {
+const connectionOptions: DataSourceOptions = {
   type: 'mysql',
   host: 'localhost',
   port: 3306,
@@ -12,6 +14,14 @@ export const connectionOptions: DataSourceOptions = {
   entities: [__dirname + '/src/**/entities/*.{js,ts}'],
   migrations: [__dirname + '/src/migrations/*.{js,ts}'],
   migrationsTableName: 'migrations',
+};
+
+export const typeormOptions: TypeOrmModuleAsyncOptions = {
+  useFactory: () => connectionOptions,
+  async dataSourceFactory(option) {
+    if (!option) throw new Error('Invalid typeorm options passed');
+    return addTransactionalDataSource(new DataSource(option));
+  },
 };
 
 const dataSource = new DataSource(connectionOptions);
