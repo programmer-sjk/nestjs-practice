@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
+import { CalendarsResponse } from './dto/calendars.response';
 import { RegisterCalendarRequest } from './dto/register-calendar.reuqest';
 import { CalendarUser } from './entities/calendar-user.entity';
 import { CalendarUserRepository } from './repositories/calendar-user.repository';
@@ -13,7 +14,17 @@ export class CalendarService {
   ) {}
 
   async findAll() {
-    return this.calendarRepository.findAll();
+    const calendars = await this.calendarRepository.findAll();
+    return calendars.map(
+      (calendar) =>
+        new CalendarsResponse(
+          calendar.id,
+          calendar.title,
+          calendar.startDate,
+          calendar.endDate,
+          calendar.calendarUsers.map((calendarUser) => calendarUser.user),
+        ),
+    );
   }
 
   @Transactional()
