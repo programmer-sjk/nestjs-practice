@@ -1,8 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put } from '@nestjs/common';
 import { ResponseEntity } from '../common/response-entity';
 import { CalendarService } from './calendar.service';
 import { CalendarsResponse } from './dto/calendars.response';
 import { RegisterCalendarRequest } from './dto/register-calendar.reuqest';
+import { UpdateCalendarRequest } from './dto/update-calendar.request';
 
 @Controller('calendar')
 export class CalendarController {
@@ -19,6 +20,12 @@ export class CalendarController {
     @Body() request: RegisterCalendarRequest,
   ): Promise<ResponseEntity<string>> {
     await this.calendarService.addCalendar(request);
+    return ResponseEntity.OK();
+  }
+
+  @Put()
+  async update(@Body() request: UpdateCalendarRequest): Promise<ResponseEntity<string>> {
+    await this.calendarService.updateCalendar(request);
     return ResponseEntity.OK();
   }
 }
