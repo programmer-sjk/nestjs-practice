@@ -7,6 +7,7 @@ services:
       - 3306:3306
     volumes:
       - calendarvol:/var/lib/mysql
+      - './scripts:/docker-entrypoint-initdb.d'
     environment:
       MYSQL_DATABASE: 'calendar'
       MYSQL_ROOT_PASSWORD: password
