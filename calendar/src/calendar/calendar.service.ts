@@ -55,10 +55,13 @@ export class CalendarService {
   }
 
   private getNewAndDeletedUserIds(prevUserIds, userIds): [number[], number[]] {
-    const newUserIds = prevUserIds.filter(
-      (prevUserId) => !userIds.find(prevUserId),
+    const newUserIds = userIds.filter(
+      (userId) => !prevUserIds.find((prevUserId) => prevUserId === userId),
     );
-    const deletedUserIds = userIds.filter((userId) => prevUserIds.find(userId));
+
+    const deletedUserIds = prevUserIds.filter(
+      (prevUserId) => !userIds.find((userId) => userId === prevUserId),
+    );
 
     return [newUserIds, deletedUserIds];
   }
@@ -78,11 +81,11 @@ export class CalendarService {
       await this.calendarUserRepository.remove(deletedCalendarUsers);
     }
 
-    if (deletedUserIds.length) {
+    if (newUserIds.length) {
       const newCalendarUsers = newUserIds.map((userId) =>
         CalendarUser.of(calendar.id, userId),
       );
-      await this.calendarRepository.save(newCalendarUsers);
+      await this.calendarUserRepository.save(newCalendarUsers);
     }
   }
 }
