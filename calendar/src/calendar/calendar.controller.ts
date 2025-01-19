@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+} from '@nestjs/common';
+import { PaginationRequest } from '../common/pagination/pagination.request';
+import { PaginationResponse } from '../common/pagination/pagination.response';
 import { ResponseEntity } from '../common/response-entity';
 import { CalendarService } from './calendar.service';
 import { CalendarsResponse } from './dto/calendars.response';
@@ -10,8 +21,10 @@ export class CalendarController {
   constructor(private readonly calendarService: CalendarService) {}
 
   @Get()
-  async findAll(): Promise<ResponseEntity<CalendarsResponse[] | string>> {
-    const calendars = await this.calendarService.findAll();
+  async findAll(
+    @Query() query: PaginationRequest,
+  ): Promise<ResponseEntity<PaginationResponse<CalendarsResponse> | string>> {
+    const calendars = await this.calendarService.findAll(query);
     return ResponseEntity.OK(calendars);
   }
 
@@ -24,7 +37,9 @@ export class CalendarController {
   }
 
   @Put()
-  async update(@Body() request: UpdateCalendarRequest): Promise<ResponseEntity<string>> {
+  async update(
+    @Body() request: UpdateCalendarRequest,
+  ): Promise<ResponseEntity<string>> {
     await this.calendarService.updateCalendar(request);
     return ResponseEntity.OK();
   }

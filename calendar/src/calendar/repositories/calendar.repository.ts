@@ -8,10 +8,12 @@ export class CalendarRepository extends Repository<Calendar> {
     super(Calendar, dataSource.createEntityManager());
   }
 
-  async findAll() {
+  async findAll(limit: number, offset: number) {
     return this.createQueryBuilder('calendar')
       .innerJoinAndSelect('calendar.calendarUsers', 'calendarUsers')
       .innerJoinAndSelect('calendarUsers.user', 'user')
-      .getMany();
+      .take(limit)
+      .offset(offset)
+      .getManyAndCount();
   }
 }

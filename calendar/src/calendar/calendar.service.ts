@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
+import { PaginationRequest } from '../common/pagination/pagination.request';
+import { PaginationResponse } from '../common/pagination/pagination.response';
 import { CalendarsResponse } from './dto/calendars.response';
 import { RegisterCalendarRequest } from './dto/register-calendar.request';
 import { UpdateCalendarRequest } from './dto/update-calendar.request';
@@ -16,17 +18,28 @@ export class CalendarService {
     private readonly calendarUserRepository: CalendarUserRepository,
   ) {}
 
-  async findAll() {
-    const calendars = await this.calendarRepository.findAll();
-    return calendars.map(
-      (calendar) =>
-        new CalendarsResponse(
-          calendar.id,
-          calendar.title,
-          calendar.startDate,
-          calendar.endDate,
-          calendar.calendarUsers.map((calendarUser) => calendarUser.user),
-        ),
+  async findAll(request: PaginationRequest) {
+    const { limit, offset } = request;
+    console.log(request);
+    const [calendars, totalCount] = await this.calendarRepository.findAll(
+      limit,
+      offset,
+    );
+
+    return new PaginationResponse(
+      limit,
+      totalCount,
+      offset,
+      calendars.map(
+        (calendar) =>
+          new CalendarsResponse(
+            calendar.id,
+            calendar.title,
+            calendar.startDate,
+            calendar.endDate,
+            calendar.calendarUsers.map((calendarUser) => calendarUser.user),
+          ),
+      ),
     );
   }
 
