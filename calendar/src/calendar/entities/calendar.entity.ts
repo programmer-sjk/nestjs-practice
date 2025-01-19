@@ -24,7 +24,9 @@ export class Calendar {
   @CreateDateColumn()
   createdAt: Date;
 
-  @OneToMany(() => CalendarUser, (calendarUser) => calendarUser.calendar)
+  @OneToMany(() => CalendarUser, (calendarUser) => calendarUser.calendar, {
+    cascade: true,
+  })
   calendarUsers: CalendarUser[];
 
   static of(title: string, startDate: Date, endDate: Date) {

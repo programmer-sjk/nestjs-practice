@@ -30,13 +30,12 @@ export class CalendarService {
     );
   }
 
-  @Transactional()
   async addCalendar(request: RegisterCalendarRequest) {
-    const calendar = await this.calendarRepository.save(request.toEntity());
-    const calendarUsers = request.userIds.map((userId) =>
+    const calendar = request.toEntity();
+    calendar.calendarUsers = request.userIds.map((userId) =>
       CalendarUser.of(calendar.id, userId),
     );
-    await this.calendarUserRepository.save(calendarUsers);
+    await this.calendarRepository.save(calendar);
   }
 
   async updateCalendar(request: UpdateCalendarRequest) {
