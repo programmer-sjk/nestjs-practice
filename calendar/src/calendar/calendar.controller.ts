@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Put } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { ResponseEntity } from '../common/response-entity';
 import { CalendarService } from './calendar.service';
 import { CalendarsResponse } from './dto/calendars.response';
@@ -26,6 +26,12 @@ export class CalendarController {
   @Put()
   async update(@Body() request: UpdateCalendarRequest): Promise<ResponseEntity<string>> {
     await this.calendarService.updateCalendar(request);
+    return ResponseEntity.OK();
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: number) {
+    await this.calendarService.removeCalendar(id);
     return ResponseEntity.OK();
   }
 }

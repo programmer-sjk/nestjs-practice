@@ -40,10 +40,7 @@ export class CalendarService {
   }
 
   async updateCalendar(request: UpdateCalendarRequest) {
-    const calendar = await this.calendarRepository.findOneOrFail({
-      where: { id: request.id },
-      relations: ['calendarUsers'],
-    });
+    const calendar = await this.findCalendarWithUsers(request.id);
     calendar.update(request.title, request.startDate, request.endDate);
 
     const [newUserIds, deletedUserIds] = this.getNewAndDeletedUserIds(
@@ -87,5 +84,19 @@ export class CalendarService {
       );
       await this.calendarUserRepository.save(newCalendarUsers);
     }
+  }
+
+  @Transactional()
+  async removeCalendar(id: number) {
+    const calendar = await this.findCalendarWithUsers(id);
+    await this.calendarRepository.remove(calendar);
+    await this.calendarUserRepository.remove(calendar.calendarUsers);
+  }
+
+  private async findCalendarWithUsers(calendarId: number) {
+    return this.calendarRepository.findOneOrFail({
+      where: { id: calendarId },
+      relations: ['calendarUsers'],
+    });
   }
 }
