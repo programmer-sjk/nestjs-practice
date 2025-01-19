@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { CalendarsResponse } from './dto/calendars.response';
-import { RegisterCalendarRequest } from './dto/register-calendar.reuqest';
+import { RegisterCalendarRequest } from './dto/register-calendar.request';
 import { UpdateCalendarRequest } from './dto/update-calendar.request';
 import { CalendarUser } from './entities/calendar-user.entity';
 import { Calendar } from './entities/calendar.entity';

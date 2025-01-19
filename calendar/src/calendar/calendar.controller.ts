@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 import { ResponseEntity } from '../common/response-entity';
 import { CalendarService } from './calendar.service';
 import { CalendarsResponse } from './dto/calendars.response';
-import { RegisterCalendarRequest } from './dto/register-calendar.reuqest';
+import { RegisterCalendarRequest } from './dto/register-calendar.request';
 import { UpdateCalendarRequest } from './dto/update-calendar.request';
 
 @Controller('calendar')
