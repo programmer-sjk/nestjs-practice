@@ -33,7 +33,6 @@ describe('CalendarService', () => {
         UserRepository,
       ],
     }).compile();
-    // addTransactionalDataSource(new DataSource(testConnectionOptions));
 
     service = module.get<CalendarService>(CalendarService);
     repository = module.get<CalendarRepository>(CalendarRepository);
