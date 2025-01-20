@@ -3,8 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn
+  OneToOne,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
+import { CalendarAlarm } from './calendar-alarm.entity';
 import { CalendarUser } from './calendar-user.entity';
 
 @Entity()
@@ -23,6 +25,11 @@ export class Calendar {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToOne(() => CalendarAlarm, (alarm) => alarm.calendar, {
+    cascade: true,
+  })
+  calendarAlarm: CalendarAlarm;
 
   @OneToMany(() => CalendarUser, (calendarUser) => calendarUser.calendar, {
     cascade: true,
