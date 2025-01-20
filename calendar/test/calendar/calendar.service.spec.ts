@@ -2,12 +2,15 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   initializeTransactionalContext,
-  StorageDriver
+  StorageDriver,
 } from 'typeorm-transactional';
 import { CalendarService } from '../../src/calendar/calendar.service';
 import { RegisterCalendarRequest } from '../../src/calendar/dto/register-calendar.request';
 import { UpdateCalendarRequest } from '../../src/calendar/dto/update-calendar.request';
+import { CalendarAlarm } from '../../src/calendar/entities/calendar-alarm.entity';
 import { CalendarUser } from '../../src/calendar/entities/calendar-user.entity';
+import { AlarmType } from '../../src/calendar/enums/alarm-type.enum';
+import { CalendarAlarmRepository } from '../../src/calendar/repositories/calendar-alarm.repository';
 import { CalendarUserRepository } from '../../src/calendar/repositories/calendar-user.repository';
 import { CalendarRepository } from '../../src/calendar/repositories/calendar.repository';
 import { PaginationRequest } from '../../src/common/pagination/pagination.request';
@@ -21,6 +24,7 @@ describe('CalendarService', () => {
   let service: CalendarService;
   let repository: CalendarRepository;
   let calendarUserRepository: CalendarUserRepository;
+  let calendarAlarmRepository: CalendarAlarmRepository;
   let userRepository: UserRepository;
 
   beforeAll(async () => {
@@ -31,6 +35,7 @@ describe('CalendarService', () => {
         CalendarService,
         CalendarRepository,
         CalendarUserRepository,
+        CalendarAlarmRepository,
         UserRepository,
       ],
     }).compile();
@@ -39,6 +44,9 @@ describe('CalendarService', () => {
     repository = module.get<CalendarRepository>(CalendarRepository);
     calendarUserRepository = module.get<CalendarUserRepository>(
       CalendarUserRepository,
+    );
+    calendarAlarmRepository = module.get<CalendarAlarmRepository>(
+      CalendarAlarmRepository,
     );
     userRepository = module.get<UserRepository>(UserRepository);
   });
@@ -51,6 +59,7 @@ describe('CalendarService', () => {
     await repository.clear();
     await userRepository.clear();
     await calendarUserRepository.clear();
+    await calendarAlarmRepository.clear();
   });
 
   it('should be defined', () => {
@@ -92,11 +101,15 @@ describe('CalendarService', () => {
         const calendar = await repository.save(
           TestCalendarFactory.of('계엄령 회의'),
         );
-  
-        await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
-        await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
+
+        await calendarUserRepository.save(
+          CalendarUser.of(calendar.id, userA.id),
+        );
+        await calendarUserRepository.save(
+          CalendarUser.of(calendar.id, userB.id),
+        );
       }
-      
+
       const paginationRequest = new PaginationRequest();
       paginationRequest.limit = 2;
 
@@ -122,6 +135,8 @@ describe('CalendarService', () => {
       dto.title = '개발팀 회의';
       dto.startDate = new Date('2025-01-31 15:00:00');
       dto.endDate = new Date('2025-01-31 16:00:00');
+      dto.alarmType = AlarmType.MAIL;
+      dto.ringMinuteBefore = 10;
       dto.userIds = [userA.id, userB.id];
 
       // when
@@ -136,6 +151,10 @@ describe('CalendarService', () => {
       const calendarUsers = await calendarUserRepository.find();
       const userIds = calendarUsers.map((calendarUser) => calendarUser.userId);
       expect(userIds.sort()).toEqual([userA.id, userB.id].sort());
+
+      const calendarAlarm = await calendarAlarmRepository.find();
+      expect(calendarAlarm[0].type).toBe(AlarmType.MAIL);
+      expect(calendarAlarm[0].ringMinuteBefore).toBe(10);
     });
   });
 
@@ -151,11 +170,16 @@ describe('CalendarService', () => {
 
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
+      await calendarAlarmRepository.save(
+        CalendarAlarm.of(calendar.id, AlarmType.MAIL, 10),
+      );
 
       const dto = new UpdateCalendarRequest();
       dto.title = '개발팀 회의';
       dto.startDate = new Date('2025-01-31 15:00:00');
       dto.endDate = new Date('2025-01-31 16:00:00');
+      dto.alarmType = AlarmType.MAIL;
+      dto.ringMinuteBefore = 10;
       dto.userIds = [userA.id, userB.id];
 
       // when
@@ -182,11 +206,16 @@ describe('CalendarService', () => {
 
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
+      await calendarAlarmRepository.save(
+        CalendarAlarm.of(calendar.id, AlarmType.MAIL, 10),
+      );
 
       const dto = new UpdateCalendarRequest();
       dto.title = '개발팀 회의';
       dto.startDate = new Date('2025-01-31 15:00:00');
       dto.endDate = new Date('2025-01-31 16:00:00');
+      dto.alarmType = AlarmType.MAIL;
+      dto.ringMinuteBefore = 10;
       dto.userIds = [userB.id, userC.id];
 
       // when
@@ -206,6 +235,46 @@ describe('CalendarService', () => {
       );
       expect(userIds.sort()).toEqual([userB.id, userC.id].sort());
     });
+
+    it('일정의 알림을 수정할 수 있다.', async () => {
+      // given
+      const userA = await userRepository.save(TestUserFactory.of('서정국'));
+      const userB = await userRepository.save(TestUserFactory.of('계엄군'));
+
+      const calendar = await repository.save(
+        TestCalendarFactory.of('계엄령 회의'),
+      );
+
+      await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
+      await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
+
+      await calendarAlarmRepository.save(
+        CalendarAlarm.of(calendar.id, AlarmType.MAIL, 10),
+      );
+
+      const dto = new UpdateCalendarRequest();
+      dto.title = '개발팀 회의';
+      dto.startDate = new Date('2025-01-31 15:00:00');
+      dto.endDate = new Date('2025-01-31 16:00:00');
+      dto.alarmType = AlarmType.SMS;
+      dto.ringMinuteBefore = 20;
+      dto.userIds = [userA.id, userB.id];
+
+      // when
+      await service.updateCalendar(dto);
+
+      // then
+      const updatedCalendar = await repository.findOneBy({ id: calendar.id });
+      expect(updatedCalendar.title).toBe('개발팀 회의');
+      expect(updatedCalendar.startDate).toEqual(
+        new Date('2025-01-31 15:00:00'),
+      );
+      expect(updatedCalendar.endDate).toEqual(new Date('2025-01-31 16:00:00'));
+
+      const updatedCalendarAlarm = await calendarAlarmRepository.find();
+      expect(updatedCalendarAlarm[0].type).toBe(AlarmType.SMS);
+      expect(updatedCalendarAlarm[0].ringMinuteBefore).toBe(20);
+    });
   });
 
   describe('removeCalendar', () => {
@@ -221,6 +290,10 @@ describe('CalendarService', () => {
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
 
+      await calendarAlarmRepository.save(
+        CalendarAlarm.of(calendar.id, AlarmType.MAIL, 10),
+      );
+
       // when
       await service.removeCalendar(calendar.id);
 
@@ -230,6 +303,9 @@ describe('CalendarService', () => {
 
       const calendarUsers = await calendarUserRepository.find();
       expect(calendarUsers).toHaveLength(0);
+
+      const calendarAlarm = await calendarAlarmRepository.find();
+      expect(calendarAlarm).toHaveLength(0);
     });
   });
 });

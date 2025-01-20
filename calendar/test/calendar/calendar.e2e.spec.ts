@@ -8,7 +8,10 @@ import { CalendarService } from '../../src/calendar/calendar.service';
 import { CalendarsResponse } from '../../src/calendar/dto/calendars.response';
 import { RegisterCalendarRequest } from '../../src/calendar/dto/register-calendar.request';
 import { UpdateCalendarRequest } from '../../src/calendar/dto/update-calendar.request';
+import { CalendarAlarm } from '../../src/calendar/entities/calendar-alarm.entity';
 import { CalendarUser } from '../../src/calendar/entities/calendar-user.entity';
+import { AlarmType } from '../../src/calendar/enums/alarm-type.enum';
+import { CalendarAlarmRepository } from '../../src/calendar/repositories/calendar-alarm.repository';
 import { CalendarUserRepository } from '../../src/calendar/repositories/calendar-user.repository';
 import { CalendarRepository } from '../../src/calendar/repositories/calendar.repository';
 import { PaginationRequest } from '../../src/common/pagination/pagination.request';
@@ -24,6 +27,7 @@ describe('Calendar e2e', () => {
   let app: INestApplication;
   let repository: CalendarRepository;
   let calendarUserRepository: CalendarUserRepository;
+  let calendarAlarmRepository: CalendarAlarmRepository;
   let userRepository: UserRepository;
 
   beforeAll(async () => {
@@ -35,6 +39,7 @@ describe('Calendar e2e', () => {
         CalendarService,
         CalendarRepository,
         CalendarUserRepository,
+        CalendarAlarmRepository,
         UserRepository,
       ],
     }).compile();
@@ -42,6 +47,9 @@ describe('Calendar e2e', () => {
     repository = module.get<CalendarRepository>(CalendarRepository);
     calendarUserRepository = module.get<CalendarUserRepository>(
       CalendarUserRepository,
+    );
+    calendarAlarmRepository = module.get<CalendarAlarmRepository>(
+      CalendarAlarmRepository,
     );
     userRepository = module.get<UserRepository>(UserRepository);
 
@@ -59,6 +67,7 @@ describe('Calendar e2e', () => {
     await repository.clear();
     await userRepository.clear();
     await calendarUserRepository.clear();
+    await calendarAlarmRepository.clear();
   });
 
   describe('GET /calendar', () => {
@@ -76,7 +85,7 @@ describe('Calendar e2e', () => {
 
       const paginationRequest = new PaginationRequest();
       paginationRequest.limit = 10;
-        
+
       // when
       const response = await request(app.getHttpServer())
         .get('/v1/calendar')
@@ -102,6 +111,8 @@ describe('Calendar e2e', () => {
       requestDto.title = '개발팀 회의';
       requestDto.startDate = new Date('2025-01-31 15:00:00');
       requestDto.endDate = new Date('2025-01-31 16:00:00');
+      requestDto.alarmType = AlarmType.MAIL;
+      requestDto.ringMinuteBefore = 10;
       requestDto.userIds = [userA.id, userB.id];
 
       // when
@@ -134,12 +145,17 @@ describe('Calendar e2e', () => {
 
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
+      await calendarAlarmRepository.save(
+        CalendarAlarm.of(calendar.id, AlarmType.MAIL, 10),
+      );
 
       const requestDto = new UpdateCalendarRequest();
       requestDto.id = calendar.id;
       requestDto.title = '개발팀 회의';
       requestDto.startDate = new Date('2025-01-31 15:00:00');
       requestDto.endDate = new Date('2025-01-31 16:00:00');
+      requestDto.alarmType = AlarmType.MAIL;
+      requestDto.ringMinuteBefore = 10;
       requestDto.userIds = [userA.id, userB.id];
 
       // when
@@ -169,12 +185,17 @@ describe('Calendar e2e', () => {
 
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
+      await calendarAlarmRepository.save(
+        CalendarAlarm.of(calendar.id, AlarmType.MAIL, 10),
+      );
 
       const requestDto = new UpdateCalendarRequest();
       requestDto.id = calendar.id;
       requestDto.title = '개발팀 회의';
       requestDto.startDate = new Date('2025-01-31 15:00:00');
       requestDto.endDate = new Date('2025-01-31 16:00:00');
+      requestDto.alarmType = AlarmType.MAIL;
+      requestDto.ringMinuteBefore = 10;
       requestDto.userIds = [userB.id, userC.id];
 
       // when
@@ -212,6 +233,10 @@ describe('Calendar e2e', () => {
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
 
+      await calendarAlarmRepository.save(
+        CalendarAlarm.of(calendar.id, AlarmType.MAIL, 10),
+      );
+
       // when
       await request(app.getHttpServer())
         .delete(`/v1/calendar/${calendar.id}`)
@@ -223,6 +248,9 @@ describe('Calendar e2e', () => {
 
       const calendarUsers = await calendarUserRepository.find();
       expect(calendarUsers).toHaveLength(0);
+
+      const calendarAlarm = await calendarAlarmRepository.find();
+      expect(calendarAlarm).toHaveLength(0);
     });
   });
 });
