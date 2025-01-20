@@ -5,6 +5,7 @@ import { PaginationResponse } from '../common/pagination/pagination.response';
 import { CalendarsResponse } from './dto/calendars.response';
 import { RegisterCalendarRequest } from './dto/register-calendar.request';
 import { UpdateCalendarRequest } from './dto/update-calendar.request';
+import { CalendarAlarmRepository } from './repositories/calendar-alarm.repository';
 import { CalendarUserRepository } from './repositories/calendar-user.repository';
 import { CalendarRepository } from './repositories/calendar.repository';
 
@@ -13,6 +14,7 @@ export class CalendarService {
   constructor(
     private readonly calendarRepository: CalendarRepository,
     private readonly calendarUserRepository: CalendarUserRepository,
+    private readonly calendarAlarmRepository: CalendarAlarmRepository,
   ) {}
 
   async findAll(request: PaginationRequest) {
@@ -42,16 +44,19 @@ export class CalendarService {
   async addCalendar(request: RegisterCalendarRequest) {
     const calendar = request.toEntity();
     calendar.updateCalendarUsers(request.toCalendarUserEntity(calendar.id));
+    calendar.updateCalendarAlarm(request.toAlarmEntity(calendar.id));
     await this.calendarRepository.save(calendar);
   }
 
   async updateCalendar(request: UpdateCalendarRequest) {
-    const calendar = await this.findCalendarWithUsers(request.id);
+    const calendar = await this.findCalendarWith(request.id);
+    calendar.calendarAlarm.update(request.alarmType, request.ringMinuteBefore);
     calendar.update(
       request.title,
       request.startDate,
       request.endDate,
       request.toCalendarUserEntity(calendar.id),
+      calendar.calendarAlarm,
     );
 
     await this.calendarRepository.save(calendar);
@@ -59,15 +64,16 @@ export class CalendarService {
 
   @Transactional()
   async removeCalendar(id: number) {
-    const calendar = await this.findCalendarWithUsers(id);
+    const calendar = await this.findCalendarWith(id);
     await this.calendarRepository.remove(calendar);
     await this.calendarUserRepository.remove(calendar.calendarUsers);
+    await this.calendarAlarmRepository.remove(calendar.calendarAlarm);
   }
 
-  private async findCalendarWithUsers(calendarId: number) {
+  private async findCalendarWith(calendarId: number) {
     return this.calendarRepository.findOneOrFail({
       where: { id: calendarId },
-      relations: ['calendarUsers'],
+      relations: ['calendarUsers', 'calendarAlarm'],
     });
   }
 }

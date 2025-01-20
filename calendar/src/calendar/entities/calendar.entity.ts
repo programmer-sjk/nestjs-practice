@@ -49,14 +49,20 @@ export class Calendar {
     startDate: Date,
     endDate: Date,
     calendarUsers: CalendarUser[],
+    calendarAlarm: CalendarAlarm,
   ) {
     this.title = title;
     this.startDate = startDate;
     this.endDate = endDate;
     this.calendarUsers = calendarUsers;
+    this.calendarAlarm = calendarAlarm;
   }
 
   updateCalendarUsers(calendarUsers: CalendarUser[]) {
     this.calendarUsers = calendarUsers;
+  }
+
+  updateCalendarAlarm(calendarAlarm: CalendarAlarm) {
+    this.calendarAlarm = calendarAlarm;
   }
 }

@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -13,7 +14,7 @@ export class CalendarAlarm {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ enum: AlarmType })
+  @Column({ type: 'enum', enum: AlarmType })
   type: AlarmType;
 
   @Column()
@@ -28,5 +29,19 @@ export class CalendarAlarm {
   @OneToOne(() => Calendar, (calendar) => calendar.calendarAlarm, {
     createForeignKeyConstraints: false,
   })
+  @JoinColumn()
   calendar: Calendar;
+
+  static of(calendarId: number, type: AlarmType, ringMinuteBefore: number) {
+    const alarm = new CalendarAlarm();
+    alarm.calendarId = calendarId;
+    alarm.type = type;
+    alarm.ringMinuteBefore = ringMinuteBefore;
+    return alarm;
+  }
+
+  update(type: AlarmType, ringMinuteBefore: number) {
+    this.type = type;
+    this.ringMinuteBefore = ringMinuteBefore;
+  }
 }

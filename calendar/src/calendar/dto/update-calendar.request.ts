@@ -2,12 +2,16 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsDate,
+  IsEnum,
   IsInt,
   IsNotEmpty,
   IsString,
+  Max,
   MaxLength,
+  Min,
 } from 'class-validator';
 import { CalendarUser } from '../entities/calendar-user.entity';
+import { AlarmType } from '../enums/alarm-type.enum';
 
 export class UpdateCalendarRequest {
   @IsNotEmpty()
@@ -28,6 +32,17 @@ export class UpdateCalendarRequest {
   @Type(() => Date)
   @IsDate()
   endDate: Date;
+
+  @IsNotEmpty()
+  @IsEnum(AlarmType)
+  alarmType: AlarmType;
+
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
+  @Min(5)
+  @Max(60)
+  ringMinuteBefore: number;
 
   @IsNotEmpty()
   @IsArray()
