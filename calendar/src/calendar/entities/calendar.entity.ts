@@ -3,7 +3,7 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { CalendarUser } from './calendar-user.entity';
 
@@ -46,6 +46,10 @@ export class Calendar {
     this.title = title;
     this.startDate = startDate;
     this.endDate = endDate;
+    this.calendarUsers = calendarUsers;
+  }
+
+  updateCalendarUsers(calendarUsers: CalendarUser[]) {
     this.calendarUsers = calendarUsers;
   }
 }

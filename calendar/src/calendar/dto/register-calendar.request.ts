@@ -7,6 +7,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
+import { CalendarUser } from '../entities/calendar-user.entity';
 import { Calendar } from '../entities/calendar.entity';
 
 export class RegisterCalendarRequest {
@@ -32,5 +33,9 @@ export class RegisterCalendarRequest {
 
   toEntity() {
     return Calendar.of(this.title, this.startDate, this.endDate);
+  }
+
+  toCalendarUserEntity(calendarId: number) {
+    return this.userIds.map((userId) => CalendarUser.of(calendarId, userId));
   }
 }

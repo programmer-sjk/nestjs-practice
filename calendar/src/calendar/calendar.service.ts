@@ -5,7 +5,6 @@ import { PaginationResponse } from '../common/pagination/pagination.response';
 import { CalendarsResponse } from './dto/calendars.response';
 import { RegisterCalendarRequest } from './dto/register-calendar.request';
 import { UpdateCalendarRequest } from './dto/update-calendar.request';
-import { CalendarUser } from './entities/calendar-user.entity';
 import { CalendarUserRepository } from './repositories/calendar-user.repository';
 import { CalendarRepository } from './repositories/calendar.repository';
 
@@ -42,9 +41,7 @@ export class CalendarService {
 
   async addCalendar(request: RegisterCalendarRequest) {
     const calendar = request.toEntity();
-    calendar.calendarUsers = request.userIds.map((userId) =>
-      CalendarUser.of(calendar.id, userId),
-    );
+    calendar.updateCalendarUsers(request.toCalendarUserEntity(calendar.id));
     await this.calendarRepository.save(calendar);
   }
 
