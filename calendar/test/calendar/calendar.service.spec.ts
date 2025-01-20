@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
   initializeTransactionalContext,
-  StorageDriver,
+  StorageDriver
 } from 'typeorm-transactional';
 import { CalendarService } from '../../src/calendar/calendar.service';
 import { RegisterCalendarRequest } from '../../src/calendar/dto/register-calendar.request';
@@ -105,9 +105,9 @@ describe('CalendarService', () => {
 
       // then
       expect(result.data).toHaveLength(2);
-      expect(result.currentPage).toBe(0);
       expect(result.limit).toBe(2);
       expect(result.totalCount).toBe(10);
+      expect(result.currentPage).toBe(0);
       expect(result.totalPage).toBe(5);
     });
   });

@@ -37,9 +37,15 @@ export class Calendar {
     return calendar;
   }
 
-  update(title: string, startDate: Date, endDate: Date) {
+  update(
+    title: string,
+    startDate: Date,
+    endDate: Date,
+    calendarUsers: CalendarUser[],
+  ) {
     this.title = title;
     this.startDate = startDate;
     this.endDate = endDate;
+    this.calendarUsers = calendarUsers;
   }
 }
