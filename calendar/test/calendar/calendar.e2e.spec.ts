@@ -5,11 +5,14 @@ import * as request from 'supertest';
 import { initializeTransactionalContext } from 'typeorm-transactional';
 import { CalendarController } from '../../src/calendar/calendar.controller';
 import { CalendarService } from '../../src/calendar/calendar.service';
+import { CalendarsResponse } from '../../src/calendar/dto/calendars.response';
 import { RegisterCalendarRequest } from '../../src/calendar/dto/register-calendar.request';
 import { UpdateCalendarRequest } from '../../src/calendar/dto/update-calendar.request';
 import { CalendarUser } from '../../src/calendar/entities/calendar-user.entity';
 import { CalendarUserRepository } from '../../src/calendar/repositories/calendar-user.repository';
 import { CalendarRepository } from '../../src/calendar/repositories/calendar.repository';
+import { PaginationRequest } from '../../src/common/pagination/pagination.request';
+import { PaginationResponse } from '../../src/common/pagination/pagination.response';
 import { setNestApp } from '../../src/common/set-nest-app';
 import { UserRepository } from '../../src/user/user.repository';
 import { TestCalendarFactory } from '../fixture/test-calendar-factory';
@@ -71,16 +74,20 @@ describe('Calendar e2e', () => {
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
 
+      const paginationRequest = new PaginationRequest();
+      paginationRequest.limit = 10;
+        
       // when
       const response = await request(app.getHttpServer())
         .get('/v1/calendar')
+        .query(paginationRequest)
         .expect(HttpStatus.OK);
 
       // then
-      const result = response.body.data;
-      expect(result[0].title).toBe('계엄령 회의');
+      const result: PaginationResponse<CalendarsResponse> = response.body.data;
+      expect(result.data[0].title).toBe('계엄령 회의');
 
-      const userIds = result[0].users.map((user) => user.id);
+      const userIds = result.data[0].users.map((user) => user.id);
       expect(userIds.sort()).toEqual([userA.id, userB.id].sort());
     });
   });

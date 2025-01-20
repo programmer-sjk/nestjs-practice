@@ -10,6 +10,7 @@ import { UpdateCalendarRequest } from '../../src/calendar/dto/update-calendar.re
 import { CalendarUser } from '../../src/calendar/entities/calendar-user.entity';
 import { CalendarUserRepository } from '../../src/calendar/repositories/calendar-user.repository';
 import { CalendarRepository } from '../../src/calendar/repositories/calendar.repository';
+import { PaginationRequest } from '../../src/common/pagination/pagination.request';
 import { UserRepository } from '../../src/user/user.repository';
 import { TestCalendarFactory } from '../fixture/test-calendar-factory';
 import { TestUserFactory } from '../fixture/test-user-factory';
@@ -69,13 +70,16 @@ describe('CalendarService', () => {
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
 
+      const paginationRequest = new PaginationRequest();
+      paginationRequest.limit = 10;
+
       // when
-      const result = await service.findAll();
+      const result = await service.findAll(paginationRequest);
 
       // then
-      expect(result[0].title).toBe('계엄령 회의');
+      expect(result.data[0].title).toBe('계엄령 회의');
 
-      const userIds = result[0].users.map((user) => user.id);
+      const userIds = result.data[0].users.map((user) => user.id);
       expect(userIds.sort()).toEqual([userA.id, userB.id].sort());
     });
   });

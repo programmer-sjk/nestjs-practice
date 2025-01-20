@@ -54,8 +54,11 @@ describe('CalendarRepository', () => {
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
       await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
 
+      const limit = 20;
+      const offset = 0;
+
       // when
-      const result = await repository.findAll();
+      const [result] = await repository.findAll(limit, offset);
 
       // then
       expect(result[0].title).toBe('계엄령 회의');
