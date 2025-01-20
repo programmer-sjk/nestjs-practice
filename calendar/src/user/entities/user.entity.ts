@@ -16,6 +16,12 @@ export class User {
   @Column({ length: 16 })
   name: string;
 
+  @Column({ length: 16 })
+  mail: string;
+
+  @Column({ length: 11 })
+  phoneNumber: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
