@@ -1,3 +1,3 @@
 export interface INotification {
-  send();
+  send(userIds: number[]);
 }

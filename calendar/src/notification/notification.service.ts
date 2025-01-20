@@ -12,9 +12,9 @@ export class NotificationService {
     private readonly pushNotificationService: PushNotificationService,
   ) {}
 
-  async sendNotification(type: NotificationType) {
+  async sendNotification(type: NotificationType, userIds: number[]) {
     const notificationService = this.getNotificationServiceByType(type);
-    await notificationService.send();
+    await notificationService.send(userIds);
   }
 
   getNotificationServiceByType(type: NotificationType) {
