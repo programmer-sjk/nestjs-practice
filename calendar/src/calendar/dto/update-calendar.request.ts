@@ -7,6 +7,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
+import { CalendarUser } from '../entities/calendar-user.entity';
 
 export class UpdateCalendarRequest {
   @IsNotEmpty()
@@ -32,4 +33,8 @@ export class UpdateCalendarRequest {
   @IsArray()
   @IsInt({ each: true })
   userIds: number[];
+
+  toCalendarUserEntity(calendarId: number) {
+    return this.userIds.map((userId) => CalendarUser.of(calendarId, userId));
+  }
 }
