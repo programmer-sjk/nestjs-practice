@@ -20,7 +20,6 @@ export class CalendarService {
 
   async findAll(request: PaginationRequest) {
     const { limit, offset } = request;
-    console.log(request);
     const [calendars, totalCount] = await this.calendarRepository.findAll(
       limit,
       offset,
