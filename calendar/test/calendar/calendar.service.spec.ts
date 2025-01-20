@@ -82,6 +82,34 @@ describe('CalendarService', () => {
       const userIds = result.data[0].users.map((user) => user.id);
       expect(userIds.sort()).toEqual([userA.id, userB.id].sort());
     });
+
+    it('일정 목록은 페이지네이션 된다.', async () => {
+      // given
+      const userA = await userRepository.save(TestUserFactory.of('서정국'));
+      const userB = await userRepository.save(TestUserFactory.of('계엄군'));
+
+      for (let i = 0; i < 10; i++) {
+        const calendar = await repository.save(
+          TestCalendarFactory.of('계엄령 회의'),
+        );
+  
+        await calendarUserRepository.save(CalendarUser.of(calendar.id, userA.id));
+        await calendarUserRepository.save(CalendarUser.of(calendar.id, userB.id));
+      }
+      
+      const paginationRequest = new PaginationRequest();
+      paginationRequest.limit = 2;
+
+      // when
+      const result = await service.findAll(paginationRequest);
+
+      // then
+      expect(result.data).toHaveLength(2);
+      expect(result.currentPage).toBe(0);
+      expect(result.limit).toBe(2);
+      expect(result.totalCount).toBe(10);
+      expect(result.totalPage).toBe(5);
+    });
   });
 
   describe('addCalendar', () => {
