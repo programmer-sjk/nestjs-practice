@@ -15,6 +15,7 @@ export class CalendarUser {
 
   @ManyToOne(() => Calendar, (calendar) => calendar.calendarUsers, {
     createForeignKeyConstraints: false,
+    orphanedRowAction: 'delete',
   })
   calendar: Calendar;
 
