@@ -31,9 +31,11 @@ export class User {
   @OneToMany(() => CalendarUser, (calendarUser) => calendarUser.user)
   calendarUsers: CalendarUser[];
 
-  static of(name: string) {
+  static of(name: string, mail: string, phoneNumber: string) {
     const user = new User();
     user.name = name;
+    user.mail = mail;
+    user.phoneNumber = phoneNumber;
     return user;
   }
 }

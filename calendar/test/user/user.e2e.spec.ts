@@ -43,6 +43,8 @@ describe('UserController', () => {
       // given
       const requestDto = new AddUserRequest();
       requestDto.name = '서정국';
+      requestDto.mail = 'test@google.com';
+      requestDto.phoneNumber = '01012345678';
 
       // when
       await request(app.getHttpServer())

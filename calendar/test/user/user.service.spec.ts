@@ -39,6 +39,8 @@ describe('UserService', () => {
       // given
       const dto = new AddUserRequest();
       dto.name = '서정국';
+      dto.mail = 'test@google.com';
+      dto.phoneNumber = '01012345678';
 
       // when
       await service.addUser(dto);
