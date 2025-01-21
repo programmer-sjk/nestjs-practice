@@ -1,6 +1,0 @@
-export enum OrderItemStatus {
-  IN_PROGRESS = 'IN_PROGRESS',
-  STORED = 'STORED',
-  RETURN_PROGRESS = 'RETURN_PROGRESS',
-  COMPLETED = 'COMPLETED',
-}
