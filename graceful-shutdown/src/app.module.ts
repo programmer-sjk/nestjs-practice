@@ -1,13 +1,18 @@
-import { Module } from '@nestjs/common';
+import { Module, OnApplicationShutdown } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { DataSource } from 'typeorm';
 import { connectionOptions } from '../ormconfig';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 
 @Module({
   imports: [TypeOrmModule.forRoot(connectionOptions), UserModule],
-  controllers: [AppController],
-  providers: [AppService],
 })
-export class AppModule {}
+export class AppModule implements OnApplicationShutdown {
+  constructor(private readonly dataSource: DataSource) {}
+
+  async onApplicationShutdown() {
+    if (this.dataSource.isInitialized) {
+      await this.dataSource.destroy();
+    }
+  }
+}
