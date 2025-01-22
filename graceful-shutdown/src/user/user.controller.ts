@@ -10,4 +10,8 @@ export class UserController {
     await this.userService.doLongQuery();
   }
 
+  @Get('/long-query2')
+  async longQuery2() {
+    await this.userService.doLongQuery2();
+  }
 }
