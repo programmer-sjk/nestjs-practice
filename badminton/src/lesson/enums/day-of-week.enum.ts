@@ -1,9 +1,0 @@
-export enum DayOfWeek {
-  SUNDAY = 'SUNDAY',
-  MONDAY = 'MONDAY',
-  TUESDAY = 'TUESDAY',
-  WEDNESDAY = 'WEDNESDAY',
-  THURSDAY = 'THURSDAY',
-  FIRDAY = 'FIRDAY',
-  SATURDAY = 'SATURDAY',
-}
