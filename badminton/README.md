@@ -40,7 +40,3 @@
 - `yarn migration:run` 명령어로 테이블을 생성한다.
 - `yarn seed:run` 명령어로 coach에 대한 초기 데이터를 생성한다.
 - `yarn start:dev` 명령어로 서버를 실행한다.
-
-## 더 해 볼것
-
-- 프로젝트 mono repo로 구성
