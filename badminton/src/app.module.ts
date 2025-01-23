@@ -3,11 +3,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { connectionOptions } from './../ormconfig';
 import { CoachModule } from './coach/coach.module';
 import { UserModule } from './user/user.module';
-import { Controller } from './.controller';
 
 @Module({
   imports: [TypeOrmModule.forRoot(connectionOptions), CoachModule, UserModule],
-  controllers: [Controller],
 })
 export class AppModule {}
 
