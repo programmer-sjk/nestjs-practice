@@ -3,9 +3,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { connectionOptions } from './../ormconfig';
 import { CoachModule } from './coach/coach.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(connectionOptions), CoachModule, UserModule],
+  imports: [TypeOrmModule.forRoot(connectionOptions), CoachModule, UserModule, AuthModule],
 })
 export class AppModule {}
 
