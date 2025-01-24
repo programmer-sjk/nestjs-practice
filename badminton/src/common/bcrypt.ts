@@ -1,6 +1,10 @@
 import bcrypt from 'bcrypt';
 
-export const hash = async (value: string) => {
+export const hash = (value: string) => {
   const saltRound = 10;
-  return bcrypt.hash(value, saltRound);
+  return bcrypt.hashAsync(value, saltRound);
+};
+
+export const compare = (plain: string, hashed: string) => {
+  return bcrypt.compareAsync(plain, hashed);
 };
