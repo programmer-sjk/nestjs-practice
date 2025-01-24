@@ -11,7 +11,7 @@ export class Coach {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ length: 16 })
   name: string;
 
   @CreateDateColumn()
