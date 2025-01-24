@@ -1,22 +1,39 @@
-export class ReponseEntity<T> {
+import { Exclude, Expose } from 'class-transformer';
+
+export class ResponseEntity<T> {
   private static readonly SUCCESS = true;
   private static readonly FAIL = false;
 
-  readonly success: boolean;
-  readonly message: string;
-  readonly data: T;
+  @Exclude() readonly _success: boolean;
+  @Exclude() readonly _message: string;
+  @Exclude() readonly _data: T;
 
   private constructor(success: boolean, message: string, data: T) {
-    this.success = success;
-    this.message = message;
-    this.data = data;
+    this._success = success;
+    this._message = message;
+    this._data = data;
   }
 
   static OK<T>(data?: T) {
-    return new ReponseEntity(ReponseEntity.SUCCESS, '', data ?? '');
+    return new ResponseEntity(ResponseEntity.SUCCESS, '', data ?? '');
   }
 
   static ERROR(message: string) {
-    return new ReponseEntity(ReponseEntity.FAIL, message, '');
+    return new ResponseEntity(ResponseEntity.FAIL, message, '');
+  }
+
+  @Expose()
+  get success(): boolean {
+    return this._success;
+  }
+
+  @Expose()
+  get message(): string {
+    return this._message;
+  }
+
+  @Expose()
+  get data(): T {
+    return this._data;
   }
 }
