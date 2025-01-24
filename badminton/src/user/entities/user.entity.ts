@@ -3,6 +3,7 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -14,6 +15,7 @@ export class User {
   @Column({ length: 16 })
   name: string;
 
+  @Index('email')
   @Column({ length: 32 })
   email: string;
 

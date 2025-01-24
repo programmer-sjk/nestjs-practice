@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class User1737694460341 implements MigrationInterface {
-  name = 'User1737694460341';
+export class User1737701059844 implements MigrationInterface {
+  name = 'User1737701059844';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -12,11 +12,13 @@ export class User1737694460341 implements MigrationInterface {
         \`password\` varchar(255) NOT NULL, 
         \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), 
         \`deleted_at\` datetime(6) NULL, 
+        INDEX \`email\` (\`email\`), 
         PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
+    await queryRunner.query(`DROP INDEX \`email\` ON \`user\``);
     await queryRunner.query(`DROP TABLE \`user\``);
   }
 }
