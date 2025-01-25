@@ -8,7 +8,7 @@ import { SignInResponse } from './dto/sigin-in.response';
 
 @Injectable()
 export class AuthService {
-  private readonly expireMs = 3 * 60 * 1000; // 3분
+  private readonly expireSecond = 5 * 60;
   private readonly secretKey;
 
   constructor(
@@ -29,7 +29,7 @@ export class AuthService {
     const payload = { sub: user.id };
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: this.secretKey,
-      expiresIn: this.expireMs,
+      expiresIn: this.expireSecond,
     });
 
     return new SignInResponse(accessToken);
