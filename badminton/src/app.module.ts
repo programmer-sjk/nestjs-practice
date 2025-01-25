@@ -4,9 +4,10 @@ import { connectionOptions } from './../ormconfig';
 import { CoachModule } from './coach/coach.module';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
+import { LessonModule } from './lesson/lesson.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(connectionOptions), CoachModule, UserModule, AuthModule],
+  imports: [TypeOrmModule.forRoot(connectionOptions), CoachModule, UserModule, AuthModule, LessonModule],
 })
 export class AppModule {}
 
