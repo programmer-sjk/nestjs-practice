@@ -1,10 +1,10 @@
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 export const hash = (value: string) => {
   const saltRound = 10;
-  return bcrypt.hashAsync(value, saltRound);
+  return bcrypt.hashSync(value, saltRound);
 };
 
 export const compare = (plain: string, hashed: string) => {
-  return bcrypt.compareAsync(plain, hashed);
+  return bcrypt.compareSync(plain, hashed);
 };
