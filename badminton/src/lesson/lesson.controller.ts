@@ -12,14 +12,22 @@ export class LessonController {
   @Roles(Role.USER)
   @Post()
   async register(@Body() request: RegisterRequest) {
-    await this.lessonService.addLesson(request);
-    return ResponseEntity.OK();
+    try {
+      await this.lessonService.addLesson(request);
+      return ResponseEntity.OK();
+    } catch (e) {
+      return ResponseEntity.ERROR(e.message);
+    }
   }
 
   @Roles(Role.USER)
   @Delete(':id')
   async remove(@Param('id') id: number) {
-    await this.lessonService.removeLesson(id);
-    return ResponseEntity.OK();
+    try {
+      await this.lessonService.removeLesson(id);
+      return ResponseEntity.OK();
+    } catch (e) {
+      return ResponseEntity.ERROR(e.message);
+    }
   }
 }
