@@ -13,11 +13,11 @@ export class LessonService {
 
   async addLesson(dto: RegisterRequest) {
     const lesson = dto.toEntity();
-    await this.validate(lesson);
+    await this.validateNewLesson(lesson);
     return this.lessonRepository.save(lesson);
   }
 
-  private async validate(lesson: Lesson) {
+  private async validateNewLesson(lesson: Lesson) {
     const coach = await this.coachRepository.findOneBy({ id: lesson.coachId });
     if (!coach) {
       throw new BadRequestException('등록되지 않은 코치입니다.');
@@ -26,5 +26,10 @@ export class LessonService {
     if (lesson.isInvalidLessonHour()) {
       throw new BadRequestException('예약할 수 없는 시간입니다.');
     }
+  }
+
+  async removeLesson(id: number) {
+    const lesson = await this.lessonRepository.findOneByOrFail({ id });
+    await this.lessonRepository.remove(lesson);
   }
 }

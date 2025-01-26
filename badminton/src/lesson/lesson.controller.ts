@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/role.enum';
 import { ResponseEntity } from './../common/response-entity';
@@ -13,6 +13,13 @@ export class LessonController {
   @Post()
   async register(@Body() request: RegisterRequest) {
     await this.lessonService.addLesson(request);
+    return ResponseEntity.OK();
+  }
+
+  @Roles(Role.USER)
+  @Delete(':id')
+  async remove(@Param('id') id: number) {
+    await this.lessonService.removeLesson(id);
     return ResponseEntity.OK();
   }
 }
