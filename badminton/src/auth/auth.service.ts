@@ -8,7 +8,7 @@ import { SignInResponse } from './dto/sigin-in.response';
 
 @Injectable()
 export class AuthService {
-  private readonly expireSecond = 5 * 60;
+  private readonly expireSecond = 10 * 60;
   private readonly secretKey;
 
   constructor(
