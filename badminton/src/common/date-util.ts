@@ -16,6 +16,7 @@ export class DateUtil {
   }
 
   static diff(date: Date) {
-    return DateTime.fromJSDate(date).diffNow('day');
+    const now = DateUtil.now().startOf('day');
+    return DateTime.fromJSDate(date).diff(now, 'day');
   }
 }
