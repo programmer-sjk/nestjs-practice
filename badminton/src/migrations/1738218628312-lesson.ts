@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Lesson1737788446623 implements MigrationInterface {
-  name = 'Lesson1737788446623';
+export class Lesson1738218628312 implements MigrationInterface {
+  name = 'Lesson1738218628312';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -11,7 +11,8 @@ export class Lesson1737788446623 implements MigrationInterface {
         \`user_id\` int NOT NULL, 
         \`type\` enum ('regular', 'one_time') NOT NULL, 
         \`day_of_week\` enum ('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday') NOT NULL, 
-        \`start_hour\` int NOT NULL, 
+        \`start_hour\` int NULL, 
+        \`start_date\` datetime NULL, 
         \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), 
         \`deleted_at\` datetime(6) NULL, 
         INDEX \`coachId\` (\`coach_id\`), 
