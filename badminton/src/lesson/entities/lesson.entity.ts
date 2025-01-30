@@ -63,7 +63,7 @@ export class Lesson {
   }
 
   isInvalidLessonHour() {
-    const startHour = this.startHour || DateUtil.hour(this.startDate);
+    const startHour = this.getHour();
 
     if (
       startHour < this.FIRST_LESSON_HOUR &&
@@ -89,16 +89,15 @@ export class Lesson {
   }
 
   isDuplicate(lessons: Lesson[]) {
-    const startHour = this.startHour || DateUtil.hour(this.startDate);
-
     for (const lesson of lessons) {
-      if (this.isDuplicateHour(lesson, startHour)) {
+      if (this.isDuplicateHour(lesson)) {
         return true;
       }
     }
   }
 
-  isDuplicateHour(lesson: Lesson, startHour: number) {
+  isDuplicateHour(lesson: Lesson) {
+    const startHour = this.getHour();
     if (lesson.type === LessonType.REGULAR) {
       if (startHour === lesson.startHour) {
         return true;
@@ -110,5 +109,9 @@ export class Lesson {
         return true;
       }
     }
+  }
+
+  getHour() {
+    return this.startHour || DateUtil.hour(this.startDate);
   }
 }
