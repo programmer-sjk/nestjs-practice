@@ -6,6 +6,7 @@ import {
   Index,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { DateUtil } from '../../common/date-util';
 import { DayOfWeek } from '../enums/day-of-week.enum';
 import { LessonType } from '../enums/lesson-type.enum';
 
@@ -28,8 +29,11 @@ export class Lesson {
   @Column({ type: 'enum', enum: DayOfWeek })
   dayOfWeek: DayOfWeek;
 
-  @Column()
+  @Column({ nullable: true })
   startHour: number;
+
+  @Column({ nullable: true })
+  startDate: Date;
 
   @CreateDateColumn()
   createdAt: Date;
@@ -45,7 +49,8 @@ export class Lesson {
     userId: number,
     type: LessonType,
     dayOfWeek: DayOfWeek,
-    startHour: number,
+    startHour?: number,
+    startDate?: Date,
   ) {
     const lesson = new Lesson();
     lesson.coachId = coachId;
@@ -53,17 +58,57 @@ export class Lesson {
     lesson.type = type;
     lesson.dayOfWeek = dayOfWeek;
     lesson.startHour = startHour;
+    lesson.startDate = startDate;
     return lesson;
   }
 
   isInvalidLessonHour() {
+    const startHour = this.startHour || DateUtil.hour(this.startDate);
+
     if (
-      this.startHour < this.FIRST_LESSON_HOUR &&
-      this.startHour > this.LAST_LESSON_HOUR
+      startHour < this.FIRST_LESSON_HOUR &&
+      startHour > this.LAST_LESSON_HOUR
     ) {
       return true;
     }
 
     return false;
+  }
+
+  isInvalidLessonDate() {
+    if (!this.startDate) {
+      return false;
+    }
+
+    const diffDay = DateUtil.diff(this.startDate).days;
+    if (diffDay < 1 || diffDay >= 7) {
+      return true;
+    }
+
+    return false;
+  }
+
+  isDuplicate(lessons: Lesson[]) {
+    const startHour = this.startHour || DateUtil.hour(this.startDate);
+
+    for (const lesson of lessons) {
+      if (this.isDuplicateHour(lesson, startHour)) {
+        return true;
+      }
+    }
+  }
+
+  isDuplicateHour(lesson: Lesson, startHour: number) {
+    if (lesson.type === LessonType.REGULAR) {
+      if (startHour === lesson.startHour) {
+        return true;
+      }
+    }
+
+    if (lesson.type === LessonType.ONE_TIME) {
+      if (startHour === DateUtil.hour(this.startDate)) {
+        return true;
+      }
+    }
   }
 }
