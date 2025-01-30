@@ -1,4 +1,13 @@
-import { IsEnum, IsInt, IsNotEmpty, Max, Min } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsDate,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  Max,
+  Min,
+} from 'class-validator';
 import { DayOfWeek } from '../enums/day-of-week.enum';
 import { LessonType } from '../enums/lesson-type.enum';
 import { Lesson } from './../entities/lesson.entity';
@@ -20,11 +29,16 @@ export class RegisterRequest {
   @IsEnum(DayOfWeek)
   dayOfWeek: DayOfWeek;
 
-  @IsNotEmpty()
+  @IsOptional()
   @Min(7)
   @Max(22)
   @IsInt()
-  startHour: number;
+  startHour?: number;
+
+  @IsOptional()
+  @Type(() => Date)
+  @IsDate()
+  startDate?: Date;
 
   toEntity() {
     return Lesson.of(
@@ -33,6 +47,7 @@ export class RegisterRequest {
       this.type,
       this.dayOfWeek,
       this.startHour,
+      this.startDate,
     );
   }
 }
