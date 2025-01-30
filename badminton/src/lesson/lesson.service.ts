@@ -60,7 +60,7 @@ export class LessonService {
       dayOfWeek: lesson.dayOfWeek,
     });
 
-    if (lessons.find((lesson) => lesson.isDuplicate(lessons))) {
+    if (lesson.isDuplicate(lessons)) {
       throw new BadRequestException('이미 예약된 레슨 시간입니다.');
     }
   }
