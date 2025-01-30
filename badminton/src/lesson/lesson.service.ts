@@ -14,7 +14,7 @@ import { LessonRepository } from './lesson.repository';
 @Injectable()
 export class LessonService {
   private readonly lessonStartHours = [
-    7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22,
   ];
 
   constructor(
@@ -31,9 +31,8 @@ export class LessonService {
     const existLessons = await this.lessonRepository.findBy({
       coachId: coach.id,
     });
-    console.log(
-      this.filterExistLesson(this.allSchedulesDuringWeek(), existLessons),
-    );
+
+    return this.filterExistLesson(this.allSchedulesDuringWeek(), existLessons);
   }
 
   async addLesson(dto: RegisterRequest) {
@@ -63,7 +62,7 @@ export class LessonService {
 
     if (lessons.find((lesson) => lesson.isDuplicate(lessons))) {
       throw new BadRequestException('이미 예약된 레슨 시간입니다.');
-    } 
+    }
   }
 
   async removeLesson(id: number) {
@@ -92,7 +91,7 @@ export class LessonService {
   ) {
     lessons.map((lesson) => {
       allSchedules[lesson.dayOfWeek] = allSchedules[lesson.dayOfWeek].filter(
-        (hour) => hour !== lesson.startHour,
+        (hour) => hour !== lesson.getHour(),
       );
     });
 

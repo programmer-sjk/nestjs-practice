@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/role.enum';
 import { ResponseEntity } from './../common/response-entity';
@@ -13,8 +21,8 @@ export class LessonController {
   @Get()
   async findLessonSchedules(@Query() request: LessonScheduleRequest) {
     try {
-      await this.lessonService.findLessonSchedules(request);
-      return ResponseEntity.OK();
+      const result = await this.lessonService.findLessonSchedules(request);
+      return ResponseEntity.OK(result);
     } catch (e) {
       return ResponseEntity.ERROR(e.message);
     }
