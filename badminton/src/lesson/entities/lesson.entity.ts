@@ -105,7 +105,7 @@ export class Lesson {
     }
 
     if (lesson.type === LessonType.ONE_TIME) {
-      if (startHour === DateUtil.hour(this.startDate)) {
+      if (startHour === DateUtil.hour(lesson.startDate)) {
         return true;
       }
     }
