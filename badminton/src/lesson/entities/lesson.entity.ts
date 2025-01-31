@@ -62,6 +62,14 @@ export class Lesson {
     return lesson;
   }
 
+  isRegular() {
+    return this.type === LessonType.REGULAR;
+  }
+
+  isOneTime() {
+    return this.type === LessonType.ONE_TIME;
+  }
+
   isInvalidLessonHour() {
     const startHour = this.getHour();
 
