@@ -23,11 +23,7 @@ export class LessonService {
   ) {}
 
   async findLessonSchedules(dto: LessonScheduleRequest) {
-    const coach = await this.coachRepository.findOneBy({ id: dto.coachId });
-    if (!coach) {
-      throw new BadRequestException('등록되지 않은 코치입니다.');
-    }
-
+    const coach = await this.findCoachByIdOrThrow(dto.coachId);
     const existLessons = await this.lessonRepository.findSchedules(coach.id);
     return this.filterExistLesson(this.allSchedulesDuringWeek(), existLessons);
   }
@@ -39,11 +35,7 @@ export class LessonService {
   }
 
   private async validateNewLesson(lesson: Lesson) {
-    const coach = await this.coachRepository.findOneBy({ id: lesson.coachId });
-    if (!coach) {
-      throw new BadRequestException('등록되지 않은 코치입니다.');
-    }
-
+    const coach = await this.findCoachByIdOrThrow(lesson.coachId);
     if (lesson.isInvalidLessonHour()) {
       throw new BadRequestException('예약할 수 없는 시간입니다.');
     }
@@ -84,6 +76,15 @@ export class LessonService {
         throw new BadRequestException('당일 예약은 취소할 수 없습니다.');
       }
     }
+  }
+
+  private async findCoachByIdOrThrow(coachId: number) {
+    const coach = await this.coachRepository.findOneBy({ id: coachId });
+    if (!coach) {
+      throw new BadRequestException('등록되지 않은 코치입니다.');
+    }
+
+    return coach;
   }
 
   private allSchedulesDuringWeek() {
