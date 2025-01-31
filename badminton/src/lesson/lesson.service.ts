@@ -28,10 +28,7 @@ export class LessonService {
       throw new BadRequestException('등록되지 않은 코치입니다.');
     }
 
-    const existLessons = await this.lessonRepository.findBy({
-      coachId: coach.id,
-    });
-
+    const existLessons = await this.lessonRepository.findSchedules(coach.id);
     return this.filterExistLesson(this.allSchedulesDuringWeek(), existLessons);
   }
 
@@ -55,10 +52,10 @@ export class LessonService {
       throw new BadRequestException('예약은 내일부터 일주일간 가능합니다.');
     }
 
-    const lessons = await this.lessonRepository.findBy({
-      coachId: coach.id,
-      dayOfWeek: lesson.dayOfWeek,
-    });
+    const lessons = await this.lessonRepository.findSchedules(
+      coach.id,
+      lesson.dayOfWeek,
+    );
 
     if (lesson.isDuplicate(lessons)) {
       throw new BadRequestException('이미 예약된 레슨 시간입니다.');
