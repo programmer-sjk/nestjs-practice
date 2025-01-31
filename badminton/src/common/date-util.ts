@@ -19,4 +19,8 @@ export class DateUtil {
     const now = DateUtil.now().startOf('day');
     return DateTime.fromJSDate(date).diff(now, 'day');
   }
+
+  static isToday(date: Date) {
+    return DateTime.fromJSDate(date).hasSame(DateUtil.now(), 'day');
+  }
 }
