@@ -67,11 +67,26 @@ export class LessonService {
 
   async removeLesson(id: number) {
     const lesson = await this.lessonRepository.findOneBy({ id });
+    this.validateRemoveLesson(lesson);
+    await this.lessonRepository.remove(lesson);
+  }
+
+  private validateRemoveLesson(lesson: Lesson) {
     if (!lesson) {
       throw new NotFoundException('등록되지 않은 레슨입니다.');
     }
 
-    await this.lessonRepository.remove(lesson);
+    if (lesson.isRegular()) {
+      if (this.toDayOfWeek(DateUtil.now().weekday) === lesson.dayOfWeek) {
+        throw new BadRequestException('당일 예약은 취소할 수 없습니다.');
+      }
+    }
+
+    if (lesson.isOneTime()) {
+      if (DateUtil.isToday(lesson.startDate)) {
+        throw new BadRequestException('당일 예약은 취소할 수 없습니다.');
+      }
+    }
   }
 
   private allSchedulesDuringWeek() {
