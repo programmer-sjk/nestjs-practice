@@ -91,8 +91,8 @@ export class LessonService {
 
   private allSchedulesDuringWeek() {
     const allSchedules: Record<string, number[]> = {};
-    const tomorrowOffest = 1;
-    for (let i = tomorrowOffest; i <= 7; i++) {
+    const tomorrowOffset = 1;
+    for (let i = tomorrowOffset; i <= 7; i++) {
       const weekday = DateUtil.weekday(i);
       allSchedules[this.toDayOfWeek(weekday)] = this.lessonStartHours;
     }
