@@ -25,7 +25,7 @@ export class LessonService {
   async findLessonSchedules(dto: LessonScheduleRequest) {
     const coach = await this.findCoachByIdOrThrow(dto.coachId);
     const existLessons = await this.lessonRepository.findSchedules(coach.id);
-    return this.filterExistLesson(this.allSchedulesDuringWeek(), existLessons);
+    return this.filterExistLesson(existLessons);
   }
 
   async addLesson(dto: RegisterRequest) {
@@ -90,7 +90,9 @@ export class LessonService {
   private allSchedulesDuringWeek() {
     const allSchedules: Record<string, number[]> = {};
     const tomorrowOffset = 1;
-    for (let i = tomorrowOffset; i <= 7; i++) {
+    const lastLessonOffsetFromToday = 7;
+
+    for (let i = tomorrowOffset; i <= lastLessonOffsetFromToday; i++) {
       const weekday = DateUtil.weekday(i);
       allSchedules[this.toDayOfWeek(weekday)] = this.lessonStartHours;
     }
@@ -98,10 +100,8 @@ export class LessonService {
     return allSchedules;
   }
 
-  private filterExistLesson(
-    allSchedules: Record<DayOfWeek, number[]>,
-    lessons: Lesson[],
-  ) {
+  private filterExistLesson(lessons: Lesson[]) {
+    const allSchedules = this.allSchedulesDuringWeek();
     lessons.map((lesson) => {
       allSchedules[lesson.dayOfWeek] = allSchedules[lesson.dayOfWeek].filter(
         (hour) => hour !== lesson.getHour(),
