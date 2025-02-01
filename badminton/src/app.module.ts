@@ -28,16 +28,3 @@ import { UserModule } from './user/user.module';
   ],
 })
 export class AppModule {}
-
-// private isDateRangeOverlap(
-//   startA: Date,
-//   endA: Date,
-//   startB: Date,
-//   endB: Date,
-// ) {
-//   if (startA < endB && endA > startB) {
-//     return true;
-//   }
-
-//   return false;
-// }
