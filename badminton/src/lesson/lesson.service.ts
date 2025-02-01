@@ -32,11 +32,17 @@ export class LessonService {
 
   async addLesson(dto: RegisterRequest) {
     const lesson = dto.toEntity();
-
-    const lock = await this.redisService.acquireLock('add-lesson');
-    await this.validateNewLesson(lesson);
-    await this.lessonRepository.save(lesson);
-    await lock.release();
+    
+    let lock;
+    try {
+      lock = await this.redisService.acquireLock('add-lesson');
+      await this.validateNewLesson(lesson);
+      await this.lessonRepository.save(lesson);
+    } catch (e) {
+      throw e;
+    } finally {
+      await lock?.release();
+    }
   }
 
   private async validateNewLesson(lesson: Lesson) {
