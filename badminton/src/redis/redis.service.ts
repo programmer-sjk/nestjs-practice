@@ -14,7 +14,7 @@ export class RedisService {
     @InjectRedis() private readonly redis: Redis,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
-    this.redlock = new Redlock([redis]);
+    this.redlock = new Redlock([this.redis]);
   }
 
   async get(key: string) {
