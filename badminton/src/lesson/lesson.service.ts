@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { CoachRepository } from '../coach/coach.repository';
 import { DateUtil } from '../common/date-util';
+import { RedisService } from '../redis/redis.service';
 import { LessonScheduleRequest } from './dto/lesson-schedule.request';
 import { RegisterRequest } from './dto/register.request';
 import { Lesson } from './entities/lesson.entity';
@@ -20,6 +21,7 @@ export class LessonService {
   constructor(
     private readonly coachRepository: CoachRepository,
     private readonly lessonRepository: LessonRepository,
+    private readonly redisService: RedisService,
   ) {}
 
   async findLessonSchedules(dto: LessonScheduleRequest) {
@@ -30,8 +32,11 @@ export class LessonService {
 
   async addLesson(dto: RegisterRequest) {
     const lesson = dto.toEntity();
+
+    const lock = await this.redisService.acquireLock('add-lesson');
     await this.validateNewLesson(lesson);
-    return this.lessonRepository.save(lesson);
+    await this.lessonRepository.save(lesson);
+    await lock.release();
   }
 
   private async validateNewLesson(lesson: Lesson) {
