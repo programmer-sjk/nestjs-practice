@@ -11,6 +11,7 @@ import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/role.enum';
 import { ResponseEntity } from './../common/response-entity';
 import { LessonScheduleRequest } from './dto/lesson-schedule.request';
+import { LessonScheduleResponse } from './dto/lesson-schedule.response';
 import { RegisterRequest } from './dto/register.request';
 import { LessonService } from './lesson.service';
 
@@ -19,7 +20,9 @@ export class LessonController {
   constructor(private readonly lessonService: LessonService) {}
 
   @Get()
-  async findLessonSchedules(@Query() request: LessonScheduleRequest) {
+  async findLessonSchedules(
+    @Query() request: LessonScheduleRequest,
+  ): Promise<ResponseEntity<LessonScheduleResponse | string>> {
     try {
       const result = await this.lessonService.findLessonSchedules(request);
       return ResponseEntity.OK(result);
@@ -30,7 +33,9 @@ export class LessonController {
 
   @Roles(Role.USER)
   @Post()
-  async register(@Body() request: RegisterRequest) {
+  async register(
+    @Body() request: RegisterRequest,
+  ): Promise<ResponseEntity<string>> {
     try {
       await this.lessonService.addLesson(request);
       return ResponseEntity.OK();
@@ -41,7 +46,7 @@ export class LessonController {
 
   @Roles(Role.USER)
   @Delete(':id')
-  async remove(@Param('id') id: number) {
+  async remove(@Param('id') id: number): Promise<ResponseEntity<string>> {
     try {
       await this.lessonService.removeLesson(id);
       return ResponseEntity.OK();

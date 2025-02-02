@@ -7,6 +7,7 @@ import { CoachRepository } from '../coach/coach.repository';
 import { DateUtil } from '../common/date-util';
 import { RedisService } from '../redis/redis.service';
 import { LessonScheduleRequest } from './dto/lesson-schedule.request';
+import { LessonScheduleResponse } from './dto/lesson-schedule.response';
 import { RegisterRequest } from './dto/register.request';
 import { Lesson } from './entities/lesson.entity';
 import { DayOfWeek } from './enums/day-of-week.enum';
@@ -27,12 +28,12 @@ export class LessonService {
   async findLessonSchedules(dto: LessonScheduleRequest) {
     const coach = await this.findCoachByIdOrThrow(dto.coachId);
     const existLessons = await this.lessonRepository.findSchedules(coach.id);
-    return this.filterExistLesson(existLessons);
+    return new LessonScheduleResponse(this.filterExistLesson(existLessons));
   }
 
   async addLesson(dto: RegisterRequest) {
     const lesson = dto.toEntity();
-    
+
     let lock;
     try {
       lock = await this.redisService.acquireLock('add-lesson');
