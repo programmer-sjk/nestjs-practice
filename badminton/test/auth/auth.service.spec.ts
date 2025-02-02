@@ -45,7 +45,7 @@ describe('AuthService', () => {
   });
 
   describe('signIn', () => {
-    it('email과 password가 일치하면 access_token을 발급한다.', async () => {
+    it('email과 password가 일치하면 accessToken을 발급한다.', async () => {
       // given
       const hashed = hash('password');
       const user = TestUserCreator.of('test@test.com', hashed);
