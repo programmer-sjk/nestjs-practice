@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { SignUpRequest } from './dto/sign-up.request';
 import { UserRepository } from './user.repository';
 
@@ -7,7 +7,12 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async findUserByEmailOrThrow(email: string) {
-    return this.userRepository.findOneByOrFail({ email });
+    const user = await  this.userRepository.findOneBy({ email });
+    if (!user) {
+      throw new NotFoundException('등록되지 않은 사용자입니다.');
+    }
+
+    return user;
   }
 
   async addUser(dto: SignUpRequest) {
