@@ -16,7 +16,6 @@ describe('UserService', () => {
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(testConnectionOptions), UserModule],
-      providers: [],
     }).compile();
 
     service = module.get<UserService>(UserService);
