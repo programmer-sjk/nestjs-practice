@@ -48,7 +48,7 @@ describe('Auth E2E', () => {
     await userRepository.clear();
   });
 
-  describe('POST /auth', () => {
+  describe('POST /v1/auth', () => {
     it('email과 password가 일치하면 accessToken을 응답받는다.', async () => {
       // given
       const hashed = hash('password');
