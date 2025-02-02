@@ -1,13 +1,13 @@
 import { UnauthorizedException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthService } from '../../src/auth/auth.service';
 import { SignInRequest } from '../../src/auth/dto/sigin-in.request';
 import { hash } from '../../src/common/bcrypt';
+import { UserModule } from '../../src/user/user.module';
 import { UserRepository } from '../../src/user/user.repository';
-import { UserService } from '../../src/user/user.service';
 import { TestUserCreator } from '../fixture/entity/test-user-creator';
 import { testConnectionOptions } from './../test-ormconfig';
 
@@ -15,24 +15,20 @@ describe('AuthService', () => {
   let module: TestingModule;
   let service: AuthService;
   let jwtService: JwtService;
-  let userService: UserService;
   let userRepository: UserRepository;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(testConnectionOptions)],
-      providers: [
-        AuthService,
-        JwtService,
-        ConfigService,
-        UserService,
-        UserRepository,
+      imports: [
+        TypeOrmModule.forRoot(testConnectionOptions),
+        ConfigModule,
+        UserModule,
       ],
+      providers: [AuthService, JwtService],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
     jwtService = module.get<JwtService>(JwtService);
-    userService = module.get<UserService>(UserService);
     userRepository = module.get<UserRepository>(UserRepository);
   });
 
