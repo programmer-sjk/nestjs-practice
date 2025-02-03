@@ -1,5 +1,4 @@
 import { validate } from 'class-validator';
-import { SignInRequest } from '../../../src/auth/dto/sigin-in.request';
 import { LessonScheduleRequest } from '../../../src/lesson/dto/lesson-schedule.request';
 
 describe('LessonScheduleRequest', () => {
