@@ -69,4 +69,85 @@ describe('RegisterRequest', () => {
     const constraintsKeys = Object.keys(dayOfWeekErrors.constraints);
     expect(constraintsKeys).toHaveLength(2);
   });
+
+  describe('startHour', () => {
+    it('startHour의 최소값은 7이다.', async () => {
+      // given
+      const dto = new RegisterRequest();
+      dto.startHour = 7;
+
+      // when
+      const errors = await validate(dto);
+
+      // then
+      const startHourErrors = errors.find(
+        (err) => err.property === 'startHour',
+      );
+      expect(startHourErrors).toBeUndefined();
+    });
+
+    it('startHour이 최소값 7보다 작을수 없다.', async () => {
+      // given
+      const dto = new RegisterRequest();
+      dto.startHour = 6;
+
+      // when
+      const errors = await validate(dto);
+
+      // then
+      const startHourErrors = errors.find(
+        (err) => err.property === 'startHour',
+      );
+      expect(startHourErrors.constraints).toHaveProperty('min');
+
+      const constraintsKeys = Object.keys(startHourErrors.constraints);
+      expect(constraintsKeys).toHaveLength(1);
+    });
+
+    it('startHour의 최대값은 22이다.', async () => {
+      // given
+      const dto = new RegisterRequest();
+      dto.startHour = 22;
+
+      // when
+      const errors = await validate(dto);
+
+      // then
+      const startHourErrors = errors.find(
+        (err) => err.property === 'startHour',
+      );
+      expect(startHourErrors).toBeUndefined();
+    });
+
+    it('startHour이 최대값보다 클 수 없다.', async () => {
+      // given
+      const dto = new RegisterRequest();
+      dto.startHour = 23;
+
+      // when
+      const errors = await validate(dto);
+
+      // then
+      const startHourErrors = errors.find(
+        (err) => err.property === 'startHour',
+      );
+      expect(startHourErrors.constraints).toHaveProperty('max');
+
+      const constraintsKeys = Object.keys(startHourErrors.constraints);
+      expect(constraintsKeys).toHaveLength(1);
+    });
+  });
+
+  it('startDate는 Date형으로 옵셔널 값이다.', async () => {
+    // given
+    const dto = new RegisterRequest();
+    dto.startDate = undefined;
+
+    // when
+    const errors = await validate(dto);
+
+    // then
+    const startDateErrors = errors.find((err) => err.property === 'startDate');
+    expect(startDateErrors).toBeUndefined();
+  });
 });
