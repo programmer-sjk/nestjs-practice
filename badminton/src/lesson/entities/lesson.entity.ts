@@ -74,7 +74,7 @@ export class Lesson {
     const startHour = this.getHour();
 
     if (
-      startHour < this.FIRST_LESSON_HOUR &&
+      startHour < this.FIRST_LESSON_HOUR ||
       startHour > this.LAST_LESSON_HOUR
     ) {
       return true;
@@ -120,6 +120,8 @@ export class Lesson {
   }
 
   getHour() {
-    return this.startHour || DateUtil.hour(this.startDate);
+    return this.type === LessonType.REGULAR
+      ? this.startHour
+      : DateUtil.hour(this.startDate);
   }
 }
