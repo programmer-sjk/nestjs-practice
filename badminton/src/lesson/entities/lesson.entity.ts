@@ -104,7 +104,7 @@ export class Lesson {
     }
   }
 
-  isDuplicateHour(lesson: Lesson) {
+  private isDuplicateHour(lesson: Lesson) {
     const startHour = this.getHour();
     if (lesson.type === LessonType.REGULAR) {
       if (startHour === lesson.startHour) {
