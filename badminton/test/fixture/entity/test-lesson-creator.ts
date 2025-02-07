@@ -1,0 +1,23 @@
+import { DayOfWeek } from '../../../src/lesson/enums/day-of-week.enum';
+import { LessonType } from '../../../src/lesson/enums/lesson-type.enum';
+import { Lesson } from './../../../src/lesson/entities/lesson.entity';
+
+export class TestLessonCreator {
+  private constructor() {}
+
+  static regular() {
+    const lesson = new Lesson();
+    lesson.type = LessonType.REGULAR;
+    lesson.dayOfWeek = DayOfWeek.MONDAY;
+    lesson.startHour = 15;
+    return lesson;
+  }
+
+  static oneTime() {
+    const lesson = new Lesson();
+    lesson.type = LessonType.ONE_TIME;
+    lesson.dayOfWeek = DayOfWeek.MONDAY;
+    lesson.startDate = new Date();
+    return lesson;
+  }
+}
