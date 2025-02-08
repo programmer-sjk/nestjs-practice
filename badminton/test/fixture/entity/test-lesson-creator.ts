@@ -5,7 +5,7 @@ import { Lesson } from './../../../src/lesson/entities/lesson.entity';
 export class TestLessonCreator {
   private constructor() {}
 
-  static of(startHour?: number) {
+  static of(startHour: number) {
     const lesson = new Lesson();
     lesson.type = LessonType.REGULAR;
     lesson.dayOfWeek = DayOfWeek.MONDAY;
@@ -13,11 +13,11 @@ export class TestLessonCreator {
     return lesson;
   }
 
-  static regular() {
+  static regular(startHour?: number) {
     const lesson = new Lesson();
     lesson.type = LessonType.REGULAR;
     lesson.dayOfWeek = DayOfWeek.MONDAY;
-    lesson.startHour = 15;
+    lesson.startHour = startHour ?? 15;
     return lesson;
   }
 
