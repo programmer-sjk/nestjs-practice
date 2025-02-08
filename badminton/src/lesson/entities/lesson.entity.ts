@@ -102,6 +102,8 @@ export class Lesson {
         return true;
       }
     }
+
+    return false;
   }
 
   private isDuplicateHour(lesson: Lesson) {
