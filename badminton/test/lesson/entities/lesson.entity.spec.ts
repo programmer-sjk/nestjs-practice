@@ -87,4 +87,32 @@ describe('lesson', () => {
       },
     );
   });
+
+  describe('isDuplicate', () => {
+    it('레슨 시간이 겹치지 않으면 false를 반환한다.', () => {
+      // given
+      const lessonHour = 15;
+      const lesson = TestLessonCreator.regular(lessonHour);
+      const newLesson = TestLessonCreator.regular(lessonHour + 1);
+
+      // when
+      const result = lesson.isDuplicate([newLesson]);
+
+      // then
+      expect(result).toBe(false);
+    });
+
+    it('레슨 시간이 겹치면 true를 반환한다.', () => {
+      // given
+      const lessonHour = 15;
+      const lesson = TestLessonCreator.regular(lessonHour);
+      const newLesson = TestLessonCreator.regular(lessonHour);
+
+      // when
+      const result = lesson.isDuplicate([newLesson]);
+
+      // then
+      expect(result).toBe(true);
+    });
+  });
 });
