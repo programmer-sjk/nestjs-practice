@@ -115,4 +115,16 @@ describe('lesson', () => {
       expect(result).toBe(true);
     });
   });
+
+  it('레슨 시간을 알 수 있다.', () => {
+    // given
+    const lessonHour = 15;
+    const lesson = TestLessonCreator.regular(lessonHour);
+
+    // when
+    const result = lesson.getHour();
+
+    // then
+    expect(result).toBe(lessonHour);
+  });
 });
