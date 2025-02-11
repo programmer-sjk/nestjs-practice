@@ -3,6 +3,11 @@ import { DateTime } from 'luxon';
 export class DateUtil {
   private constructor() {}
 
+  static of(hour: number, day?: number) {
+    if (day) return DateTime.now().plus({ day }).set({ hour });
+    return DateTime.now().set({ hour });
+  }
+
   static now() {
     return DateTime.now();
   }
