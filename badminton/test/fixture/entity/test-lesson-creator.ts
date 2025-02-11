@@ -21,13 +21,13 @@ export class TestLessonCreator {
     return lesson;
   }
 
-  static oneTime(coachId?: number, startDate?: Date) {
+  static oneTime() {
     const lesson = new Lesson();
     lesson.type = LessonType.ONE_TIME;
     lesson.dayOfWeek = DayOfWeek.MONDAY;
-    lesson.startDate = startDate ?? new Date();
-    lesson.coachId = coachId ?? 1;
-    lesson.userId = coachId ?? 1;
+    lesson.startDate = new Date();
+    lesson.coachId = 1;
+    lesson.userId = 1;
     return lesson;
   }
 }
