@@ -8,6 +8,7 @@ import { DateUtil } from '../../src/common/date-util';
 import { setNestApp } from '../../src/common/set-nest-app';
 import { LessonScheduleRequest } from '../../src/lesson/dto/lesson-schedule.request';
 import { RegisterRequest } from '../../src/lesson/dto/register.request';
+import { Lesson } from '../../src/lesson/entities/lesson.entity';
 import { DayOfWeek } from '../../src/lesson/enums/day-of-week.enum';
 import { LessonType } from '../../src/lesson/enums/lesson-type.enum';
 import { LessonController } from '../../src/lesson/lesson.controller';
@@ -99,6 +100,36 @@ describe('LessonController', () => {
       expect(result[0].coachId).toBe(coach.id);
       expect(result[0].userId).toBe(1);
       expect(result[0].type).toBe(LessonType.ONE_TIME);
+    });
+  });
+
+  describe('DELETE /v1/lesson', () => {
+    it('레슨을 삭제할 수 있다.', async () => {
+      // given
+      const coach = await coachRepository.save(TestCoachCreator.of());
+      const startDate = DateUtil.now()
+        .plus({ day: 1 })
+        .set({ hour: 7 })
+        .toJSDate();
+      const lesson = await lessonRepository.save(
+        Lesson.of(
+          coach.id,
+          1,
+          LessonType.ONE_TIME,
+          DayOfWeek.MONDAY,
+          undefined,
+          startDate,
+        ),
+      );
+
+      // when
+      await request(app.getHttpServer())
+        .delete(`/v1/lesson/${lesson.id}`)
+        .expect(HttpStatus.OK);
+
+      // then
+      const result = await lessonRepository.find();
+      expect(result).toHaveLength(0);
     });
   });
 });
