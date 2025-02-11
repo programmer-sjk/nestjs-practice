@@ -126,15 +126,16 @@ describe('LessonService', () => {
         .plus({ day: 1 })
         .set({ hour: 7 })
         .toJSDate();
-      const existLesson = Lesson.of(
-        coach.id,
-        1,
-        LessonType.ONE_TIME,
-        DayOfWeek.MONDAY,
-        undefined,
-        startDate,
+      await lessonRepository.save(
+        Lesson.of(
+          coach.id,
+          1,
+          LessonType.ONE_TIME,
+          DayOfWeek.MONDAY,
+          undefined,
+          startDate,
+        ),
       );
-      await lessonRepository.save(existLesson);
 
       const dto = new RegisterRequest();
       dto.coachId = coach.id;
@@ -147,6 +148,34 @@ describe('LessonService', () => {
       await expect(service.addLesson(dto)).rejects.toThrow(
         new BadRequestException('이미 예약된 레슨 시간입니다.'),
       );
+    });
+  });
+
+  describe('removeLesson', () => {
+    it('레슨을 삭제할 수 있다', async () => {
+      // given
+      const coach = await coachRepository.save(TestCoachCreator.of());
+      const startDate = DateUtil.now()
+        .plus({ day: 1 })
+        .set({ hour: 7 })
+        .toJSDate();
+      const lesson = await lessonRepository.save(
+        Lesson.of(
+          coach.id,
+          1,
+          LessonType.ONE_TIME,
+          DayOfWeek.MONDAY,
+          undefined,
+          startDate,
+        ),
+      );
+
+      // when
+      await service.removeLesson(lesson.id);
+
+      // then
+      const result = await lessonRepository.find();
+      expect(result).toHaveLength(0);
     });
   });
 });
