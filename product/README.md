@@ -1,73 +1,30 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 주문 프로젝트
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## 요구사항
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- 포인트와 쿠폰을 활용해 주문하는 프로젝트
 
-## Description
+### 사용자
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- 사용자는 회원가입이 가능하다.
+- 사용자는 로그인 후 주문이 가능하다.
+- 인증 방법으로 jwt 토큰을 사용한다.
 
-## Installation
+### 어드민
 
-```bash
-$ yarn install
-```
+- 어드민으로 로그인 후 다음 두 가지 작업을 수행할 수 있다.
+  - 카테고리를 저장한다.
+  - 상품의 이름, 수량, 가격, 카테고리를 입력하여 상품을 등록할 수 있다.
 
-## Running the app
+### 포인트
 
-```bash
-# development
-$ yarn run start
+- 사용자는 포인트를 구매할 수 있다.
+- 실제 결제와 관련된 로직은 구현하지 않는다. 포인트 구매 API를 호출할 때 결제는 진행된것으로 간주한다.
+- 첫 회원가입을 하면 1_000 포인트를 지급한다.
 
-# watch mode
-$ yarn run start:dev
+### 쿠폰
 
-# production mode
-$ yarn run start:prod
-```
-
-## Test
-
-```bash
-# unit tests
-$ yarn run test
-
-# e2e tests
-$ yarn run test:e2e
-
-# test coverage
-$ yarn run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- 쿠폰은 정액 쿠폰과 할인 쿠폰이 존재한다.
+- 정액 쿠폰은 1_000원과 같이 실제 가격을 할인하고 할인 쿠폰은 가격의 10%와 같이 퍼센트 비율로 할인한다.
+- 두 종류의 쿠폰을 모두 사용한다면 우선순위는 할인쿠폰 -> 정액 쿠폰으로 사용한다.
+- 쿠폰은 동일한 카테고리에만 사용이 가능하다. 카테고리 정보가 없으면 전체 상품에 사용이 가능하며 카테고리 정보가 있다면 상품이 동일한 카테고리일 때 적용이 가능하다.
