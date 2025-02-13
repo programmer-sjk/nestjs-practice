@@ -5,8 +5,9 @@ import { ProductModule } from './product/product.module';
 import { OrderModule } from './order/order.module';
 import { PointModule } from './point/point.module';
 import { CouponModule } from './coupon/coupon.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UserModule, AdminModule, ProductModule, OrderModule, PointModule, CouponModule],
+  imports: [UserModule, AdminModule, ProductModule, OrderModule, PointModule, CouponModule, AuthModule],
 })
 export class AppModule {}
