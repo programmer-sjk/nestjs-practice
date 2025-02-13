@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { hash } from '../../common/bcrypt';
 import { User } from '../entities/user.entity';
 
 export class SignUpRequest {
@@ -12,6 +13,6 @@ export class SignUpRequest {
   password: string;
 
   toEntity() {
-    return User.of(this.email, this.password);
+    return User.of(this.email, hash(this.password));
   }
 }
