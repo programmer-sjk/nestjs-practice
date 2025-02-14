@@ -8,6 +8,7 @@ import { SignInResponse } from './dto/sign-in.response';
 
 @Injectable()
 export class AuthService {
+  private readonly expiresIn = '1d';
   private readonly secretKey;
 
   constructor(
@@ -31,6 +32,7 @@ export class AuthService {
     const payload = { sub: user.id };
     const accessToken = await this.jwtService.signAsync(payload, {
       secret: this.secretKey,
+      expiresIn: this.expiresIn,
     });
     return new SignInResponse(accessToken);
   }
