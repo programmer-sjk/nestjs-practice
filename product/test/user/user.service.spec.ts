@@ -32,6 +32,23 @@ describe('UserService', () => {
     expect(service).toBeDefined();
   });
 
+  describe('findOneByEmail', () => {
+    it('email로 사용자를 조회할 수 있다.', async () => {
+      // given
+      const dto = new SignUpRequest();
+      dto.email = 'test@google.com';
+      dto.password = 'password';
+
+      // when
+      await service.addUser(dto);
+
+      // then
+      const result = await repository.find();
+      expect(result).toHaveLength(1);
+      expect(result[0].email).toBe(dto.email);
+    });
+  });
+
   describe('addUser', () => {
     it('사용자를 추가할 수 있다.', async () => {
       // given
