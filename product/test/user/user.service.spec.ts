@@ -4,6 +4,7 @@ import { SignUpRequest } from '../../src/user/dto/sign-up.request';
 import { UserModule } from '../../src/user/user.module';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
+import { UserFactory } from '../fixture/entities/user-factory';
 import { testConnectionOptions } from '../test-ormconfig';
 
 describe('UserService', () => {
@@ -35,17 +36,15 @@ describe('UserService', () => {
   describe('findOneByEmail', () => {
     it('email로 사용자를 조회할 수 있다.', async () => {
       // given
-      const dto = new SignUpRequest();
-      dto.email = 'test@google.com';
-      dto.password = 'password';
+      const email = 'test@google.com';
+      const password = 'password';
+      const user = await repository.save(UserFactory.from(email, password));
 
       // when
-      await service.addUser(dto);
+      const result = await service.findOneByEmail(email);
 
       // then
-      const result = await repository.find();
-      expect(result).toHaveLength(1);
-      expect(result[0].email).toBe(dto.email);
+      expect(result.email).toBe(email);
     });
   });
 
