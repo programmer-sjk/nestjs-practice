@@ -6,6 +6,10 @@ import { AdminRepository } from './admin.repository';
 export class AdminService {
   constructor(private readonly adminRepository: AdminRepository) {}
 
+  async findOneByEmail(email: string) {
+    return this.adminRepository.findOneBy({ email });
+  }
+
   async signUp(dto: SignUpRequest) {
     await this.adminRepository.save(dto.toEntity());
   }
