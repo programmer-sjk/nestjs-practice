@@ -16,4 +16,13 @@ export class AuthController {
     const acceesToken = await this.authService.signIn(request);
     return ResponseEntity.OK(acceesToken);
   }
+
+  @Post('/admin/login')
+  @HttpCode(HttpStatus.OK)
+  async adminSignIn(
+    @Body() request: SignInRequest,
+  ): Promise<ResponseEntity<SignInResponse | string>> {
+    const acceesToken = await this.authService.adminSignIn(request);
+    return ResponseEntity.OK(acceesToken);
+  }
 }
