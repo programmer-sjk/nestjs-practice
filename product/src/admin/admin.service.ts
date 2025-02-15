@@ -10,7 +10,7 @@ export class AdminService {
     return this.adminRepository.findOneBy({ email });
   }
 
-  async signUp(dto: SignUpRequest) {
+  async addAdmin(dto: SignUpRequest) {
     await this.adminRepository.save(dto.toEntity());
   }
 }
