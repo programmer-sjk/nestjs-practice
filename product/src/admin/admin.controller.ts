@@ -8,8 +8,8 @@ export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
   @Post()
-  adminSignUp(@Body() request: AdminSignUpRequest) {
-    await this.adminService.signUp(request)
+  async adminSignUp(@Body() request: AdminSignUpRequest) {
+    await this.adminService.signUp(request);
     return ResponseEntity.OK();
   }
 }
