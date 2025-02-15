@@ -24,4 +24,11 @@ export class Admin {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  static of(email: string, password: string) {
+    const admin = new Admin();
+    admin.email = email;
+    admin.password = password;
+    return admin;
+  }
 }
