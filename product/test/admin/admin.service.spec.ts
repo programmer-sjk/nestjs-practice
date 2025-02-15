@@ -15,8 +15,7 @@ describe('AdminService', () => {
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(testConnectionOptions), AdminModule],
-    })import { AdminSignUpRequest } from './../../src/admin/dto/admin-sign-up.request';
-.compile();
+    }).compile();
 
     service = module.get<AdminService>(AdminService);
     repository = module.get<AdminRepository>(AdminRepository);
