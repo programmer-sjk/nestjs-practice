@@ -15,4 +15,10 @@ export class Category {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  static of(name: string) {
+    const category = new Category();
+    category.name = name;
+    return category;
+  }
 }
