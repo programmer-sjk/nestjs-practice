@@ -2,6 +2,7 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
@@ -26,7 +27,7 @@ export class CouponRegisterRequest {
   @IsInt()
   stock: number;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   description: string;
 
