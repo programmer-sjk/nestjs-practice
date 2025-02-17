@@ -21,4 +21,12 @@ export class Product {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  static of(name: string, price: number, stock: number) {
+    const product = new Product();
+    product.name = name;
+    product.price = price;
+    product.stock = stock;
+    return product;
+  }
 }
