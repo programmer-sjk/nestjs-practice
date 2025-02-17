@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { PointService } from './point.service';
 import { PointController } from './point.controller';
+import { PointRepository } from './point.repository';
+import { PointService } from './point.service';
 
 @Module({
-  providers: [PointService],
-  controllers: [PointController]
+  providers: [PointService, PointRepository],
+  controllers: [PointController],
 })
 export class PointModule {}
