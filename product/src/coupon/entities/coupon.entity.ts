@@ -28,4 +28,20 @@ export class Coupon {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  static of(
+    name: string,
+    type: CouponType,
+    value: number,
+    stock: number,
+    description?: string,
+  ) {
+    const coupon = new Coupon();
+    coupon.name = name;
+    coupon.type = type;
+    coupon.value = value;
+    coupon.stock = stock;
+    coupon.description = description;
+    return coupon;
+  }
 }
