@@ -1,4 +1,5 @@
-import { IsInt, IsNotEmpty, IsString, MaxLength } from "class-validator";
+import { IsInt, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { Product } from '../entities/product.entity';
 
 export class ProductRegisterRequest {
   @IsNotEmpty()
@@ -13,4 +14,8 @@ export class ProductRegisterRequest {
   @IsNotEmpty()
   @IsInt()
   stock: number;
+
+  toEntity() {
+    return Product.of(this.name, this.price, this.stock);
+  }
 }
