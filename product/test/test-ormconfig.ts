@@ -1,5 +1,7 @@
-import { DataSourceOptions } from 'typeorm';
+import { TypeOrmModuleAsyncOptions } from '@nestjs/typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { addTransactionalDataSource } from 'typeorm-transactional';
 
 export const testConnectionOptions: DataSourceOptions = {
   type: 'mysql',
@@ -14,4 +16,12 @@ export const testConnectionOptions: DataSourceOptions = {
   migrations: [__dirname + '/../src/migrations/*{.ts,.js}'],
   migrationsTableName: 'migrations',
   namingStrategy: new SnakeNamingStrategy(),
+};
+
+export const testTypeormOptions: TypeOrmModuleAsyncOptions = {
+  useFactory: () => testConnectionOptions,
+  async dataSourceFactory(option) {
+    if (!option) throw new Error('Invalid typeorm options passed');
+    return addTransactionalDataSource(new DataSource(option));
+  },
 };
