@@ -11,7 +11,7 @@ import { AuthService } from '../../src/auth/auth.service';
 import { AuthGuard } from '../../src/auth/guards/auth.guard';
 import { setNestApp } from '../../src/common/set-nest-app';
 import { CouponController } from '../../src/coupon/coupon.controller';
-import { CouponRepository } from '../../src/coupon/coupon.repository';
+import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
 import { CouponService } from '../../src/coupon/coupon.service';
 import { CouponRegisterRequest } from '../../src/coupon/dto/coupon-register.request';
 import { CouponType } from '../../src/coupon/enums/coupon-type.enum';

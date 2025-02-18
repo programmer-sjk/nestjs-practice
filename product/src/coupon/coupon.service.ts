@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CouponRepository } from './coupon.repository';
+import { CouponRepository } from './repositories/coupon.repository';
 import { CouponRegisterRequest } from './dto/coupon-register.request';
 
 @Injectable()

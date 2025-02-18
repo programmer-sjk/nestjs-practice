@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CouponModule } from '../../src/coupon/coupon.module';
-import { CouponRepository } from '../../src/coupon/coupon.repository';
+import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
 import { CouponService } from '../../src/coupon/coupon.service';
 import { CouponRegisterRequest } from '../../src/coupon/dto/coupon-register.request';
 import { CouponType } from '../../src/coupon/enums/coupon-type.enum';
