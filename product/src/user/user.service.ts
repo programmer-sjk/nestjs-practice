@@ -1,10 +1,16 @@
 import { Injectable } from '@nestjs/common';
+import { CouponService } from '../coupon/coupon.service';
+import { PointService } from '../point/point.service';
 import { SignUpRequest } from './dto/sign-up.request';
 import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(
+    private readonly couponService: CouponService,
+    private readonly pointService: PointService,
+    private readonly userRepository: UserRepository,
+  ) {}
 
   async findOneById(id: number) {
     return this.userRepository.findOneBy({ id });
