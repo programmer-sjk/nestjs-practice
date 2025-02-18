@@ -10,4 +10,11 @@ export class CouponUser {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  static of(couponId: number, userId: number) {
+    const couponUser = new CouponUser();
+    couponUser.couponId = couponId;
+    couponUser.userId = userId;
+    return couponUser;
+  }
 }
