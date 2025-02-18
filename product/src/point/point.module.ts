@@ -8,5 +8,6 @@ import { PointService } from './point.service';
   imports: [UserModule],
   providers: [PointService, PointRepository],
   controllers: [PointController],
+  exports: [PointService]
 })
 export class PointModule {}
