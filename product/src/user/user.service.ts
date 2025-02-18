@@ -21,6 +21,8 @@ export class UserService {
   }
 
   async addUser(dto: SignUpRequest) {
-    await this.userRepository.save(dto.toEntity());
+    const user = await this.userRepository.save(dto.toEntity());
+    await this.couponService.addSignUpCoupon(user.id);
+    await this.pointService.addSignUpPointToUser(user.id);
   }
 }
