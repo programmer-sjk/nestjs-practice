@@ -33,12 +33,27 @@ describe('UserService', () => {
     expect(service).toBeDefined();
   });
 
+  describe('findOneById', () => {
+    it('id로 사용자를 조회할 수 있다.', async () => {
+      // given
+      const email = 'test@google.com';
+      const password = 'password';
+      const user = await repository.save(UserFactory.from(email, password));
+
+      // when
+      const result = await service.findOneById(user.id);
+
+      // then
+      expect(result.email).toBe(email);
+    });
+  });
+
   describe('findOneByEmail', () => {
     it('email로 사용자를 조회할 수 있다.', async () => {
       // given
       const email = 'test@google.com';
       const password = 'password';
-      const user = await repository.save(UserFactory.from(email, password));
+      await repository.save(UserFactory.from(email, password));
 
       // when
       const result = await service.findOneByEmail(email);
