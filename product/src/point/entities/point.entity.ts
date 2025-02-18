@@ -18,4 +18,11 @@ export class Point {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  static of(userId: number, value: number) {
+    const point = new Point();
+    point.userId = userId;
+    point.value = value;
+    return point;
+  }
 }
