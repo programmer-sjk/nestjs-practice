@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 import { CouponService } from '../coupon/coupon.service';
 import { PointService } from '../point/point.service';
 import { SignUpRequest } from './dto/sign-up.request';
@@ -20,6 +21,7 @@ export class UserService {
     return this.userRepository.findOneBy({ email });
   }
 
+  @Transactional()
   async addUser(dto: SignUpRequest) {
     const user = await this.userRepository.save(dto.toEntity());
     await this.couponService.addSignUpCoupon(user.id);
