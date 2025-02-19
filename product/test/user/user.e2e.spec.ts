@@ -8,17 +8,20 @@ import {
 } from 'typeorm-transactional';
 import { setNestApp } from '../../src/common/set-nest-app';
 import { CouponModule } from '../../src/coupon/coupon.module';
+import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
 import { PointModule } from '../../src/point/point.module';
 import { SignUpRequest } from '../../src/user/dto/sign-up.request';
 import { UserController } from '../../src/user/user.controller';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
+import { CouponFactory } from '../fixture/entities/coupon-factory';
 import { testTypeormOptions } from '../test-ormconfig';
 
 describe('User E2E', () => {
   let module: TestingModule;
   let app: INestApplication;
   let repository: UserRepository;
+  let couponRepository: CouponRepository;
 
   beforeAll(async () => {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
@@ -33,6 +36,7 @@ describe('User E2E', () => {
     }).compile();
 
     repository = module.get<UserRepository>(UserRepository);
+    couponRepository = module.get<CouponRepository>(CouponRepository);
     app = module.createNestApplication();
     setNestApp(app);
     await app.init();
@@ -50,6 +54,7 @@ describe('User E2E', () => {
   describe('POST /v1/user', () => {
     it('사용자가 회원가입할 수 있다.', async () => {
       // given
+      await couponRepository.save(CouponFactory.signUpCoupon());
       const requestDto = new SignUpRequest();
       requestDto.email = 'test@google.com';
       requestDto.password = 'password';
