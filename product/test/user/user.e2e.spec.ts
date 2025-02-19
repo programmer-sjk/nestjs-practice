@@ -2,12 +2,18 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
+import {
+  initializeTransactionalContext,
+  StorageDriver,
+} from 'typeorm-transactional';
 import { setNestApp } from '../../src/common/set-nest-app';
+import { CouponModule } from '../../src/coupon/coupon.module';
+import { PointModule } from '../../src/point/point.module';
 import { SignUpRequest } from '../../src/user/dto/sign-up.request';
 import { UserController } from '../../src/user/user.controller';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
-import { testConnectionOptions } from '../test-ormconfig';
+import { testTypeormOptions } from '../test-ormconfig';
 
 describe('User E2E', () => {
   let module: TestingModule;
@@ -15,8 +21,13 @@ describe('User E2E', () => {
   let repository: UserRepository;
 
   beforeAll(async () => {
+    initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
     module = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(testConnectionOptions)],
+      imports: [
+        TypeOrmModule.forRootAsync(testTypeormOptions),
+        CouponModule,
+        PointModule,
+      ],
       controllers: [UserController],
       providers: [UserService, UserRepository],
     }).compile();

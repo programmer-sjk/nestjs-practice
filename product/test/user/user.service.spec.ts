@@ -1,28 +1,45 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  initializeTransactionalContext,
+  StorageDriver,
+} from 'typeorm-transactional';
+import { CouponModule } from '../../src/coupon/coupon.module';
+import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
+import { PointModule } from '../../src/point/point.module';
 import { SignUpRequest } from '../../src/user/dto/sign-up.request';
 import { UserModule } from '../../src/user/user.module';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
+import { CouponFactory } from '../fixture/entities/coupon-factory';
 import { UserFactory } from '../fixture/entities/user-factory';
-import { testConnectionOptions } from '../test-ormconfig';
+import { testTypeormOptions } from '../test-ormconfig';
 
 describe('UserService', () => {
   let module: TestingModule;
   let service: UserService;
   let repository: UserRepository;
+  let couponRepository: CouponRepository;
 
   beforeAll(async () => {
+    initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
     module = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(testConnectionOptions), UserModule],
+      imports: [
+        TypeOrmModule.forRootAsync(testTypeormOptions),
+        UserModule,
+        CouponModule,
+        PointModule,
+      ],
     }).compile();
 
     service = module.get<UserService>(UserService);
     repository = module.get<UserRepository>(UserRepository);
+    couponRepository = module.get<CouponRepository>(CouponRepository);
   });
 
   beforeEach(async () => {
     await repository.clear();
+    await couponRepository.clear();
   });
 
   afterAll(async () => {
@@ -66,6 +83,7 @@ describe('UserService', () => {
   describe('addUser', () => {
     it('사용자를 추가할 수 있다.', async () => {
       // given
+      await couponRepository.save(CouponFactory.signUpCoupon());
       const dto = new SignUpRequest();
       dto.email = 'test@google.com';
       dto.password = 'password';
