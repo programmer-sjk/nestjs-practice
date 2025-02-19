@@ -11,10 +11,13 @@ import { AuthService } from '../../src/auth/auth.service';
 import { AuthGuard } from '../../src/auth/guards/auth.guard';
 import { setNestApp } from '../../src/common/set-nest-app';
 import { CouponController } from '../../src/coupon/coupon.controller';
-import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
 import { CouponService } from '../../src/coupon/coupon.service';
 import { CouponRegisterRequest } from '../../src/coupon/dto/coupon-register.request';
 import { CouponType } from '../../src/coupon/enums/coupon-type.enum';
+import { CouponUserRepository } from '../../src/coupon/repositories/coupon-user.repository';
+import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
+import { PointRepository } from '../../src/point/point.repository';
+import { PointService } from '../../src/point/point.service';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
 import { SignInRequestFactory } from '../fixture/dto/sign-in-request-factory';
@@ -26,6 +29,7 @@ describe('Coupon E2E', () => {
   let app: INestApplication;
   let authService: AuthService;
   let repository: CouponRepository;
+  let couponUserRepository: CouponUserRepository;
   let adminRepository: AdminRepository;
 
   beforeAll(async () => {
@@ -37,8 +41,11 @@ describe('Coupon E2E', () => {
       providers: [
         CouponService,
         CouponRepository,
+        CouponUserRepository,
         AuthService,
         AdminService,
+        PointService,
+        PointRepository,
         AdminRepository,
         UserService,
         JwtService,
@@ -53,6 +60,8 @@ describe('Coupon E2E', () => {
 
     authService = module.get<AuthService>(AuthService);
     repository = module.get<CouponRepository>(CouponRepository);
+    couponUserRepository =
+      module.get<CouponUserRepository>(CouponUserRepository);
     adminRepository = module.get<AdminRepository>(AdminRepository);
 
     app = module.createNestApplication();
@@ -63,6 +72,7 @@ describe('Coupon E2E', () => {
   beforeEach(async () => {
     await repository.clear();
     await adminRepository.clear();
+    await couponUserRepository.clear();
   });
 
   afterAll(async () => {

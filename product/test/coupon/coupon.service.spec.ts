@@ -6,11 +6,13 @@ import { CouponService } from '../../src/coupon/coupon.service';
 import { CouponRegisterRequest } from '../../src/coupon/dto/coupon-register.request';
 import { CouponType } from '../../src/coupon/enums/coupon-type.enum';
 import { testConnectionOptions } from '../test-ormconfig';
+import { CouponUserRepository } from '../../src/coupon/repositories/coupon-user.repository';
 
 describe('CouponService', () => {
   let module: TestingModule;
   let service: CouponService;
   let repository: CouponRepository;
+  let couponUserRepository: CouponUserRepository;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -19,6 +21,7 @@ describe('CouponService', () => {
 
     service = module.get<CouponService>(CouponService);
     repository = module.get<CouponRepository>(CouponRepository);
+    couponUserRepository = module.get<CouponUserRepository>(CouponUserRepository);
   });
 
   beforeEach(async () => {
