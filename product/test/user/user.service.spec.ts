@@ -5,8 +5,10 @@ import {
   StorageDriver,
 } from 'typeorm-transactional';
 import { CouponModule } from '../../src/coupon/coupon.module';
+import { CouponUserRepository } from '../../src/coupon/repositories/coupon-user.repository';
 import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
 import { PointModule } from '../../src/point/point.module';
+import { PointRepository } from '../../src/point/point.repository';
 import { SignUpRequest } from '../../src/user/dto/sign-up.request';
 import { UserModule } from '../../src/user/user.module';
 import { UserRepository } from '../../src/user/user.repository';
@@ -20,6 +22,8 @@ describe('UserService', () => {
   let service: UserService;
   let repository: UserRepository;
   let couponRepository: CouponRepository;
+  let couponUserRepository: CouponUserRepository;
+  let pointRepository: PointRepository;
 
   beforeAll(async () => {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
@@ -35,11 +39,16 @@ describe('UserService', () => {
     service = module.get<UserService>(UserService);
     repository = module.get<UserRepository>(UserRepository);
     couponRepository = module.get<CouponRepository>(CouponRepository);
+    couponUserRepository =
+      module.get<CouponUserRepository>(CouponUserRepository);
+    pointRepository = module.get<PointRepository>(PointRepository);
   });
 
   beforeEach(async () => {
     await repository.clear();
     await couponRepository.clear();
+    await couponUserRepository.clear();
+    await pointRepository.clear();
   });
 
   afterAll(async () => {
@@ -95,6 +104,29 @@ describe('UserService', () => {
       const result = await repository.find();
       expect(result).toHaveLength(1);
       expect(result[0].email).toBe(dto.email);
+    });
+
+    it('신규 사용자가 추가되면 포인트와 쿠폰이 발급된다.', async () => {
+      // given
+      await couponRepository.save(CouponFactory.signUpCoupon());
+      const dto = new SignUpRequest();
+      dto.email = 'test@google.com';
+      dto.password = 'password';
+
+      // when
+      await service.addUser(dto);
+
+      // then
+      const result = await repository.find();
+      const user = result[0];
+
+      const coupon = await couponUserRepository.find();
+      expect(coupon).toHaveLength(1);
+      expect(coupon[0].userId).toBe(user.id);
+
+      const point = await pointRepository.find();
+      expect(point).toHaveLength(1);
+      expect(point[0].userId).toBe(user.id);
     });
   });
 });
