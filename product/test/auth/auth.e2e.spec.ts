@@ -11,6 +11,8 @@ import { AuthService } from '../../src/auth/auth.service';
 import { SignInRequest } from '../../src/auth/dto/sign-in.request';
 import { SignInResponse } from '../../src/auth/dto/sign-in.response';
 import { setNestApp } from '../../src/common/set-nest-app';
+import { CouponModule } from '../../src/coupon/coupon.module';
+import { PointModule } from '../../src/point/point.module';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
 import { AdminFactory } from '../fixture/entities/admin-factory';
@@ -29,6 +31,8 @@ describe('Auth E2E', () => {
       imports: [
         TypeOrmModule.forRoot(testConnectionOptions),
         ConfigModule.forRoot(),
+        CouponModule,
+        PointModule,
       ],
       controllers: [AuthController],
       providers: [
