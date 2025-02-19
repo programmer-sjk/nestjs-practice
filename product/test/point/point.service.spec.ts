@@ -55,4 +55,18 @@ describe('PointService', () => {
       expect(point.value).toBe(1_000);
     });
   });
+
+  describe('addSignUpPointToUser', () => {
+    it('신규 가입자에게 포인트를 지급할 수 있다.', async () => {
+      // given
+      const user = await userRepository.save(UserFactory.of());
+
+      // when
+      await service.addSignUpPointToUser(user.id);
+
+      // then
+      const point = await repository.findOneBy({ userId: user.id });
+      expect(point.value).toBe(1_000);
+    });
+  });
 });
