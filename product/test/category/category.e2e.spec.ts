@@ -14,6 +14,8 @@ import { CategoryRepository } from '../../src/category/category.repository';
 import { CategoryService } from '../../src/category/category.service';
 import { CategoryRegisterRequest } from '../../src/category/dto/category-register.request';
 import { setNestApp } from '../../src/common/set-nest-app';
+import { CouponModule } from '../../src/coupon/coupon.module';
+import { PointModule } from '../../src/point/point.module';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
 import { SignInRequestFactory } from '../fixture/dto/sign-in-request-factory';
@@ -32,6 +34,8 @@ describe('Category E2E', () => {
       imports: [
         TypeOrmModule.forRoot(testConnectionOptions),
         ConfigModule.forRoot(),
+        CouponModule,
+        PointModule,
       ],
       providers: [
         CategoryService,
