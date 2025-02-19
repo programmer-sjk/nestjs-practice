@@ -11,6 +11,8 @@ import { AuthService } from '../../src/auth/auth.service';
 import { AuthGuard } from '../../src/auth/guards/auth.guard';
 import { CategoryRepository } from '../../src/category/category.repository';
 import { setNestApp } from '../../src/common/set-nest-app';
+import { CouponModule } from '../../src/coupon/coupon.module';
+import { PointModule } from '../../src/point/point.module';
 import { ProductRegisterRequest } from '../../src/product/dto/product-register.request';
 import { ProductController } from '../../src/product/product.controller';
 import { ProductRepository } from '../../src/product/product.repository';
@@ -33,6 +35,8 @@ describe('Product E2E', () => {
       imports: [
         TypeOrmModule.forRoot(testConnectionOptions),
         ConfigModule.forRoot(),
+        CouponModule,
+        PointModule,
       ],
       providers: [
         ProductService,
