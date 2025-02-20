@@ -31,4 +31,14 @@ export class OrderItem {
     createForeignKeyConstraints: false,
   })
   product: Product;
+
+  static of(order: Order, product: Product) {
+    const item = new OrderItem();
+    item.orderId = order.id;
+    item.order = order;
+
+    item.productId = product.id;
+    item.product = product;
+    return order;
+  }
 }
