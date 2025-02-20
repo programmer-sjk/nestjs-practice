@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { SignUpRequest } from '../user/dto/sign-up.request';
 import { AdminRepository } from './admin.repository';
+import { AdminSignUpRequest } from './dto/admin-sign-up.request';
 
 @Injectable()
 export class AdminService {
@@ -10,7 +10,7 @@ export class AdminService {
     return this.adminRepository.findOneBy({ email });
   }
 
-  async addAdmin(dto: SignUpRequest) {
+  async addAdmin(dto: AdminSignUpRequest) {
     await this.adminRepository.save(dto.toEntity());
   }
 }
