@@ -4,6 +4,7 @@ import { ProductRegisterRequest } from '../../src/product/dto/product-register.r
 import { ProductModule } from '../../src/product/product.module';
 import { ProductRepository } from '../../src/product/product.repository';
 import { ProductService } from '../../src/product/product.service';
+import { ProductFactory } from '../fixture/entities/product-factory';
 import { testConnectionOptions } from '../test-ormconfig';
 
 describe('ProductService', () => {
@@ -30,6 +31,22 @@ describe('ProductService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('findByIds', () => {
+    it('id 배열로 상품을 조회할 수 있다.', async () => {
+      // given
+      const product1 = await repository.save(ProductFactory.of('검은색 패딩'));
+      const product2 = await repository.save(ProductFactory.of('하얀색 패딩'));
+
+      // when
+      const result = await service.findByIds([product1.id, product2.id]);
+
+      // then
+      expect(result).toHaveLength(2);
+      expect(result[0].name).toBe('검은색 패딩');
+      expect(result[1].name).toBe('하얀색 패딩');
+    });
   });
 
   describe('addProcut', () => {
