@@ -4,8 +4,10 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Order } from '../../order/entities/order.entity';
 
 @Entity()
 export class User {
@@ -31,4 +33,7 @@ export class User {
     user.password = password;
     return user;
   }
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[]
 }
