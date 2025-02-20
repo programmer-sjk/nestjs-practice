@@ -5,7 +5,7 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { Order } from '../../order/entities/order.entity';
 
@@ -27,13 +27,13 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date;
 
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[]
+
   static of(email: string, password: string) {
     const user = new User();
     user.email = email;
     user.password = password;
     return user;
   }
-
-  @OneToMany(() => Order, (order) => order.user)
-  orders: Order[]
 }

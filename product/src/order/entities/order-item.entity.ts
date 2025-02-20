@@ -39,6 +39,6 @@ export class OrderItem {
 
     item.productId = product.id;
     item.product = product;
-    return order;
+    return item;
   }
 }
