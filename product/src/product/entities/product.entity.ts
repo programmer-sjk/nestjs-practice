@@ -2,8 +2,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { OrderItem } from '../../order/entities/order-item.entity';
 
 @Entity()
 export class Product {
@@ -21,6 +23,9 @@ export class Product {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
+  orderItems: OrderItem[];
 
   static of(name: string, price: number, stock: number) {
     const product = new Product();
