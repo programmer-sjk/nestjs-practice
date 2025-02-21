@@ -21,6 +21,9 @@ export class Product {
   @Column()
   stock: number;
 
+  @Column()
+  categoryId: number;
+
   @CreateDateColumn()
   createdAt: Date;
 

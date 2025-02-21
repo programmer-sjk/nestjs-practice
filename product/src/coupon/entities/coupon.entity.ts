@@ -24,6 +24,9 @@ export class Coupon {
   stock: number;
 
   @Column({ nullable: true })
+  categoryId: number;
+
+  @Column({ nullable: true })
   description: string;
 
   @CreateDateColumn()
