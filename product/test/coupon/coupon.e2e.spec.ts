@@ -9,6 +9,7 @@ import { AdminRepository } from '../../src/admin/admin.repository';
 import { AdminService } from '../../src/admin/admin.service';
 import { AuthService } from '../../src/auth/auth.service';
 import { AuthGuard } from '../../src/auth/guards/auth.guard';
+import { CategoryModule } from '../../src/category/category.module';
 import { setNestApp } from '../../src/common/set-nest-app';
 import { CouponController } from '../../src/coupon/coupon.controller';
 import { CouponService } from '../../src/coupon/coupon.service';
@@ -37,6 +38,7 @@ describe('Coupon E2E', () => {
       imports: [
         TypeOrmModule.forRoot(testConnectionOptions),
         ConfigModule.forRoot(),
+        CategoryModule,
       ],
       providers: [
         CouponService,
