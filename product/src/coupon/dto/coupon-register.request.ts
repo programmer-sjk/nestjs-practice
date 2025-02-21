@@ -28,6 +28,10 @@ export class CouponRegisterRequest {
   stock: number;
 
   @IsOptional()
+  @IsInt()
+  categoryId?: number;
+
+  @IsOptional()
   @IsString()
   description: string;
 
@@ -37,6 +41,7 @@ export class CouponRegisterRequest {
       this.type,
       this.value,
       this.stock,
+      this.categoryId,
       this.description,
     );
   }

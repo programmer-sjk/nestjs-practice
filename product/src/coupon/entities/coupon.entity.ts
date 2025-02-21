@@ -37,6 +37,7 @@ export class Coupon {
     type: CouponType,
     value: number,
     stock: number,
+    categoryId?: number,
     description?: string,
   ) {
     const coupon = new Coupon();
@@ -44,6 +45,7 @@ export class Coupon {
     coupon.type = type;
     coupon.value = value;
     coupon.stock = stock;
+    coupon.categoryId = categoryId;
     coupon.description = description;
     return coupon;
   }
