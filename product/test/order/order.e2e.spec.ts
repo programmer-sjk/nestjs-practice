@@ -8,6 +8,7 @@ import * as request from 'supertest';
 import { AuthModule } from '../../src/auth/auth.module';
 import { AuthService } from '../../src/auth/auth.service';
 import { AuthGuard } from '../../src/auth/guards/auth.guard';
+import { CategoryModule } from '../../src/category/category.module';
 import { setNestApp } from '../../src/common/set-nest-app';
 import { CouponModule } from '../../src/coupon/coupon.module';
 import { AddOrderRequest } from '../../src/order/dto/add-order.request';
@@ -42,6 +43,7 @@ describe('OrderController', () => {
         CouponModule,
         PointModule,
         AuthModule,
+        CategoryModule,
       ],
       providers: [
         JwtService,
