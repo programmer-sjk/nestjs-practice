@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { In } from 'typeorm';
 import { CategoryService } from '../category/category.service';
+import { ERROR } from '../common/err-message';
 import { ProductRegisterRequest } from './dto/product-register.request';
 import { ProductRepository } from './product.repository';
 
@@ -18,7 +19,7 @@ export class ProductService {
   async addProduct(dto: ProductRegisterRequest) {
     const category = await this.categoryService.findOneById(dto.categoryId);
     if (!category) {
-      throw new BadRequestException('등록된 카테고리가 아닙니다.');
+      throw new BadRequestException(ERROR.categoryNotFound);
     }
 
     await this.productRepository.save(dto.toEntity());
