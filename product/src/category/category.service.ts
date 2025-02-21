@@ -6,6 +6,10 @@ import { CategoryRegisterRequest } from './dto/category-register.request';
 export class CategoryService {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
+  async findOneById(id: number) {
+    await this.categoryRepository.findOneBy({ id });
+  }
+
   async addCategory(dto: CategoryRegisterRequest) {
     await this.categoryRepository.save(dto.toEntity());
   }
