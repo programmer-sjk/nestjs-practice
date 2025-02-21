@@ -1,5 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CategoryModule } from '../../src/category/category.module';
+import { CategoryRepository } from '../../src/category/category.repository';
+import { Category } from '../../src/category/entities/category.entity';
 import { ProductRegisterRequest } from '../../src/product/dto/product-register.request';
 import { ProductModule } from '../../src/product/product.module';
 import { ProductRepository } from '../../src/product/product.repository';
@@ -11,18 +14,25 @@ describe('ProductService', () => {
   let module: TestingModule;
   let service: ProductService;
   let repository: ProductRepository;
+  let categoryRepository: CategoryRepository;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
-      imports: [TypeOrmModule.forRoot(testConnectionOptions), ProductModule],
+      imports: [
+        TypeOrmModule.forRoot(testConnectionOptions),
+        ProductModule,
+        CategoryModule,
+      ],
     }).compile();
 
     service = module.get<ProductService>(ProductService);
     repository = module.get<ProductRepository>(ProductRepository);
+    categoryRepository = module.get<CategoryRepository>(CategoryRepository);
   });
 
   beforeEach(async () => {
     await repository.clear();
+    await categoryRepository.clear();
   });
 
   afterAll(async () => {
@@ -52,10 +62,13 @@ describe('ProductService', () => {
   describe('addProcut', () => {
     it('상품을 등록할 수 있다.', async () => {
       // given
+      await categoryRepository.save(Category.of('의류 상의'));
+
       const dto = new ProductRegisterRequest();
       dto.name = '검은색 패딩';
       dto.price = 100_000;
       dto.stock = 50;
+      dto.categoryId = 1;
 
       // when
       await service.addProduct(dto);

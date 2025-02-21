@@ -9,7 +9,9 @@ import { AdminRepository } from '../../src/admin/admin.repository';
 import { AdminService } from '../../src/admin/admin.service';
 import { AuthService } from '../../src/auth/auth.service';
 import { AuthGuard } from '../../src/auth/guards/auth.guard';
+import { CategoryModule } from '../../src/category/category.module';
 import { CategoryRepository } from '../../src/category/category.repository';
+import { Category } from '../../src/category/entities/category.entity';
 import { setNestApp } from '../../src/common/set-nest-app';
 import { CouponModule } from '../../src/coupon/coupon.module';
 import { PointModule } from '../../src/point/point.module';
@@ -29,6 +31,7 @@ describe('Product E2E', () => {
   let authService: AuthService;
   let repository: ProductRepository;
   let adminRepository: AdminRepository;
+  let categoryRepository: CategoryRepository;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
@@ -37,11 +40,11 @@ describe('Product E2E', () => {
         ConfigModule.forRoot(),
         CouponModule,
         PointModule,
+        CategoryModule,
       ],
       providers: [
         ProductService,
         ProductRepository,
-        CategoryRepository,
         AuthService,
         AdminService,
         AdminRepository,
@@ -59,6 +62,7 @@ describe('Product E2E', () => {
     authService = module.get<AuthService>(AuthService);
     repository = module.get<ProductRepository>(ProductRepository);
     adminRepository = module.get<AdminRepository>(AdminRepository);
+    categoryRepository = module.get<CategoryRepository>(CategoryRepository);
 
     app = module.createNestApplication();
     setNestApp(app);
@@ -68,6 +72,7 @@ describe('Product E2E', () => {
   beforeEach(async () => {
     await repository.clear();
     await adminRepository.clear();
+    await categoryRepository.clear();
   });
 
   afterAll(async () => {
@@ -82,6 +87,8 @@ describe('Product E2E', () => {
       const password = 'password';
       await adminRepository.save(AdminFactory.from(email, password));
 
+      const category = await categoryRepository.save(Category.of('의류 상의'));
+
       const signInResponse = await authService.adminSignIn(
         SignInRequestFactory.of(email, password),
       );
@@ -90,6 +97,7 @@ describe('Product E2E', () => {
       requestDto.name = '검은색 패딩';
       requestDto.price = 100_000;
       requestDto.stock = 50;
+      requestDto.categoryId = category.id;
 
       // when
       await request(app.getHttpServer())
