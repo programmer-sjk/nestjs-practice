@@ -6,6 +6,7 @@ export class ProductFactory {
   static of(name: string) {
     const price = 1_000;
     const stock = 10;
-    return Product.of(name, price, stock);
+    const categoryId = 1;
+    return Product.of(name, price, stock, categoryId);
   }
 }
