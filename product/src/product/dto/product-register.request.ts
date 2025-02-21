@@ -15,7 +15,11 @@ export class ProductRegisterRequest {
   @IsInt()
   stock: number;
 
+  @IsNotEmpty()
+  @IsInt()
+  categoryId: number;
+
   toEntity() {
-    return Product.of(this.name, this.price, this.stock);
+    return Product.of(this.name, this.price, this.stock, this.categoryId);
   }
 }

@@ -30,11 +30,12 @@ export class Product {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
 
-  static of(name: string, price: number, stock: number) {
+  static of(name: string, price: number, stock: number, categoryId: number) {
     const product = new Product();
     product.name = name;
     product.price = price;
     product.stock = stock;
+    product.categoryId = categoryId;
     return product;
   }
 }
