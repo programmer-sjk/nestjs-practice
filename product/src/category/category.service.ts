@@ -7,7 +7,7 @@ export class CategoryService {
   constructor(private readonly categoryRepository: CategoryRepository) {}
 
   async findOneById(id: number) {
-    await this.categoryRepository.findOneBy({ id });
+    return this.categoryRepository.findOneBy({ id });
   }
 
   async addCategory(dto: CategoryRegisterRequest) {

@@ -4,6 +4,7 @@ import { CategoryModule } from '../../src/category/category.module';
 import { CategoryRepository } from '../../src/category/category.repository';
 import { CategoryService } from '../../src/category/category.service';
 import { CategoryRegisterRequest } from '../../src/category/dto/category-register.request';
+import { Category } from '../../src/category/entities/category.entity';
 import { testConnectionOptions } from '../test-ormconfig';
 
 describe('CategoryService', () => {
@@ -27,9 +28,22 @@ describe('CategoryService', () => {
   afterAll(async () => {
     await module.close();
   });
-  
+
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('findOneById', () => {
+    it('id로 카테고리를 조회할 수 있다.', async () => {
+      // given
+      const category = await repository.save(Category.of('의류'));
+
+      // when
+      const result = await service.findOneById(category.id);
+
+      // then
+      expect(result.name).toBe('의류');
+    });
   });
 
   describe('addCategory', () => {
