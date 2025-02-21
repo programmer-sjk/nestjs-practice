@@ -6,5 +6,6 @@ import { CategoryService } from './category.service';
 @Module({
   providers: [CategoryService, CategoryRepository],
   controllers: [CategoryController],
+  exports: [CategoryService],
 })
 export class CategoryModule {}
