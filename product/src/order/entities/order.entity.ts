@@ -21,6 +21,12 @@ export class Order {
   @Column({ type: 'enum', enum: OrderStatus })
   status: OrderStatus;
 
+  @Column()
+  originalPrice: number;
+
+  @Column()
+  price: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
