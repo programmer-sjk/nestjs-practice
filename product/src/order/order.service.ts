@@ -1,4 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { CouponService } from '../coupon/coupon.service';
+import { PointService } from '../point/point.service';
 import { Product } from '../product/entities/product.entity';
 import { ProductService } from '../product/product.service';
 import { UserService } from '../user/user.service';
@@ -11,6 +13,8 @@ export class OrderService {
   constructor(
     private readonly userService: UserService,
     private readonly productService: ProductService,
+    private readonly pointService: PointService,
+    private readonly couponService: CouponService,
     private readonly orderRepository: OrderRepository,
     private readonly orderItemRepository: OrderItemRepository,
   ) {}
@@ -25,11 +29,18 @@ export class OrderService {
     this.validateProducts(dto.productIds, products);
     const totalPrice = products.reduce((acc, cur) => acc + cur.price, 0);
 
+    if (dto.point) {
+      const userPoint = await this.pointService.getUserTotalPoint(user.id);
+      if (userPoint < dto.point) {
+        throw new BadRequestException('포인트가 부족합니다.');
+      }
+    }
+
     const order = await this.orderRepository.save(
       dto.toEntity(user, totalPrice),
     );
     await this.orderItemRepository.save(dto.toItemEntities(order, products));
-    await this.productService.decreaseStock(products)
+    await this.productService.decreaseStock(products);
   }
 
   private validateProducts(productIds: number[], products: Product[]) {
