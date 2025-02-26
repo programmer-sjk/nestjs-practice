@@ -1,4 +1,4 @@
-import { IsArray, IsInt, IsNotEmpty } from 'class-validator';
+import { IsArray, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 import { Product } from '../../product/entities/product.entity';
 import { User } from '../../user/entities/user.entity';
 import { OrderItem } from '../entities/order-item.entity';
@@ -13,6 +13,14 @@ export class AddOrderRequest {
   @IsArray()
   @IsInt({ each: true })
   productIds: number[];
+
+  @IsOptional()
+  @IsInt()
+  point?: number;
+
+  @IsOptional()
+  @IsInt()
+  couponId?: number;
 
   toEntity(user: User, totalPrice: number) {
     return Order.newOrder(user, totalPrice);
