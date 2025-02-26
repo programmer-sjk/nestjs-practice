@@ -38,11 +38,13 @@ export class Order {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
 
-  static newOrder(user: User) {
+  static newOrder(user: User, originalPrice: number) {
     const order = new Order();
     order.userId = user.id;
     order.status = OrderStatus.IN_PROGRESS;
     order.user = user;
+    order.originalPrice = originalPrice;
+    order.price = originalPrice;
     return order;
   }
 }

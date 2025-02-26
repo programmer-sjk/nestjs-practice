@@ -24,8 +24,9 @@ export class OrderService {
     if (products.length !== dto.productIds.length) {
       throw new BadRequestException('상품이 유효하지 않습니다.');
     }
+    const totalPrice = products.reduce((acc, cur) => acc + cur.price, 0);
 
-    const order = await this.orderRepository.save(dto.toEntity(user));
+    const order = await this.orderRepository.save(dto.toEntity(user, totalPrice));
     await this.orderItemRepository.save(dto.toItemEntities(order, products));
   }
 }
