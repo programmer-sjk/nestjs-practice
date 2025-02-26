@@ -3,6 +3,7 @@ import { In } from 'typeorm';
 import { CategoryService } from '../category/category.service';
 import { ERROR } from '../common/err-message';
 import { ProductRegisterRequest } from './dto/product-register.request';
+import { Product } from './entities/product.entity';
 import { ProductRepository } from './product.repository';
 
 @Injectable()
@@ -23,5 +24,10 @@ export class ProductService {
     }
 
     await this.productRepository.save(dto.toEntity());
+  }
+
+  async decreaseStock(products: Product[]) {
+    products.forEach((product) => product.decreaseStock());
+    await this.productRepository.save(products);
   }
 }

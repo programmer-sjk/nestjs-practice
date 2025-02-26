@@ -29,6 +29,7 @@ export class OrderService {
       dto.toEntity(user, totalPrice),
     );
     await this.orderItemRepository.save(dto.toItemEntities(order, products));
+    await this.productService.decreaseStock(products)
   }
 
   private validateProducts(productIds: number[], products: Product[]) {
