@@ -8,6 +8,11 @@ export class PointService {
 
   constructor(private readonly pointRepository: PointRepository) {}
 
+  async getUserTotalPoint(userId: number) {
+    const userPoint = await this.pointRepository.findBy({ userId });
+    return userPoint.reduce((acc, cur) => acc + cur.value, 0);
+  }
+
   async addPointToUser(userId: number, value: number) {
     await this.pointRepository.save(Point.of(userId, value));
   }
