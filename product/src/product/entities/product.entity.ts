@@ -38,4 +38,8 @@ export class Product {
     product.categoryId = categoryId;
     return product;
   }
+
+  decreaseStock() {
+    this.stock = this.stock - 1;
+  }
 }
