@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { Product } from '../product/entities/product.entity';
 import { ProductService } from '../product/product.service';
 import { UserService } from '../user/user.service';
 import { AddOrderRequest } from './dto/add-order.request';
@@ -21,12 +22,24 @@ export class OrderService {
     }
 
     const products = await this.productService.findByIds(dto.productIds);
-    if (products.length !== dto.productIds.length) {
-      throw new BadRequestException('상품이 유효하지 않습니다.');
-    }
+    this.validateProducts(dto.productIds, products);
     const totalPrice = products.reduce((acc, cur) => acc + cur.price, 0);
 
-    const order = await this.orderRepository.save(dto.toEntity(user, totalPrice));
+    const order = await this.orderRepository.save(
+      dto.toEntity(user, totalPrice),
+    );
     await this.orderItemRepository.save(dto.toItemEntities(order, products));
+  }
+
+  private validateProducts(productIds: number[], products: Product[]) {
+    if (products.length !== productIds.length) {
+      throw new BadRequestException('상품이 유효하지 않습니다.');
+    }
+
+    if (!products.every((product) => product.stock > 0)) {
+      throw new BadRequestException(
+        '재고가 없는 상품이 주문에 포함되었습니다.',
+      );
+    }
   }
 }
