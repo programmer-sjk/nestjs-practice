@@ -1,6 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CouponService } from '../coupon/coupon.service';
-import { Coupon } from '../coupon/entities/coupon.entity';
 import { PointService } from '../point/point.service';
 import { Product } from '../product/entities/product.entity';
 import { ProductService } from '../product/product.service';
@@ -38,20 +37,24 @@ export class OrderService {
       }
     }
 
-    let coupon: Coupon;
     if (dto.couponId) {
-      coupon = await this.couponService.findUserCoupon(dto.couponId, user.id);
+      const coupon = await this.couponService.findUserCoupon(
+        dto.couponId,
+        user.id,
+      );
 
       if (!coupon || coupon.couponUsers?.length === 0) {
         throw new BadRequestException('잘못된 쿠폰입니다.');
       }
     }
 
-    // const order = await this.orderRepository.save(
-    //   dto.toEntity(user, totalPrice),
-    // );
-    // await this.orderItemRepository.save(dto.toItemEntities(order, products));
-    // await this.productService.decreaseStock(products);
+    const order = await this.orderRepository.save(
+      dto.toEntity(user, totalPrice),
+    );
+    await this.orderItemRepository.save(dto.toItemEntities(order, products));
+    await this.productService.decreaseStock(products);
+    await this.productService.decreaseStock(products);
+    await this.couponService.useCoupon(dto.couponId, user.id);
   }
 
   private validateProducts(productIds: number[], products: Product[]) {
