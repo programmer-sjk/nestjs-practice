@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CouponType } from '../enums/coupon-type.enum';
+import { CouponUser } from './coupon-user.entity';
 
 @Entity()
 export class Coupon {
@@ -31,6 +34,9 @@ export class Coupon {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => CouponUser, (user) => user.coupon)
+  couponUsers: CouponUser[]
 
   static of(
     name: string,

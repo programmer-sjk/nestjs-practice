@@ -1,4 +1,5 @@
-import { CreateDateColumn, Entity, PrimaryColumn } from 'typeorm';
+import { CreateDateColumn, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Coupon } from './coupon.entity';
 
 @Entity()
 export class CouponUser {
@@ -10,6 +11,11 @@ export class CouponUser {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => Coupon, (coupon) => coupon.couponUsers, {
+    createForeignKeyConstraints: false,
+  })
+  coupon: Coupon;
 
   static of(couponId: number, userId: number) {
     const couponUser = new CouponUser();
