@@ -11,6 +11,6 @@ export class PointController {
   @Roles(Role.USER)
   @Post()
   async purchase(@Body() request: PointPurchaseRequest) {
-    await this.pointService.addPointToUser(request.userId, request.value);
+    await this.pointService.addPointByPurchase(request.userId, request.value);
   }
 }

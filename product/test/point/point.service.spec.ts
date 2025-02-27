@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PointModule } from '../../src/point/point.module';
-import { PointRepository } from '../../src/point/repositories/point.repository';
 import { PointService } from '../../src/point/point.service';
+import { PointRepository } from '../../src/point/repositories/point.repository';
 import { UserModule } from '../../src/user/user.module';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserFactory } from '../fixture/entities/user-factory';
@@ -48,7 +48,7 @@ describe('PointService', () => {
       const pointValue = 1_000;
 
       // when
-      await service.addPointToUser(user.id, pointValue);
+      await service.addPointByPurchase(user.id, pointValue);
 
       // then
       const point = await repository.findOneBy({ userId: user.id });
