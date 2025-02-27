@@ -16,12 +16,7 @@ export class PointService {
     private readonly pointHistoryRepository: PointHistoryRepository,
   ) {}
 
-  async getUserTotalPoint(userId: number) {
-    const userPoint = await this.pointRepository.findOneBy({ userId });
-    return userPoint.value;
-  }
-
-  private async getUserPoint(userId: number) {
+  async getUserPoint(userId: number) {
     return this.pointRepository.findOneBy({ userId });
   }
 

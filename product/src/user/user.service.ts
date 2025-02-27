@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { CouponService } from '../coupon/coupon.service';
 import { PointService } from '../point/point.service';
@@ -13,8 +13,13 @@ export class UserService {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async findOneById(id: number) {
-    return this.userRepository.findOneBy({ id });
+  async findOneByIdOrThrow(id: number) {
+    const user = await this.userRepository.findOneBy({ id });
+    if (!user) {
+      throw new NotFoundException('사용자가 존재하지 않습니다.');
+    }
+
+    return user;
   }
 
   async findOneByEmail(email: string) {

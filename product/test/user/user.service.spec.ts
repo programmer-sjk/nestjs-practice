@@ -67,7 +67,7 @@ describe('UserService', () => {
       const user = await repository.save(UserFactory.from(email, password));
 
       // when
-      const result = await service.findOneById(user.id);
+      const result = await service.findOneByIdOrThrow(user.id);
 
       // then
       expect(result.email).toBe(email);
