@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 import { PointHistory } from './entities/point-history.entity';
 import { Point } from './entities/point.entity';
 import { PointType } from './enums/point-type.enum';
@@ -19,6 +20,7 @@ export class PointService {
     return userPoint.reduce((acc, cur) => acc + cur.value, 0);
   }
 
+  @Transactional()
   async addPointByPurchase(userId: number, value: number) {
     await this.pointRepository.save(Point.of(userId, value));
     await this.pointHistoryRepository.save(
@@ -26,6 +28,7 @@ export class PointService {
     );
   }
 
+  @Transactional()
   async addSignUpPointToUser(userId: number) {
     await this.pointRepository.save(Point.of(userId, this.SIGN_UP_POINT));
     await this.pointHistoryRepository.save(
