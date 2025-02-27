@@ -32,4 +32,8 @@ export class CouponUser {
     couponUser.userId = userId;
     return couponUser;
   }
+
+  use() {
+    this.isUsed = true;
+  }
 }

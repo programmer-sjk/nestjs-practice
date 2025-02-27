@@ -3,6 +3,7 @@ import { CategoryService } from '../category/category.service';
 import { ERROR } from '../common/err-message';
 import { CouponRegisterRequest } from './dto/coupon-register.request';
 import { CouponUser } from './entities/coupon-user.entity';
+import { Coupon } from './entities/coupon.entity';
 import { CouponUserRepository } from './repositories/coupon-user.repository';
 import { CouponRepository } from './repositories/coupon.repository';
 
@@ -44,5 +45,11 @@ export class CouponService {
       name: this.SIGN_UP_COUPON_NAME,
     });
     await this.couponUserRepository.save(CouponUser.of(coupon.id, userId));
+  }
+
+  async useCoupon(couponId: number, userId: number) {
+    const couponUser = await this.couponUserRepository.findOneBy({ couponId, userId });
+    couponUser.use();
+    await this.couponUserRepository.save(couponUser);
   }
 }
