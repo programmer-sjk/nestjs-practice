@@ -1,4 +1,10 @@
-import { CreateDateColumn, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+} from 'typeorm';
 import { Coupon } from './coupon.entity';
 
 @Entity()
@@ -8,6 +14,9 @@ export class CouponUser {
 
   @PrimaryColumn()
   userId: number;
+
+  @Column({ default: false })
+  isUsed: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
