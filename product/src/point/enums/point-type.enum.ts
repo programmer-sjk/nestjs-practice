@@ -3,4 +3,5 @@ export enum PointType {
   PURCHASE = 'PURCHASE',
   ADMIN = 'ADMIN',
   MISSION = 'MISSION',
+  ORDER = 'ORDER',
 }
