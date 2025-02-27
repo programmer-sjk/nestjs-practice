@@ -20,9 +20,16 @@ export class PointService {
     return userPoint.reduce((acc, cur) => acc + cur.value, 0);
   }
 
+  private async getUserPoint(userId: number) {
+    return this.pointRepository.findOneBy({ userId });
+  }
+
   @Transactional()
   async addPointByPurchase(userId: number, value: number) {
-    await this.pointRepository.save(Point.of(userId, value));
+    const point = await this.getUserPoint(userId);
+    const totalPoint = point?.value ?? 0 + value;
+
+    await this.pointRepository.save(Point.of(userId, totalPoint));
     await this.pointHistoryRepository.save(
       PointHistory.of(userId, value, PointType.PURCHASE),
     );
@@ -30,7 +37,10 @@ export class PointService {
 
   @Transactional()
   async addSignUpPointToUser(userId: number) {
-    await this.pointRepository.save(Point.of(userId, this.SIGN_UP_POINT));
+    const point = await this.getUserPoint(userId);
+    const totalPoint = point?.value ?? 0 + this.SIGN_UP_POINT;
+
+    await this.pointRepository.save(Point.of(userId, totalPoint));
     await this.pointHistoryRepository.save(
       PointHistory.of(userId, this.SIGN_UP_POINT, PointType.SIGNUP),
     );
