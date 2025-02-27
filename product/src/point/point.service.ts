@@ -1,5 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
+import { ERROR } from '../common/err-message';
 import { PointHistory } from './entities/point-history.entity';
 import { Point } from './entities/point.entity';
 import { PointType } from './enums/point-type.enum';
@@ -43,6 +44,20 @@ export class PointService {
     await this.pointRepository.save(Point.of(userId, totalPoint));
     await this.pointHistoryRepository.save(
       PointHistory.of(userId, this.SIGN_UP_POINT, PointType.SIGNUP),
+    );
+  }
+
+  async usePoint(userId: number, value: number, type: PointType) {
+    const point = await this.getUserPoint(userId);
+    const totalPoint = point?.value ?? 0 - value;
+
+    if (totalPoint < 0) {
+      throw new BadRequestException(ERROR.pointNotEnough);
+    }
+
+    await this.pointRepository.save(Point.of(userId, totalPoint));
+    await this.pointHistoryRepository.save(
+      PointHistory.of(userId, -value, type),
     );
   }
 }
