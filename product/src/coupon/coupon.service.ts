@@ -16,6 +16,13 @@ export class CouponService {
     private readonly couponUserRepository: CouponUserRepository,
   ) {}
 
+  async findUserCoupon(id: number, userId: number) {
+    return this.couponRepository.findOne({
+      where: { id, couponUsers: { userId } },
+      relations: ['couponUsers'],
+    });
+  }
+
   async addCoupon(dto: CouponRegisterRequest) {
     await this.validateCategory(dto.categoryId);
     await this.couponRepository.save(dto.toEntity());
