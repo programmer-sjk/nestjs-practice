@@ -8,7 +8,7 @@ import { CouponModule } from '../../src/coupon/coupon.module';
 import { CouponUserRepository } from '../../src/coupon/repositories/coupon-user.repository';
 import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
 import { PointModule } from '../../src/point/point.module';
-import { PointRepository } from '../../src/point/point.repository';
+import { PointRepository } from '../../src/point/repositories/point.repository';
 import { SignUpRequest } from '../../src/user/dto/sign-up.request';
 import { UserModule } from '../../src/user/user.module';
 import { UserRepository } from '../../src/user/user.repository';

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Point } from './entities/point.entity';
-import { PointRepository } from './point.repository';
+import { PointRepository } from './repositories/point.repository';
 
 @Injectable()
 export class PointService {

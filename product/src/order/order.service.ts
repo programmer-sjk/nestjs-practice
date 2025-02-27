@@ -53,7 +53,6 @@ export class OrderService {
     );
     await this.orderItemRepository.save(dto.toItemEntities(order, products));
     await this.productService.decreaseStock(products);
-    await this.productService.decreaseStock(products);
     await this.couponService.useCoupon(dto.couponId, user.id);
   }
 

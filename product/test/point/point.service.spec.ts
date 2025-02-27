@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PointModule } from '../../src/point/point.module';
-import { PointRepository } from '../../src/point/point.repository';
+import { PointRepository } from '../../src/point/repositories/point.repository';
 import { PointService } from '../../src/point/point.service';
 import { UserModule } from '../../src/user/user.module';
 import { UserRepository } from '../../src/user/user.repository';

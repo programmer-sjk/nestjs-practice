@@ -17,7 +17,7 @@ import { CouponRegisterRequest } from '../../src/coupon/dto/coupon-register.requ
 import { CouponType } from '../../src/coupon/enums/coupon-type.enum';
 import { CouponUserRepository } from '../../src/coupon/repositories/coupon-user.repository';
 import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
-import { PointRepository } from '../../src/point/point.repository';
+import { PointRepository } from '../../src/point/repositories/point.repository';
 import { PointService } from '../../src/point/point.service';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
