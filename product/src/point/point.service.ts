@@ -16,8 +16,8 @@ export class PointService {
   ) {}
 
   async getUserTotalPoint(userId: number) {
-    const userPoint = await this.pointRepository.findBy({ userId });
-    return userPoint.reduce((acc, cur) => acc + cur.value, 0);
+    const userPoint = await this.pointRepository.findOneBy({ userId });
+    return userPoint.value;
   }
 
   private async getUserPoint(userId: number) {
