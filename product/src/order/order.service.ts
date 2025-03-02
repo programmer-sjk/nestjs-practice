@@ -78,9 +78,8 @@ export class OrderService {
     }
 
     const coupon = await this.couponService.findUserCoupon(couponId, userId);
-
     if (!coupon) {
-      throw new BadRequestException('존재하지 않는 쿠폰입니다.');
+      throw new BadRequestException('유효하지 않는 쿠폰입니다.');
     }
 
     if (coupon.couponUsers?.length === 0) {
