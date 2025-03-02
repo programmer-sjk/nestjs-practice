@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PointType } from '../enums/point-type.enum';
@@ -11,6 +12,7 @@ export class PointHistory {
   @PrimaryGeneratedColumn()
   id: number;
 
+  @Index('userId')
   @Column()
   userId: number;
 
