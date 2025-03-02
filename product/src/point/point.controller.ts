@@ -20,5 +20,6 @@ export class PointController {
   @Post()
   async purchase(@Body() request: PointPurchaseRequest) {
     await this.pointService.addPointByPurchase(request.userId, request.value);
+    return ResponseEntity.OK();
   }
 }

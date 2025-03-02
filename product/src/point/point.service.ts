@@ -31,9 +31,13 @@ export class PointService {
   @Transactional()
   async addPointByPurchase(userId: number, value: number) {
     const point = await this.getUserPoint(userId);
-    const totalPoint = point?.value ?? 0 + value;
+    if (!point) {
+      await this.pointRepository.save(Point.of(userId, value));
+    } else {
+      point.value += value;
+      await this.pointRepository.save(point);
+    }
 
-    await this.pointRepository.save(Point.of(userId, totalPoint));
     await this.pointHistoryRepository.save(
       PointHistory.of(userId, value, PointType.PURCHASE),
     );
