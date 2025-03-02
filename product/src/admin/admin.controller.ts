@@ -13,7 +13,7 @@ export class AdminController {
       await this.adminService.addAdmin(request);
       return ResponseEntity.OK();
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 }

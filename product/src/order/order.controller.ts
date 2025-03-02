@@ -16,7 +16,7 @@ export class OrderController {
       await this.orderService.newOrder(request);
       return ResponseEntity.OK();
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 }

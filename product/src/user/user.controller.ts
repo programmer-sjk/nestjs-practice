@@ -15,7 +15,7 @@ export class UserController {
       await this.userService.addUser(request);
       return ResponseEntity.OK();
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 }

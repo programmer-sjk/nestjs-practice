@@ -16,7 +16,7 @@ export class CouponController {
       await this.couponService.addCoupon(request);
     return ResponseEntity.OK();
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 }

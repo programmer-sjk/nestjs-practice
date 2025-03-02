@@ -17,7 +17,7 @@ export class AuthController {
       const acceesToken = await this.authService.signIn(request);
       return ResponseEntity.OK(acceesToken);
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 
@@ -30,7 +30,7 @@ export class AuthController {
       const acceesToken = await this.authService.adminSignIn(request);
       return ResponseEntity.OK(acceesToken);
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 }

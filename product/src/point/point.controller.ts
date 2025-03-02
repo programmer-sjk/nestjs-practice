@@ -16,7 +16,7 @@ export class PointController {
       const histories = await this.pointService.findHistory(userId);
       return ResponseEntity.OK(histories);
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 
@@ -27,7 +27,7 @@ export class PointController {
       await this.pointService.addPointByPurchase(request.userId, request.value);
       return ResponseEntity.OK();
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 }

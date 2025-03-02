@@ -16,7 +16,7 @@ export class ProductController {
       await this.productService.addProduct(request);
       return ResponseEntity.OK();
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 }

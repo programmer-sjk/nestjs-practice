@@ -16,7 +16,7 @@ export class CategoryController {
       await this.categoryService.addCategory(request);
       return ResponseEntity.OK();
     } catch (err) {
-      return ResponseEntity.ERROR(err);
+      return ResponseEntity.ERROR(err.message);
     }
   }
 }
