@@ -45,10 +45,7 @@ export class PointService {
 
   @Transactional()
   async addSignUpPointToUser(userId: number) {
-    const point = await this.getUserPoint(userId);
-    const totalPoint = point?.value ?? 0 + this.SIGN_UP_POINT;
-
-    await this.pointRepository.save(Point.of(userId, totalPoint));
+    await this.pointRepository.save(Point.of(userId, this.SIGN_UP_POINT));
     await this.pointHistoryRepository.save(
       PointHistory.of(userId, this.SIGN_UP_POINT, PointType.SIGNUP),
     );
@@ -67,4 +64,6 @@ export class PointService {
       PointHistory.of(userId, -value, type),
     );
   }
+
+  private async updateUserPoint(userId: number, point?: Point) {}
 }
