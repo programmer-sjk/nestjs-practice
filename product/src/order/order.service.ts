@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 import { ERROR } from '../common/err-message';
 import { CouponService } from '../coupon/coupon.service';
 import { PointType } from '../point/enums/point-type.enum';
@@ -21,6 +22,7 @@ export class OrderService {
     private readonly orderItemRepository: OrderItemRepository,
   ) {}
 
+  @Transactional()
   async newOrder(dto: AddOrderRequest) {
     const user = await this.userService.findOneByIdOrThrow(dto.userId);
     const products = await this.productService.findByIds(dto.productIds);
