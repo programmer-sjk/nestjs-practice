@@ -3,7 +3,6 @@ import { CategoryService } from '../category/category.service';
 import { ERROR } from '../common/err-message';
 import { CouponRegisterRequest } from './dto/coupon-register.request';
 import { CouponUser } from './entities/coupon-user.entity';
-import { Coupon } from './entities/coupon.entity';
 import { CouponUserRepository } from './repositories/coupon-user.repository';
 import { CouponRepository } from './repositories/coupon.repository';
 
@@ -19,7 +18,7 @@ export class CouponService {
 
   async findUserCoupon(id: number, userId: number) {
     return this.couponRepository.findOne({
-      where: { id, couponUsers: { userId } },
+      where: { id, couponUsers: { userId, isUsed: false } },
       relations: ['couponUsers'],
     });
   }
@@ -48,7 +47,10 @@ export class CouponService {
   }
 
   async useCoupon(couponId: number, userId: number) {
-    const couponUser = await this.couponUserRepository.findOneBy({ couponId, userId });
+    const couponUser = await this.couponUserRepository.findOneBy({
+      couponId,
+      userId,
+    });
     couponUser.use();
     await this.couponUserRepository.save(couponUser);
   }
