@@ -9,6 +9,7 @@ import { CouponRepository } from './repositories/coupon.repository';
 @Injectable()
 export class CouponService {
   private readonly SIGN_UP_COUPON_NAME = '신규회원 쿠폰';
+  private readonly COUPON_CAN_USE = false;
 
   constructor(
     private readonly categoryService: CategoryService,
@@ -18,7 +19,7 @@ export class CouponService {
 
   async findUserCoupon(id: number, userId: number) {
     return this.couponRepository.findOne({
-      where: { id, couponUsers: { userId, isUsed: false } },
+      where: { id, couponUsers: { userId, isUsed: this.COUPON_CAN_USE } },
       relations: ['couponUsers'],
     });
   }
