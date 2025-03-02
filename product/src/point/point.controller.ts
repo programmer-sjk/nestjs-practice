@@ -10,7 +10,7 @@ export class PointController {
   constructor(private readonly pointService: PointService) {}
 
   @Roles(Role.USER)
-  @Get()
+  @Get('history')
   async findHistory(@Body('userId') userId: number) {
     const histories = await this.pointService.findHistory(userId);
     return ResponseEntity.OK(histories);
