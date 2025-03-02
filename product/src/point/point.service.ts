@@ -31,13 +31,7 @@ export class PointService {
   @Transactional()
   async addPointByPurchase(userId: number, value: number) {
     const point = await this.getUserPoint(userId);
-    if (!point) {
-      await this.pointRepository.save(Point.of(userId, value));
-    } else {
-      point.value += value;
-      await this.pointRepository.save(point);
-    }
-
+    await this.updateUserPoint(userId, value, point);
     await this.pointHistoryRepository.save(
       PointHistory.of(userId, value, PointType.PURCHASE),
     );
@@ -59,11 +53,18 @@ export class PointService {
       throw new BadRequestException(ERROR.pointNotEnough);
     }
 
-    await this.pointRepository.save(Point.of(userId, totalPoint));
+    await this.updateUserPoint(userId, -value, point);
     await this.pointHistoryRepository.save(
       PointHistory.of(userId, -value, type),
     );
   }
 
-  private async updateUserPoint(userId: number, point?: Point) {}
+  private async updateUserPoint(userId: number, value: number, point?: Point) {
+    if (!point) {
+      await this.pointRepository.save(Point.of(userId, value));
+    } else {
+      point.value += value;
+      await this.pointRepository.save(point);
+    }
+  }
 }
