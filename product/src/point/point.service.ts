@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
+import { OrderBy } from '../common/enums/order-by.enum';
 import { ERROR } from '../common/err-message';
 import { PointHistory } from './entities/point-history.entity';
 import { Point } from './entities/point.entity';
@@ -15,6 +16,13 @@ export class PointService {
     private readonly pointRepository: PointRepository,
     private readonly pointHistoryRepository: PointHistoryRepository,
   ) {}
+
+  async findHistory(userId: number) {
+    return this.pointHistoryRepository.find({
+      where: { userId },
+      order: { id: OrderBy.DESC },
+    });
+  }
 
   async getUserPoint(userId: number) {
     return this.pointRepository.findOneBy({ userId });
