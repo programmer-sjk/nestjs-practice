@@ -12,7 +12,11 @@ export class ProductController {
   @Roles(Role.ADMIN)
   @Post()
   async register(@Body() request: ProductRegisterRequest) {
-    await this.productService.addProduct(request);
-    return ResponseEntity.OK();
+    try {
+      await this.productService.addProduct(request);
+      return ResponseEntity.OK();
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 }

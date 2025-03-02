@@ -8,8 +8,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post()
-  async signUp(@Body() request: SignUpRequest): Promise<ResponseEntity<string>> {
-    await this.userService.addUser(request);
-    return ResponseEntity.OK();
+  async signUp(
+    @Body() request: SignUpRequest,
+  ): Promise<ResponseEntity<string>> {
+    try {
+      await this.userService.addUser(request);
+      return ResponseEntity.OK();
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 }

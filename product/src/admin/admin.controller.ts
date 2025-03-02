@@ -9,7 +9,11 @@ export class AdminController {
 
   @Post()
   async adminSignUp(@Body() request: AdminSignUpRequest) {
-    await this.adminService.addAdmin(request);
-    return ResponseEntity.OK();
+    try {
+      await this.adminService.addAdmin(request);
+      return ResponseEntity.OK();
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 }

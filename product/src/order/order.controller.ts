@@ -12,7 +12,11 @@ export class OrderController {
   @Roles(Role.USER)
   @Post()
   async order(@Body() request: AddOrderRequest) {
-    await this.orderService.newOrder(request);
-    return ResponseEntity.OK();
+    try {
+      await this.orderService.newOrder(request);
+      return ResponseEntity.OK();
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 }

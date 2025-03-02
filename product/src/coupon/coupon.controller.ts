@@ -12,7 +12,11 @@ export class CouponController {
   @Roles(Role.ADMIN)
   @Post()
   async reigster(@Body() request: CouponRegisterRequest) {
-    await this.couponService.addCoupon(request);
+    try {
+      await this.couponService.addCoupon(request);
     return ResponseEntity.OK();
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 }

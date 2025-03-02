@@ -13,8 +13,12 @@ export class AuthController {
   async signIn(
     @Body() request: SignInRequest,
   ): Promise<ResponseEntity<SignInResponse | string>> {
-    const acceesToken = await this.authService.signIn(request);
-    return ResponseEntity.OK(acceesToken);
+    try {
+      const acceesToken = await this.authService.signIn(request);
+      return ResponseEntity.OK(acceesToken);
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 
   @Post('/admin/login')
@@ -22,7 +26,11 @@ export class AuthController {
   async adminSignIn(
     @Body() request: SignInRequest,
   ): Promise<ResponseEntity<SignInResponse | string>> {
-    const acceesToken = await this.authService.adminSignIn(request);
-    return ResponseEntity.OK(acceesToken);
+    try {
+      const acceesToken = await this.authService.adminSignIn(request);
+      return ResponseEntity.OK(acceesToken);
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 }

@@ -12,14 +12,22 @@ export class PointController {
   @Roles(Role.USER)
   @Get('history')
   async findHistory(@Body('userId') userId: number) {
-    const histories = await this.pointService.findHistory(userId);
-    return ResponseEntity.OK(histories);
+    try {
+      const histories = await this.pointService.findHistory(userId);
+      return ResponseEntity.OK(histories);
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 
   @Roles(Role.USER)
   @Post('purchase')
   async purchase(@Body() request: PointPurchaseRequest) {
-    await this.pointService.addPointByPurchase(request.userId, request.value);
-    return ResponseEntity.OK();
+    try {
+      await this.pointService.addPointByPurchase(request.userId, request.value);
+      return ResponseEntity.OK();
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 }

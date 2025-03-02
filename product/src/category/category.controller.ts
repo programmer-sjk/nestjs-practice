@@ -12,7 +12,11 @@ export class CategoryController {
   @Roles(Role.ADMIN)
   @Post()
   async register(@Body() request: CategoryRegisterRequest) {
-    await this.categoryService.addCategory(request);
-    return ResponseEntity.OK();
+    try {
+      await this.categoryService.addCategory(request);
+      return ResponseEntity.OK();
+    } catch (err) {
+      return ResponseEntity.ERROR(err);
+    }
   }
 }
