@@ -34,18 +34,27 @@ export class PointHistoryResponse {
   get userId() {
     return this._userId;
   }
+
   @Expose()
   get value() {
     return this._value;
   }
+
   @Expose()
   get type() {
     return this._type;
   }
+
+  @Expose()
+  get isExpired() {
+    return new Date() > this._expiredAt;
+  }
+
   @Expose()
   get expiredAt() {
     return this._expiredAt;
   }
+
   @Expose()
   get createdAt() {
     return this._createdAt;
