@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { OrderBy } from '../common/enums/order-by.enum';
 import { ERROR } from '../common/err-message';
+import { PointHistoryResponse } from './dto/point-history.response';
 import { PointHistory } from './entities/point-history.entity';
 import { Point } from './entities/point.entity';
 import { PointType } from './enums/point-type.enum';
@@ -18,12 +19,25 @@ export class PointService {
   ) {}
 
   async findHistory(userId: number) {
-    return this.pointHistoryRepository.find({
+    const histories = await this.pointHistoryRepository.find({
       where: { userId },
       order: { id: OrderBy.DESC },
     });
+
+    return histories.map(
+      (history) =>
+        new PointHistoryResponse(
+          history.id,
+          history.userId,
+          history.value,
+          history.type,
+          history.expiredAt,
+          history.createdAt,
+        ),
+    );
   }
 
+  // point history 기반으로 수정 필요.
   async getUserPoint(userId: number) {
     return this.pointRepository.findOneBy({ userId });
   }
