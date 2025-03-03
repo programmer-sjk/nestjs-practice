@@ -67,7 +67,7 @@ export class OrderService {
     }
 
     const point = await this.pointService.getUserPoint(userId);
-    if (point.value < usePoint) {
+    if (point < usePoint) {
       throw new BadRequestException(ERROR.pointNotEnough);
     }
   }

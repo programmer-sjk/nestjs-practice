@@ -37,9 +37,9 @@ export class PointService {
     );
   }
 
-  // point history 기반으로 수정 필요.
   async getUserPoint(userId: number) {
-    return this.pointRepository.findOneBy({ userId });
+    const points = await this.pointHistoryRepository.findBy({ userId });
+    return points.reduce((acc, cur) => acc + cur.value, 0);
   }
 
   @Transactional()
@@ -61,7 +61,7 @@ export class PointService {
 
   async usePoint(userId: number, value: number, type: PointType) {
     const point = await this.getUserPoint(userId);
-    const totalPoint = point?.value ?? 0 - value;
+    const totalPoint = point - value;
 
     if (totalPoint < 0) {
       throw new BadRequestException(ERROR.pointNotEnough);
