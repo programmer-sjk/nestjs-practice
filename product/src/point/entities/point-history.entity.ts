@@ -28,11 +28,12 @@ export class PointHistory {
   @CreateDateColumn()
   createdAt: Date;
 
-  static of(userId: number, value: number, type: PointType) {
+  static of(userId: number, value: number, type: PointType, expiredAt?: Date) {
     const history = new PointHistory();
     history.userId = userId;
     history.value = value;
     history.type = type;
+    history.expiredAt = expiredAt;
 
     return history;
   }

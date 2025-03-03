@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { DateTime } from 'luxon';
 import { OrderBy } from '../common/enums/order-by.enum';
 import { ERROR } from '../common/err-message';
 import { PointHistoryResponse } from './dto/point-history.response';
@@ -45,8 +46,9 @@ export class PointService {
   }
 
   async addSignUpPointToUser(userId: number) {
+    const expiredAt = DateTime.now().plus({ months: 3 });
     await this.pointHistoryRepository.save(
-      PointHistory.of(userId, this.SIGN_UP_POINT, PointType.SIGNUP),
+      PointHistory.of(userId, this.SIGN_UP_POINT, PointType.SIGNUP, expiredAt),
     );
   }
 
