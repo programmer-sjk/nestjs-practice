@@ -27,6 +27,12 @@ export class Order {
   @Column()
   price: number;
 
+  @Column({ default: 0 })
+  usedPoint: number;
+
+  @Column({ nullable: true })
+  couponId: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
