@@ -31,7 +31,7 @@ export class OrderService {
     const totalPrice = products.reduce((acc, cur) => acc + cur.price, 0);
 
     const order = await this.orderRepository.save(
-      dto.toEntity(user, totalPrice),
+      dto.toEntity(user, totalPrice, dto.point, dto.couponId),
     );
     await this.orderItemRepository.save(dto.toItemEntities(order, products));
     await this.productService.decreaseStock(products);

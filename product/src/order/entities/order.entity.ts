@@ -44,13 +44,27 @@ export class Order {
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order)
   orderItems: OrderItem[];
 
-  static newOrder(user: User, originalPrice: number) {
+  static newOrder(
+    user: User,
+    originalPrice: number,
+    point?: number,
+    couponId?: number,
+  ) {
     const order = new Order();
     order.userId = user.id;
     order.status = OrderStatus.IN_PROGRESS;
     order.user = user;
     order.originalPrice = originalPrice;
     order.price = originalPrice;
+
+    if (point) {
+      order.usedPoint = point;
+    }
+
+    if (couponId) {
+      order.couponId = couponId;
+    }
+
     return order;
   }
 }
