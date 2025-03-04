@@ -6,4 +6,8 @@ export class DateUtil {
   static now() {
     return DateTime.now();
   }
+
+  static nowDate() {
+    return DateTime.now().toJSDate();
+  }
 }
