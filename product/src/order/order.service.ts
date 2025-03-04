@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { ERROR } from '../common/err-message';
 import { CouponService } from '../coupon/coupon.service';
+import { Coupon } from '../coupon/entities/coupon.entity';
 import { PointType } from '../point/enums/point-type.enum';
 import { PointService } from '../point/point.service';
 import { Product } from '../product/entities/product.entity';
@@ -26,12 +27,16 @@ export class OrderService {
   async newOrder(dto: AddOrderRequest) {
     const user = await this.userService.findOneByIdOrThrow(dto.userId);
     const products = await this.productService.findByIds(dto.productIds);
+    const coupon = dto.couponId
+      ? await this.couponService.findUserCoupon(dto.couponId, user.id)
+      : undefined;
 
-    await this.validateNewOrder(dto, user.id, products);
-    const totalPrice = products.reduce((acc, cur) => acc + cur.price, 0);
+    await this.validateNewOrder(dto, products, coupon);
+    const originalPrice = products.reduce((acc, cur) => acc + cur.price, 0);
+    const payPrice = this.calculatePrice(originalPrice, dto.point, coupon);
 
     const order = await this.orderRepository.save(
-      dto.toEntity(user, totalPrice, dto.point, dto.couponId),
+      dto.toEntity(user, originalPrice, payPrice, dto.point, dto.couponId),
     );
     await this.orderItemRepository.save(dto.toItemEntities(order, products));
     await this.productService.decreaseStock(products);
@@ -41,12 +46,12 @@ export class OrderService {
 
   private async validateNewOrder(
     dto: AddOrderRequest,
-    userId: number,
     products: Product[],
+    coupon?: Coupon,
   ) {
     this.validateProducts(dto.productIds, products);
-    await this.validatePoint(userId, dto.point);
-    await this.validateCoupon(userId, dto.couponId);
+    await this.validatePoint(dto.userId, dto.point);
+    await this.validateCoupon(coupon);
   }
 
   private validateProducts(productIds: number[], products: Product[]) {
@@ -72,12 +77,11 @@ export class OrderService {
     }
   }
 
-  private async validateCoupon(userId: number, couponId?: number) {
-    if (!couponId) {
+  private async validateCoupon(coupon?: Coupon) {
+    if (!coupon) {
       return;
     }
 
-    const coupon = await this.couponService.findUserCoupon(couponId, userId);
     if (!coupon) {
       throw new BadRequestException('유효하지 않는 쿠폰입니다.');
     }
@@ -85,5 +89,23 @@ export class OrderService {
     if (coupon.couponUsers?.length === 0) {
       throw new BadRequestException('쿠폰 정보가 일치하지 않습니다.');
     }
+  }
+
+  private calculatePrice(
+    originalPrice: number,
+    point?: number,
+    coupon?: Coupon,
+  ) {
+    let discountPrice = 0;
+
+    if (point) {
+      discountPrice += point;
+    }
+
+    if (coupon) {
+      discountPrice += coupon.value;
+    }
+
+    return originalPrice - discountPrice;
   }
 }

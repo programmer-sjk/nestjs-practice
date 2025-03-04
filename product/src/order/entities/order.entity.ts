@@ -4,7 +4,7 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { OrderStatus } from '../enums/order-status.enum';
@@ -47,6 +47,7 @@ export class Order {
   static newOrder(
     user: User,
     originalPrice: number,
+    price: number,
     point?: number,
     couponId?: number,
   ) {
@@ -55,7 +56,7 @@ export class Order {
     order.status = OrderStatus.IN_PROGRESS;
     order.user = user;
     order.originalPrice = originalPrice;
-    order.price = originalPrice;
+    order.price = price;
 
     if (point) {
       order.usedPoint = point;

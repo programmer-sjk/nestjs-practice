@@ -22,8 +22,14 @@ export class AddOrderRequest {
   @IsInt()
   couponId?: number;
 
-  toEntity(user: User, totalPrice: number, point?: number, couponId?: number) {
-    return Order.newOrder(user, totalPrice, point, couponId);
+  toEntity(
+    user: User,
+    originalPrice: number,
+    payPrice: number,
+    point?: number,
+    couponId?: number,
+  ) {
+    return Order.newOrder(user, originalPrice, payPrice, point, couponId);
   }
 
   toItemEntities(order: Order, products: Product[]) {
