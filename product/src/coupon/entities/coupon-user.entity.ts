@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import {
   Column,
   CreateDateColumn,
@@ -36,7 +37,11 @@ export class CouponUser {
     return couponUser;
   }
 
-  use() {
+  use(now: Date) {
+    if (this.expiredAt && this.expiredAt < now) {
+      throw new BadRequestException('유효기간이 만료된 쿠폰입니다.');
+    }
+
     this.isUsed = true;
   }
 }

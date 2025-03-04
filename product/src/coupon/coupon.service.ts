@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CategoryService } from '../category/category.service';
+import { DateUtil } from '../common/date-util';
 import { ERROR } from '../common/err-message';
 import { CouponRegisterRequest } from './dto/coupon-register.request';
 import { CouponUser } from './entities/coupon-user.entity';
@@ -52,7 +53,7 @@ export class CouponService {
       couponId,
       userId,
     });
-    couponUser.use();
+    couponUser.use(DateUtil.nowDate());
     await this.couponUserRepository.save(couponUser);
   }
 }
