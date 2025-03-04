@@ -4,7 +4,7 @@ import {
   Entity,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from '../../user/entities/user.entity';
 import { OrderStatus } from '../enums/order-status.enum';
@@ -67,5 +67,9 @@ export class Order {
     }
 
     return order;
+  }
+
+  refund() {
+    this.status = OrderStatus.REFUNDED;
   }
 }

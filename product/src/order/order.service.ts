@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { ERROR } from '../common/err-message';
 import { CouponService } from '../coupon/coupon.service';
@@ -9,6 +9,7 @@ import { Product } from '../product/entities/product.entity';
 import { ProductService } from '../product/product.service';
 import { UserService } from '../user/user.service';
 import { AddOrderRequest } from './dto/add-order.request';
+import { RefundRequest } from './dto/refund.request';
 import { OrderItemRepository } from './repositories/order-item.repository';
 import { OrderRepository } from './repositories/order.repository';
 
@@ -107,5 +108,20 @@ export class OrderService {
     }
 
     return originalPrice - discountPrice;
+  }
+
+  async refund(dto: RefundRequest) {
+    const order = await this.findOneOrder(dto.orderId);
+    order.refund();
+    await this.orderRepository.save(order);
+  }
+
+  private async findOneOrder(id: number) {
+    const order = await this.orderRepository.findOneBy({ id });
+    if (!order) {
+      throw new NotFoundException('주문 정보가 없습니다.');
+    }
+
+    return order;
   }
 }
