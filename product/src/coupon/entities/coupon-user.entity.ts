@@ -18,6 +18,9 @@ export class CouponUser {
   @Column({ default: false })
   isUsed: boolean;
 
+  @Column({ nullable: true })
+  expiredAt: Date;
+
   @CreateDateColumn()
   createdAt: Date;
 
