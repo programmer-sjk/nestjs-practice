@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
-import { MoreThan } from 'typeorm';
+import { IsNull, MoreThan, Or } from 'typeorm';
 import { DateUtil } from '../common/date-util';
 import { OrderBy } from '../common/enums/order-by.enum';
 import { ERROR } from '../common/err-message';
@@ -39,7 +39,10 @@ export class PointService {
   async getUserPoint(userId: number) {
     const points = await this.pointHistoryRepository.findBy({
       userId,
-      expiredAt: MoreThan(DateUtil.now().dt),
+      expiredAt: Or(
+        IsNull(),
+        MoreThan(DateUtil.now().toFormat('yyyy-MM-dd HH:mm:ss')),
+      ),
     });
     return points.reduce((acc, cur) => acc + cur.value, 0);
   }
