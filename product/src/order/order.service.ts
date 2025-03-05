@@ -112,8 +112,15 @@ export class OrderService {
 
   async refund(dto: RefundRequest) {
     const order = await this.findOneOrder(dto.orderId);
+    const coupon = order.couponId
+      ? await this.couponService.findUserCoupon(order.couponId, order.userId)
+      : undefined;
+
     order.refund();
     await this.orderRepository.save(order);
+    if (coupon) {
+      await this.couponService.cancelUsedCoupon(coupon.id, order.userId);
+    }
   }
 
   private async findOneOrder(id: number) {
