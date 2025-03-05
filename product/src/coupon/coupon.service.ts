@@ -56,4 +56,13 @@ export class CouponService {
     couponUser.use(DateUtil.nowDate());
     await this.couponUserRepository.save(couponUser);
   }
+
+  async cancelUsedCoupon(couponId: number, userId: number) {
+    const couponUser = await this.couponUserRepository.findOneBy({
+      couponId,
+      userId,
+    });
+    couponUser.cancelUsed();
+    await this.couponUserRepository.save(couponUser);
+  }
 }
