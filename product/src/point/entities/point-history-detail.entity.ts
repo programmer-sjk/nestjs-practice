@@ -6,6 +6,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { PointStatus } from '../enums/point-status.enum';
 import { PointHistory } from './point-history.entity';
 
 @Entity()
@@ -16,6 +17,9 @@ export class PointHistoryDetail {
   @Index('userId')
   @Column()
   userId: number;
+
+  @Column()
+  status: PointStatus;
 
   @Column()
   value: number;

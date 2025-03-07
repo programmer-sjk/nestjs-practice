@@ -4,8 +4,9 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
+import { PointStatus } from '../enums/point-status.enum';
 import { PointType } from '../enums/point-type.enum';
 import { PointHistoryDetail } from './point-history-detail.entity';
 
@@ -17,6 +18,9 @@ export class PointHistory {
   @Index('userId')
   @Column()
   userId: number;
+
+  @Column()
+  status: PointStatus;
 
   @Column()
   value: number;
