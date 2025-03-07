@@ -37,7 +37,7 @@ export class PointService {
     );
   }
 
-  async getUserPoint(userId: number) {
+  async getUserTotalPoint(userId: number) {
     const points = await this.pointHistoryRepository.findBy({
       userId,
       expiredAt: Or(
@@ -67,7 +67,7 @@ export class PointService {
   }
 
   async usePoint(userId: number, value: number, type: PointType) {
-    const point = await this.getUserPoint(userId);
+    const point = await this.getUserTotalPoint(userId);
     const totalPoint = point - value;
 
     if (totalPoint < 0) {
