@@ -20,11 +20,11 @@ export class PointHistoryDetail {
   @Column()
   value: number;
 
-  @Column()
+  @Column({ comment: '포인트 적립/사용시 detail 원본 ID' })
   pointHistoryDetailId: number;
 
   @Column()
-  pointhistoryId: number;
+  pointHistoryId: number;
 
   @CreateDateColumn()
   createdAt: Date;
