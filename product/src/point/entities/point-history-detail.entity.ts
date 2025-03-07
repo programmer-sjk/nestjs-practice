@@ -3,8 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { PointHistory } from './point-history.entity';
 
 @Entity()
 export class PointHistoryDetail {
@@ -22,8 +24,17 @@ export class PointHistoryDetail {
   pointHistoryDetailId: number;
 
   @Column()
-  historyId: number;
+  pointhistoryId: number;
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(
+    () => PointHistory,
+    (pointHistory) => pointHistory.historyDetails,
+    {
+      createForeignKeyConstraints: false,
+    },
+  )
+  pointHistory: PointHistory;
 }

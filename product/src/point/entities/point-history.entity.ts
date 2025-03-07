@@ -3,9 +3,11 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PointType } from '../enums/point-type.enum';
+import { PointHistoryDetail } from './point-history-detail.entity';
 
 @Entity()
 export class PointHistory {
@@ -30,6 +32,9 @@ export class PointHistory {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => PointHistoryDetail, (detail) => detail.pointHistory)
+  historyDetails: PointHistoryDetail[];
 
   static of(userId: number, value: number, type: PointType, expiredAt?: Date) {
     const history = new PointHistory();
