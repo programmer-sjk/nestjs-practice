@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Transactional } from 'typeorm-transactional';
 import { ERROR } from '../common/err-message';
 import { CouponService } from '../coupon/coupon.service';
@@ -41,8 +45,14 @@ export class OrderService {
     );
     await this.orderItemRepository.save(dto.toItemEntities(order, products));
     await this.productService.decreaseStock(products);
-    await this.couponService.useCoupon(dto.couponId, user.id);
-    await this.pointService.usePoint(user.id, dto.point, PointType.ORDER);
+
+    if (dto.couponId) {
+      await this.couponService.useCoupon(dto.couponId, user.id);
+    }
+
+    if (dto.point) {
+      await this.pointService.usePoint(user.id, dto.point, PointType.ORDER);
+    }
   }
 
   private async validateNewOrder(
