@@ -23,6 +23,9 @@ export class PointHistory {
   type: PointType;
 
   @Column({ nullable: true })
+  memo: string;
+
+  @Column({ nullable: true })
   expiredAt: Date;
 
   @CreateDateColumn()
