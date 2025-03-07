@@ -110,6 +110,7 @@ export class OrderService {
     return originalPrice - discountPrice;
   }
 
+  @Transactional()
   async refund(dto: RefundRequest) {
     const order = await this.findOneOrder(dto.orderId);
     const coupon = order.couponId
