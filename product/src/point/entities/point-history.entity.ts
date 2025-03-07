@@ -4,7 +4,7 @@ import {
   Entity,
   Index,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { PointStatus } from '../enums/point-status.enum';
 import { PointType } from '../enums/point-type.enum';
@@ -40,13 +40,35 @@ export class PointHistory {
   @OneToMany(() => PointHistoryDetail, (detail) => detail.pointHistory)
   historyDetails: PointHistoryDetail[];
 
-  static of(userId: number, value: number, type: PointType, expiredAt?: Date) {
+  private static of(
+    userId: number,
+    value: number,
+    type: PointType,
+    expiredAt?: Date,
+  ) {
     const history = new PointHistory();
     history.userId = userId;
     history.value = value;
     history.type = type;
     history.expiredAt = expiredAt;
 
+    return history;
+  }
+
+  static earn(
+    userId: number,
+    value: number,
+    type: PointType,
+    expiredAt?: Date,
+  ) {
+    const history = this.of(userId, value, type, expiredAt);
+    history.status = PointStatus.EARN;
+    return history;
+  }
+
+  static use(userId: number, value: number, type: PointType, expiredAt?: Date) {
+    const history = this.of(userId, value, type, expiredAt);
+    history.status = PointStatus.USE;
     return history;
   }
 }

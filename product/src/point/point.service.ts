@@ -27,6 +27,7 @@ export class PointService {
       (history) =>
         new PointHistoryResponse(
           history.id,
+          history.status,
           history.userId,
           history.value,
           history.type,
@@ -49,14 +50,19 @@ export class PointService {
 
   async addPointByPurchase(userId: number, value: number) {
     await this.pointHistoryRepository.save(
-      PointHistory.of(userId, value, PointType.PURCHASE),
+      PointHistory.earn(userId, value, PointType.PURCHASE),
     );
   }
 
   async addSignUpPointToUser(userId: number) {
     const expiredAt = DateTime.now().plus({ months: 3 });
     await this.pointHistoryRepository.save(
-      PointHistory.of(userId, this.SIGN_UP_POINT, PointType.SIGNUP, expiredAt),
+      PointHistory.earn(
+        userId,
+        this.SIGN_UP_POINT,
+        PointType.SIGNUP,
+        expiredAt,
+      ),
     );
   }
 
@@ -69,7 +75,7 @@ export class PointService {
     }
 
     await this.pointHistoryRepository.save(
-      PointHistory.of(userId, -value, type),
+      PointHistory.use(userId, -value, type),
     );
   }
 }

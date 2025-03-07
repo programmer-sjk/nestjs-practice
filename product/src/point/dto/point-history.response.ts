@@ -1,8 +1,10 @@
 import { Exclude, Expose } from 'class-transformer';
+import { PointStatus } from '../enums/point-status.enum';
 import { PointType } from '../enums/point-type.enum';
 
 export class PointHistoryResponse {
   @Exclude() _id: number;
+  @Exclude() _status: PointStatus;
   @Exclude() _userId: number;
   @Exclude() _value: number;
   @Exclude() _type: PointType;
@@ -11,6 +13,7 @@ export class PointHistoryResponse {
 
   constructor(
     id: number,
+    status: PointStatus,
     userId: number,
     value: number,
     type: PointType,
@@ -18,6 +21,7 @@ export class PointHistoryResponse {
     createdAt: Date,
   ) {
     this._id = id;
+    this._status = status;
     this._userId = userId;
     this._value = value;
     this._type = type;
@@ -28,6 +32,11 @@ export class PointHistoryResponse {
   @Expose()
   get id() {
     return this._id;
+  }
+
+  @Expose()
+  get status() {
+    return this._status;
   }
 
   @Expose()
