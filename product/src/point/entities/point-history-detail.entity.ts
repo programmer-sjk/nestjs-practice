@@ -38,4 +38,24 @@ export class PointHistoryDetail {
     },
   )
   pointHistory: PointHistory;
+
+  private static of(userId: number, value: number, pointHistoryId: number) {
+    const detail = new PointHistoryDetail();
+    detail.userId = userId;
+    detail.value = value;
+    detail.pointHistoryId = pointHistoryId;
+    return detail;
+  }
+
+  static earn(userId: number, value: number, pointHistoryId: number) {
+    const detail = this.of(userId, value, pointHistoryId);
+    detail.status = PointStatus.EARN;
+    return detail;
+  }
+
+  static use(userId: number, value: number, pointHistoryId: number) {
+    const detail = this.of(userId, value, pointHistoryId);
+    detail.status = PointStatus.USE;
+    return detail;
+  }
 }
