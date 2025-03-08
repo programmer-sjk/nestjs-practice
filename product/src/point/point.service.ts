@@ -42,14 +42,23 @@ export class PointService {
   }
 
   async getUserTotalPoint(userId: number) {
-    const points = await this.pointHistoryRepository.findBy({
-      userId,
-      expiredAt: Or(
-        IsNull(),
-        MoreThan(DateUtil.now().toFormat('yyyy-MM-dd HH:mm:ss')),
-      ),
-    });
+    const points = await this.getUserPoints(userId);
     return points.reduce((acc, cur) => acc + cur.value, 0);
+  }
+
+  private async getUserPoints(userId: number) {
+    return this.pointHistoryRepository.find({
+      where: {
+        userId,
+        expiredAt: Or(
+          IsNull(),
+          MoreThan(DateUtil.now().toFormat('yyyy-MM-dd HH:mm:ss')),
+        ),
+      },
+      order: {
+        expiredAt: OrderBy.ASC,
+      },
+    });
   }
 
   @Transactional()
