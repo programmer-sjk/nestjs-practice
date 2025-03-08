@@ -24,9 +24,6 @@ export class PointHistoryDetail {
   @Column()
   value: number;
 
-  @Column({ comment: '포인트 적립/사용시 detail 원본 ID' })
-  pointHistoryDetailId: number;
-
   @Column()
   pointHistoryId: number;
 
