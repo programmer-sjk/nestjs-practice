@@ -27,6 +27,9 @@ export class PointHistoryDetail {
   @Column()
   pointHistoryId: number;
 
+  @Column()
+  isUsed: boolean;
+
   @CreateDateColumn()
   createdAt: Date;
 
