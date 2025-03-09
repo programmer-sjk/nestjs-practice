@@ -53,12 +53,14 @@ export class PointHistoryDetail {
   static earn(userId: number, value: number, pointHistoryId: number) {
     const detail = this.of(userId, value, pointHistoryId);
     detail.status = PointStatus.EARN;
+    detail.isUsed = false;
     return detail;
   }
 
   static use(userId: number, value: number, pointHistoryId: number) {
     const detail = this.of(userId, value, pointHistoryId);
     detail.status = PointStatus.USE;
+    detail.isUsed = true;
     return detail;
   }
 }
