@@ -1,8 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
-import { IsNull, MoreThan, Or } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
-import { DateUtil } from '../common/date-util';
 import { OrderBy } from '../common/enums/order-by.enum';
 import { ERROR } from '../common/err-message';
 import { PointHistoryResponse } from './dto/point-history.response';
@@ -41,23 +39,16 @@ export class PointService {
     );
   }
 
-  async getUserTotalPoint(userId: number) {
+  // canUsePoint로 수정할 예정
+  async canUsePoint(userId: number, usePoint: number) {
     const points = await this.getUserPoints(userId);
-    return points.reduce((acc, cur) => acc + cur.value, 0);
+    return points.reduce((acc, cur) => acc + cur.value, 0) > usePoint;
   }
 
   private async getUserPoints(userId: number) {
-    return this.pointHistoryRepository.find({
-      where: {
-        userId,
-        expiredAt: Or(
-          IsNull(),
-          MoreThan(DateUtil.now().toFormat('yyyy-MM-dd HH:mm:ss')),
-        ),
-      },
-      order: {
-        expiredAt: OrderBy.ASC,
-      },
+    return this.historyDetailRepository.find({
+      where: { userId },
+      order: { id: OrderBy.ASC },
     });
   }
 
@@ -91,11 +82,22 @@ export class PointService {
 
   @Transactional()
   async usePoint(userId: number, value: number, type: PointType) {
-    const userPoint = await this.getUserTotalPoint(userId);
-    const totalPoint = userPoint - value;
+    const points = await this.getUserPoints(userId);
+    const totalPoint = points.reduce((acc, cur) => acc + cur.value, 0);
 
-    if (totalPoint < 0) {
+    if (totalPoint - value < 0) {
       throw new BadRequestException(ERROR.pointNotEnough);
+    }
+
+    let pointSum = 0;
+    const temp = [];
+    for (const point of points) {
+      temp.push(point);
+      pointSum += point.value;
+
+      if (pointSum >= value) {
+        break;
+      }
     }
 
     const point = await this.pointHistoryRepository.save(
