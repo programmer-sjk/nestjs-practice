@@ -39,7 +39,6 @@ export class PointService {
     );
   }
 
-  // canUsePoint로 수정할 예정
   async canUsePoint(userId: number, usePoint: number) {
     const points = await this.getUserPoints(userId);
     return points.reduce((acc, cur) => acc + cur.value, 0) > usePoint;
@@ -83,29 +82,26 @@ export class PointService {
   @Transactional()
   async usePoint(userId: number, value: number, type: PointType) {
     const points = await this.getUserPoints(userId);
-    const totalPoint = points.reduce((acc, cur) => acc + cur.value, 0);
-
-    if (totalPoint - value < 0) {
-      throw new BadRequestException(ERROR.pointNotEnough);
-    }
-
-    let pointSum = 0;
-    const temp = [];
-    for (const point of points) {
-      temp.push(point);
-      pointSum += point.value;
-
-      if (pointSum >= value) {
-        break;
+    const willBeUsedPoints = [];
+    const totalPoint = points.reduce((acc, point) => {
+      if (acc < value) {
+        willBeUsedPoints.push(point);
       }
+      return acc + point.value;
+    }, 0);
+
+    if (totalPoint < value) {
+      throw new BadRequestException(ERROR.pointNotEnough);
     }
 
     const point = await this.pointHistoryRepository.save(
       PointHistory.use(userId, -value, type),
     );
 
-    await this.historyDetailRepository.save(
-      PointHistoryDetail.use(userId, -value, point.id),
-    );
+    for (const target of willBeUsedPoints) {
+      await this.historyDetailRepository.save(
+        PointHistoryDetail.use(userId, -target.value, point.id),
+      );
+    }
   }
 }
