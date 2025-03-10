@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
 import { In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
+import { DateUtil } from '../common/date-util';
 import { OrderBy } from '../common/enums/order-by.enum';
 import { ERROR } from '../common/err-message';
 import { PointHistoryResponse } from './dto/point-history.response';
@@ -119,5 +120,42 @@ export class PointService {
         ),
       );
     }
+  }
+
+  async refundPoint(orderId: number, userId: number) {
+    const point = await this.pointHistoryRepository.findOneBy({
+      userId,
+      orderId,
+    });
+    if (!point) {
+      throw new BadRequestException('잘못된 주문 정보입니다.');
+    }
+
+    // Note. 유효 기간이 지난 포인트는 환불하지 않고 종료
+    if (point.expiredAt < DateUtil.nowDate()) {
+      return;
+    }
+
+    const pointDetails = await this.historyDetailRepository.findBy({
+      pointHistoryId: point.id,
+    });
+    const refundPointDetails = pointDetails.map((detail) =>
+      PointHistoryDetail.refund(
+        userId,
+        Math.abs(detail.value),
+        0,
+        detail.detailHistoryId,
+      ),
+    );
+
+    await this.pointHistoryRepository.save(
+      PointHistory.refund(
+        userId,
+        Math.abs(point.value),
+        PointType.REFUND,
+        point.expiredAt,
+      ),
+    );
+    await this.historyDetailRepository.save(refundPointDetails);
   }
 }

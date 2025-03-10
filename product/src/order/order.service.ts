@@ -139,7 +139,7 @@ export class OrderService {
     }
 
     if (order.usedPoint > 0) {
-      // await this.pointService.refundPoint();
+      await this.pointService.refundPoint(order.id, order.userId);
     }
   }
 
