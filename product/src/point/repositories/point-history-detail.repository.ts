@@ -8,12 +8,13 @@ export class PointHistoryDetailRepository extends Repository<PointHistoryDetail>
     super(PointHistoryDetail, dataSource.createEntityManager());
   }
 
-  async getAvaiableUserPointIds(userId: number) {
-    return this.createQueryBuilder('detail')
-      .select('detail.pointHistoryId')
+  async getAvaiablePointHistoryIds(userId: number) {
+    const results = await this.createQueryBuilder('detail')
+      .select('detail.pointHistoryId AS pointHistoryId')
       .where('detail.userId = :userId', { userId })
       .groupBy('detail.pointHistoryId')
       .having('SUM(detail.value) > 0')
       .getRawMany();
+    return results.map((result) => result.pointHistoryId);
   }
 }
