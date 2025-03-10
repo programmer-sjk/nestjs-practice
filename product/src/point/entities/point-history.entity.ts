@@ -69,9 +69,16 @@ export class PointHistory {
     return history;
   }
 
-  static use(userId: number, value: number, type: PointType, expiredAt?: Date) {
+  static use(
+    userId: number,
+    value: number,
+    type: PointType,
+    orderId: number,
+    expiredAt?: Date,
+  ) {
     const history = this.of(userId, value, type, expiredAt);
     history.status = PointStatus.USE;
+    history.orderId = orderId;
     return history;
   }
 }

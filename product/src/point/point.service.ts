@@ -84,7 +84,12 @@ export class PointService {
   }
 
   @Transactional()
-  async usePoint(userId: number, value: number, type: PointType) {
+  async usePoint(
+    userId: number,
+    value: number,
+    type: PointType,
+    orderId: number,
+  ) {
     const points = await this.getUserPoints(userId);
     const willBeUsedPoints = [];
     const totalPoint = points.reduce((acc, point) => {
@@ -101,7 +106,7 @@ export class PointService {
     }
 
     const poinHistory = await this.pointHistoryRepository.save(
-      PointHistory.use(userId, -value, type),
+      PointHistory.use(userId, -value, type, orderId),
     );
 
     for (const target of willBeUsedPoints) {

@@ -51,7 +51,7 @@ export class OrderService {
     }
 
     if (dto.point) {
-      await this.pointService.usePoint(user.id, dto.point, PointType.ORDER);
+      await this.pointService.usePoint(user.id, dto.point, PointType.ORDER, order.id);
     }
   }
 
