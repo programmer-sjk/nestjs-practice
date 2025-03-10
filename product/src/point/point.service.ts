@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { DateTime } from 'luxon';
+import { In } from 'typeorm';
 import { Transactional } from 'typeorm-transactional';
 import { OrderBy } from '../common/enums/order-by.enum';
 import { ERROR } from '../common/err-message';
@@ -40,13 +41,16 @@ export class PointService {
   }
 
   async canUsePoint(userId: number, usePoint: number) {
-    const points = await this.getAvailableUserPoints(userId);
-    return points.reduce((acc, cur) => acc + cur.value, 0) > usePoint;
+    const points = await this.getUserPoints(userId);
+    return points.reduce((acc, cur) => acc + cur.value, 0) >= usePoint;
   }
 
-  private async getAvailableUserPoints(userId: number) {
+  private async getUserPoints(userId: number) {
+    const availablePointHistoryIds =
+      await this.historyDetailRepository.getAvaiablePointHistoryIds(userId);
+
     return this.historyDetailRepository.find({
-      where: { userId },
+      where: { userId, pointHistoryId: In(availablePointHistoryIds) },
       order: { id: OrderBy.ASC },
     });
   }
@@ -81,8 +85,7 @@ export class PointService {
 
   @Transactional()
   async usePoint(userId: number, value: number, type: PointType) {
-    // pointHistoryId로 그룹바이 -> sum이 0이 아니라면 계산에 포함될 예정.
-    const points = await this.getAvailableUserPoints(userId);
+    const points = await this.getUserPoints(userId);
     const willBeUsedPoints = [];
     const totalPoint = points.reduce((acc, point) => {
       if (acc < value) {
@@ -97,13 +100,13 @@ export class PointService {
       throw new BadRequestException(ERROR.pointNotEnough);
     }
 
-    const point = await this.pointHistoryRepository.save(
+    await this.pointHistoryRepository.save(
       PointHistory.use(userId, -value, type),
     );
 
     for (const target of willBeUsedPoints) {
       await this.historyDetailRepository.save(
-        PointHistoryDetail.use(userId, -target.useValue, point.id),
+        PointHistoryDetail.use(userId, -target.usePoint, target.pointHistoryId),
       );
     }
   }

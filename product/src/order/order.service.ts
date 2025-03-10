@@ -60,6 +60,7 @@ export class OrderService {
     products: Product[],
     coupon?: Coupon,
   ) {
+
     this.validateProducts(dto.productIds, products);
     await this.validatePoint(dto.userId, dto.point);
     await this.validateCoupon(coupon);
