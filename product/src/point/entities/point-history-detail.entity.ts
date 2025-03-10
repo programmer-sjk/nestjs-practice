@@ -4,7 +4,7 @@ import {
   Entity,
   Index,
   ManyToOne,
-  PrimaryGeneratedColumn,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { PointStatus } from '../enums/point-status.enum';
 import { PointHistory } from './point-history.entity';
@@ -23,6 +23,9 @@ export class PointHistoryDetail {
 
   @Column()
   value: number;
+
+  @Column()
+  detailHistroyId: number;
 
   @Column()
   pointHistoryId: number;
