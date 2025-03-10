@@ -100,13 +100,18 @@ export class PointService {
       throw new BadRequestException(ERROR.pointNotEnough);
     }
 
-    await this.pointHistoryRepository.save(
+    const poinHistory = await this.pointHistoryRepository.save(
       PointHistory.use(userId, -value, type),
     );
 
     for (const target of willBeUsedPoints) {
       await this.historyDetailRepository.save(
-        PointHistoryDetail.use(userId, -target.usePoint, target.pointHistoryId),
+        PointHistoryDetail.use(
+          userId,
+          -target.usePoint,
+          target.pointHistoryId,
+          poinHistory.id,
+        ),
       );
     }
   }
