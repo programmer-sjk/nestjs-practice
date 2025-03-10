@@ -50,7 +50,7 @@ export class PointService {
       await this.historyDetailRepository.getAvaiablePointHistoryIds(userId);
 
     return this.historyDetailRepository.find({
-      where: { userId, pointHistoryId: In(availablePointHistoryIds) },
+      where: { userId, detailHistoryId: In(availablePointHistoryIds) },
       order: { id: OrderBy.ASC },
     });
   }
@@ -109,8 +109,8 @@ export class PointService {
         PointHistoryDetail.use(
           userId,
           -target.usePoint,
-          target.pointHistoryId,
           poinHistory.id,
+          target.pointHistoryId,
         ),
       );
     }

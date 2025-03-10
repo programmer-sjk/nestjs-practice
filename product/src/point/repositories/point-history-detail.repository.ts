@@ -10,11 +10,11 @@ export class PointHistoryDetailRepository extends Repository<PointHistoryDetail>
 
   async getAvaiablePointHistoryIds(userId: number) {
     const results = await this.createQueryBuilder('detail')
-      .select('detail.pointHistoryId AS pointHistoryId')
+      .select('detail.detailHistoryId AS detailHistoryId')
       .where('detail.userId = :userId', { userId })
-      .groupBy('detail.pointHistoryId')
+      .groupBy('detail.detailHistoryId')
       .having('SUM(detail.value) > 0')
       .getRawMany();
-    return results.map((result) => result.pointHistoryId);
+    return results.map((result) => result.detailHistoryId);
   }
 }
