@@ -57,7 +57,7 @@ export class CouponService {
     await this.couponUserRepository.save(couponUser);
   }
 
-  async cancelUsedCoupon(couponId: number, userId: number) {
+  async refundCoupon(couponId: number, userId: number) {
     const couponUser = await this.couponUserRepository.findOneBy({
       couponId,
       userId,

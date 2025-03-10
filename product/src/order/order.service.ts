@@ -51,7 +51,12 @@ export class OrderService {
     }
 
     if (dto.point) {
-      await this.pointService.usePoint(user.id, dto.point, PointType.ORDER, order.id);
+      await this.pointService.usePoint(
+        user.id,
+        dto.point,
+        PointType.ORDER,
+        order.id,
+      );
     }
   }
 
@@ -60,7 +65,6 @@ export class OrderService {
     products: Product[],
     coupon?: Coupon,
   ) {
-
     this.validateProducts(dto.productIds, products);
     await this.validatePoint(dto.userId, dto.point);
     await this.validateCoupon(coupon);
@@ -131,7 +135,11 @@ export class OrderService {
     order.refund();
     await this.orderRepository.save(order);
     if (coupon) {
-      await this.couponService.cancelUsedCoupon(coupon.id, order.userId);
+      await this.couponService.refundCoupon(coupon.id, order.userId);
+    }
+
+    if (order.usedPoint > 0) {
+      // await this.pointService.refundPoint();
     }
   }
 
