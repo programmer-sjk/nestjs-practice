@@ -40,11 +40,11 @@ export class PointService {
   }
 
   async canUsePoint(userId: number, usePoint: number) {
-    const points = await this.getUserPoints(userId);
+    const points = await this.getAvailableUserPoints(userId);
     return points.reduce((acc, cur) => acc + cur.value, 0) > usePoint;
   }
 
-  private async getUserPoints(userId: number) {
+  private async getAvailableUserPoints(userId: number) {
     return this.historyDetailRepository.find({
       where: { userId },
       order: { id: OrderBy.ASC },
@@ -81,12 +81,15 @@ export class PointService {
 
   @Transactional()
   async usePoint(userId: number, value: number, type: PointType) {
-    const points = await this.getUserPoints(userId);
+    // pointHistoryId로 그룹바이 -> sum이 0이 아니라면 계산에 포함될 예정.
+    const points = await this.getAvailableUserPoints(userId);
     const willBeUsedPoints = [];
     const totalPoint = points.reduce((acc, point) => {
       if (acc < value) {
-        willBeUsedPoints.push(point);
+        const usePoint = acc + point.value > value ? value - acc : point.value;
+        willBeUsedPoints.push({ ...point, usePoint });
       }
+
       return acc + point.value;
     }, 0);
 
@@ -100,7 +103,7 @@ export class PointService {
 
     for (const target of willBeUsedPoints) {
       await this.historyDetailRepository.save(
-        PointHistoryDetail.use(userId, -target.value, point.id),
+        PointHistoryDetail.use(userId, -target.useValue, point.id),
       );
     }
   }
