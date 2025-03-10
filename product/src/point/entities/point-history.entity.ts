@@ -81,4 +81,15 @@ export class PointHistory {
     history.orderId = orderId;
     return history;
   }
+
+  static refund(
+    userId: number,
+    value: number,
+    type: PointType,
+    expiredAt?: Date,
+  ) {
+    const history = this.of(userId, value, type, expiredAt);
+    history.status = PointStatus.REFUND;
+    return history;
+  }
 }

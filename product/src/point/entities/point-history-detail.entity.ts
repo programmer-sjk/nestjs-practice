@@ -72,4 +72,15 @@ export class PointHistoryDetail {
     detail.status = PointStatus.USE;
     return detail;
   }
+
+  static refund(
+    userId: number,
+    value: number,
+    pointHistoryId: number,
+    detailHistoryId: number,
+  ) {
+    const detail = this.of(userId, value, pointHistoryId, detailHistoryId);
+    detail.status = PointStatus.REFUND;
+    return detail;
+  }
 }
