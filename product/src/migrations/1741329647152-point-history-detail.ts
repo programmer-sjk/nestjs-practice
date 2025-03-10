@@ -10,6 +10,7 @@ export class PointHistoryDetail1741329647152 implements MigrationInterface {
         \`user_id\` int NOT NULL, 
         \`status\` varchar(255) NOT NULL, 
         \`value\` int NOT NULL, 
+        \`detail_history_id\` int NOT NULL,
         \`point_history_id\` int NOT NULL, 
         \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), 
         INDEX \`userId\` (\`user_id\`), 
