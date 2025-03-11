@@ -13,8 +13,11 @@ export class ProductService {
     private readonly productRepository: ProductRepository,
   ) {}
 
-  async findByIds(ids: number[]) {
-    return this.productRepository.findBy({ id: In(ids) });
+  async findByIdsWithPessimisticLock(ids: number[]) {
+    return this.productRepository.find({
+      where: { id: In(ids) },
+      lock: { mode: 'pessimistic_write' },
+    });
   }
 
   async addProduct(dto: ProductRegisterRequest) {

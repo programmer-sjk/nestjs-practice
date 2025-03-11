@@ -31,7 +31,9 @@ export class OrderService {
   @Transactional()
   async newOrder(dto: AddOrderRequest) {
     const user = await this.userService.findOneByIdOrThrow(dto.userId);
-    const products = await this.productService.findByIds(dto.productIds);
+    const products = await this.productService.findByIdsWithPessimisticLock(
+      dto.productIds,
+    );
     const coupon = dto.couponId
       ? await this.couponService.findUserCoupon(dto.couponId, user.id)
       : undefined;

@@ -50,7 +50,10 @@ describe('ProductService', () => {
       const product2 = await repository.save(ProductFactory.of('하얀색 패딩'));
 
       // when
-      const result = await service.findByIds([product1.id, product2.id]);
+      const result = await service.findByIdsWithPessimisticLock([
+        product1.id,
+        product2.id,
+      ]);
 
       // then
       expect(result).toHaveLength(2);
