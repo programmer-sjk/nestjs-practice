@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { Transactional } from 'typeorm-transactional';
 import { CategoryService } from '../category/category.service';
 import { DateUtil } from '../common/date-util';
 import { ERROR } from '../common/err-message';
@@ -16,6 +17,22 @@ export class CouponService {
     private readonly couponRepository: CouponRepository,
     private readonly couponUserRepository: CouponUserRepository,
   ) {}
+
+  @Transactional()
+  async getCoupon(id: number, userId: number) {
+    const coupon = await this.couponRepository.findOneBy({ id });
+    if (!coupon) {
+      throw new BadRequestException('존재하지 않는 쿠폰입니다.');
+    }
+
+    if (!coupon.hasStock()) {
+      throw new BadRequestException('쿠폰이 모두 소진되었습니다.');
+    }
+
+    coupon.decreaseStock();
+    await this.couponRepository.save(coupon);
+    await this.couponUserRepository.save(CouponUser.of(coupon.id, userId));
+  }
 
   async findUserCoupon(id: number, userId: number) {
     return this.couponRepository.findOne({

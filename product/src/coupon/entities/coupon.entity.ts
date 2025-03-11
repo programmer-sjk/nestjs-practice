@@ -68,4 +68,8 @@ export class Coupon {
 
     return this.stock > 0;
   }
+
+  decreaseStock() {
+    this.stock -= 1;
+  }
 }

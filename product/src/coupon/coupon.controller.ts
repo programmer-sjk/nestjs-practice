@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/role.enum';
 import { ResponseEntity } from '../common/response-entity';
@@ -9,12 +9,26 @@ import { CouponRegisterRequest } from './dto/coupon-register.request';
 export class CouponController {
   constructor(private readonly couponService: CouponService) {}
 
+  @Roles(Role.USER)
+  @Get(':couponId')
+  async getCoupon(
+    @Param('couponId') couponId: number,
+    @Body('userId') userId: number,
+  ) {
+    try {
+      await this.couponService.getCoupon(couponId, userId);
+      return ResponseEntity.OK();
+    } catch (err) {
+      return ResponseEntity.ERROR(err.message);
+    }
+  }
+
   @Roles(Role.ADMIN)
   @Post()
   async reigster(@Body() request: CouponRegisterRequest) {
     try {
       await this.couponService.addCoupon(request);
-    return ResponseEntity.OK();
+      return ResponseEntity.OK();
     } catch (err) {
       return ResponseEntity.ERROR(err.message);
     }
