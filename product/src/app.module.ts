@@ -14,6 +14,7 @@ import { CouponModule } from './coupon/coupon.module';
 import { OrderModule } from './order/order.module';
 import { PointModule } from './point/point.module';
 import { ProductModule } from './product/product.module';
+import { RedisModule } from './redis/redis.module';
 import { UserModule } from './user/user.module';
 
 @Module({
@@ -24,7 +25,7 @@ import { UserModule } from './user/user.module';
       },
       async dataSourceFactory(options) {
         if (!options) {
-          throw new Error('Invalid options passed');
+          throw new Error('Invalid options passedd');
         }
 
         return addTransactionalDataSource(new DataSource(options));
@@ -40,6 +41,7 @@ import { UserModule } from './user/user.module';
     CategoryModule,
     ConfigModule,
     JwtModule,
+    RedisModule,
   ],
   providers: [
     {
