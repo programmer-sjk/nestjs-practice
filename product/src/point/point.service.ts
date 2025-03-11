@@ -133,7 +133,7 @@ export class PointService {
     }
 
     // Note. 유효 기간이 지난 포인트는 환불하지 않고 종료
-    if (point.expiredAt < DateUtil.nowDate()) {
+    if (point.expiredAt && point.expiredAt < DateUtil.nowDate()) {
       return;
     }
 
