@@ -18,6 +18,7 @@ export class CouponService {
     private readonly couponUserRepository: CouponUserRepository,
   ) {}
 
+  // Note. 사용자가 쿠폰을 이미 가지고 있는지 체크해야 하지만 테스트 용이성을 위해 스킵.
   @Transactional()
   async getCoupon(id: number, userId: number) {
     const coupon = await this.couponRepository.findOneBy({ id });
