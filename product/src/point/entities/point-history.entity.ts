@@ -86,10 +86,12 @@ export class PointHistory {
     userId: number,
     value: number,
     type: PointType,
+    orderId: number,
     expiredAt?: Date,
   ) {
     const history = this.of(userId, value, type, expiredAt);
     history.status = PointStatus.REFUND;
+    history.orderId = orderId;
     return history;
   }
 }

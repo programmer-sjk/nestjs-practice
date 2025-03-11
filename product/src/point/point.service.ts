@@ -137,6 +137,16 @@ export class PointService {
       return;
     }
 
+    const refundPoint = await this.pointHistoryRepository.save(
+      PointHistory.refund(
+        userId,
+        Math.abs(point.value),
+        PointType.REFUND,
+        orderId,
+        point.expiredAt,
+      ),
+    );
+
     const pointDetails = await this.historyDetailRepository.findBy({
       pointHistoryId: point.id,
     });
@@ -144,19 +154,11 @@ export class PointService {
       PointHistoryDetail.refund(
         userId,
         Math.abs(detail.value),
-        0,
+        refundPoint.id,
         detail.detailHistoryId,
       ),
     );
 
-    await this.pointHistoryRepository.save(
-      PointHistory.refund(
-        userId,
-        Math.abs(point.value),
-        PointType.REFUND,
-        point.expiredAt,
-      ),
-    );
     await this.historyDetailRepository.save(refundPointDetails);
   }
 }
