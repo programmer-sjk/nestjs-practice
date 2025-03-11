@@ -98,8 +98,8 @@ export class OrderService {
       return;
     }
 
-    if (!coupon) {
-      throw new BadRequestException('유효하지 않는 쿠폰입니다.');
+    if (coupon.isUsed()) {
+      throw new BadRequestException('이미 사용된 쿠폰입니다.');
     }
 
     if (coupon.couponUsers?.length === 0) {

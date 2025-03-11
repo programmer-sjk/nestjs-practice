@@ -1,10 +1,8 @@
 import {
   Column,
   CreateDateColumn,
-  Entity,
-  ManyToOne,
-  OneToMany,
-  PrimaryGeneratedColumn,
+  Entity, OneToMany,
+  PrimaryGeneratedColumn
 } from 'typeorm';
 import { CouponType } from '../enums/coupon-type.enum';
 import { CouponUser } from './coupon-user.entity';
@@ -54,5 +52,9 @@ export class Coupon {
     coupon.categoryId = categoryId;
     coupon.description = description;
     return coupon;
+  }
+
+  isUsed() {
+    return this.isUsed;
   }
 }
