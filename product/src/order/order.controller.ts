@@ -22,7 +22,7 @@ export class OrderController {
   }
 
   @Roles(Role.USER)
-  @Post()
+  @Post('/refund')
   async refund(@Body() request: RefundRequest) {
     try {
       await this.orderService.refund(request);
