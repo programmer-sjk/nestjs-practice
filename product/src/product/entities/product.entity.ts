@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import {
   Column,
   CreateDateColumn,
@@ -40,6 +41,10 @@ export class Product {
   }
 
   decreaseStock() {
+    if (this.stock <= 0) {
+      throw new BadRequestException('재고가 없습니다.');
+    }
+
     this.stock = this.stock - 1;
   }
 }
