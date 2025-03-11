@@ -3,6 +3,7 @@ import { Transactional } from 'typeorm-transactional';
 import { CategoryService } from '../category/category.service';
 import { DateUtil } from '../common/date-util';
 import { ERROR } from '../common/err-message';
+import { RedisService } from '../redis/redis.service';
 import { CouponRegisterRequest } from './dto/coupon-register.request';
 import { CouponUser } from './entities/coupon-user.entity';
 import { CouponUserRepository } from './repositories/coupon-user.repository';
@@ -14,6 +15,7 @@ export class CouponService {
 
   constructor(
     private readonly categoryService: CategoryService,
+    private readonly redisService: RedisService,
     private readonly couponRepository: CouponRepository,
     private readonly couponUserRepository: CouponUserRepository,
   ) {}
@@ -21,18 +23,26 @@ export class CouponService {
   // Note. 사용자가 쿠폰을 이미 가지고 있는지 체크해야 하지만 테스트 용이성을 위해 스킵.
   @Transactional()
   async getCoupon(id: number, userId: number) {
-    const coupon = await this.couponRepository.findOneBy({ id });
-    if (!coupon) {
-      throw new BadRequestException('존재하지 않는 쿠폰입니다.');
-    }
+    let lock;
+    try {
+      lock = await this.redisService.acquireLock(`get-coupon:${id}`);
+      const coupon = await this.couponRepository.findOneBy({ id });
+      if (!coupon) {
+        throw new BadRequestException('존재하지 않는 쿠폰입니다.');
+      }
 
-    if (!coupon.hasStock()) {
-      throw new BadRequestException('쿠폰이 모두 소진되었습니다.');
-    }
+      if (!coupon.hasStock()) {
+        throw new BadRequestException('쿠폰이 모두 소진되었습니다.');
+      }
 
-    coupon.decreaseStock();
-    await this.couponRepository.save(coupon);
-    await this.couponUserRepository.save(CouponUser.of(coupon.id, userId));
+      coupon.decreaseStock();
+      await this.couponRepository.save(coupon);
+      await this.couponUserRepository.save(CouponUser.of(coupon.id, userId));
+    } catch (e) {
+      throw e;
+    } finally {
+      await lock?.release();
+    }
   }
 
   async findUserCoupon(id: number, userId: number) {
