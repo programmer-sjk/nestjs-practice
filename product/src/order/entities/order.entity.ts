@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import {
   Column,
   CreateDateColumn,
@@ -70,6 +71,10 @@ export class Order {
   }
 
   refund() {
+    if (this.status === OrderStatus.REFUNDED) {
+      throw new BadRequestException('이미 환불된 주문 정보입니다.');
+    }
+
     this.status = OrderStatus.REFUNDED;
   }
 }
