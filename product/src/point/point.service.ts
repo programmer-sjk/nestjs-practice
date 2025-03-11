@@ -122,6 +122,7 @@ export class PointService {
     }
   }
 
+  @Transactional()
   async refundPoint(orderId: number, userId: number) {
     const point = await this.pointHistoryRepository.findOneBy({
       userId,
