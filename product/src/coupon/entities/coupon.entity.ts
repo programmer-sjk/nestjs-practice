@@ -62,7 +62,7 @@ export class Coupon {
   }
 
   hasStock() {
-    if (this.stock === Coupon.INFINITE_COUPON) {
+    if (this.isInfiniteCoupon()) {
       return true;
     }
 
@@ -70,6 +70,14 @@ export class Coupon {
   }
 
   decreaseStock() {
+    if (this.isInfiniteCoupon()) {
+      return true;
+    }
+
     this.stock -= 1;
+  }
+
+  private isInfiniteCoupon() {
+    return this.stock === Coupon.INFINITE_COUPON;
   }
 }
