@@ -1,8 +1,9 @@
 import {
   Column,
   CreateDateColumn,
-  Entity, OneToMany,
-  PrimaryGeneratedColumn
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { CouponType } from '../enums/coupon-type.enum';
 import { CouponUser } from './coupon-user.entity';
@@ -34,7 +35,9 @@ export class Coupon {
   createdAt: Date;
 
   @OneToMany(() => CouponUser, (user) => user.coupon)
-  couponUsers: CouponUser[]
+  couponUsers: CouponUser[];
+
+  private static readonly INFINITE_COUPON = -1;
 
   static of(
     name: string,
@@ -56,5 +59,13 @@ export class Coupon {
 
   isUsed() {
     return this.isUsed;
+  }
+
+  hasStock() {
+    if (this.stock === Coupon.INFINITE_COUPON) {
+      return true;
+    }
+
+    return this.stock > 0;
   }
 }
