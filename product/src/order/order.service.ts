@@ -31,13 +31,13 @@ export class OrderService {
   @Transactional()
   async newOrder(dto: AddOrderRequest) {
     const user = await this.userService.findOneByIdOrThrow(dto.userId);
-    const products = await this.productService.findByIdsWithPessimisticLock(
-      dto.productIds,
-    );
     const coupon = dto.couponId
       ? await this.couponService.findUserCoupon(dto.couponId, user.id)
       : undefined;
 
+    const products = await this.productService.findByIdsWithPessimisticLock(
+      dto.productIds,
+    );
     await this.validateNewOrder(dto, products, coupon);
     const originalPrice = products.reduce((acc, cur) => acc + cur.price, 0);
     const payPrice = this.calculatePrice(originalPrice, dto.point, coupon);
