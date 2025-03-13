@@ -69,7 +69,7 @@ export class PointService {
 
   @Transactional()
   async addSignUpPointToUser(userId: number) {
-    const expiredAt = DateTime.now().plus({ months: 3 });
+    const expiredAt = DateTime.now().plus({ months: 3 }).toJSDate();
     const point = await this.pointHistoryRepository.save(
       PointHistory.earn(
         userId,
