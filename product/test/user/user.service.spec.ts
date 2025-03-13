@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
@@ -8,7 +9,7 @@ import { CouponModule } from '../../src/coupon/coupon.module';
 import { CouponUserRepository } from '../../src/coupon/repositories/coupon-user.repository';
 import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
 import { PointModule } from '../../src/point/point.module';
-import { PointRepository } from '../../src/point/repositories/point.repository';
+import { PointHistoryRepository } from '../../src/point/repositories/point-history.repository';
 import { SignUpRequest } from '../../src/user/dto/sign-up.request';
 import { UserModule } from '../../src/user/user.module';
 import { UserRepository } from '../../src/user/user.repository';
@@ -23,7 +24,7 @@ describe('UserService', () => {
   let repository: UserRepository;
   let couponRepository: CouponRepository;
   let couponUserRepository: CouponUserRepository;
-  let pointRepository: PointRepository;
+  let pointRepository: PointHistoryRepository;
 
   beforeAll(async () => {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
@@ -41,7 +42,9 @@ describe('UserService', () => {
     couponRepository = module.get<CouponRepository>(CouponRepository);
     couponUserRepository =
       module.get<CouponUserRepository>(CouponUserRepository);
-    pointRepository = module.get<PointRepository>(PointRepository);
+    pointRepository = module.get<PointHistoryRepository>(
+      PointHistoryRepository,
+    );
   });
 
   beforeEach(async () => {
@@ -59,7 +62,7 @@ describe('UserService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('findOneById', () => {
+  describe('findOneByIdOrThrow', () => {
     it('id로 사용자를 조회할 수 있다.', async () => {
       // given
       const email = 'test@google.com';
@@ -71,6 +74,13 @@ describe('UserService', () => {
 
       // then
       expect(result.email).toBe(email);
+    });
+
+    it('id로 조회되는 사용자가 없다면 예외가 발생한다.', async () => {
+      // when & then
+      await expect(service.findOneByIdOrThrow(-1)).rejects.toThrowError(
+        new NotFoundException('사용자가 존재하지 않습니다.'),
+      );
     });
   });
 
