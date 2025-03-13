@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../auth/enums/role.enum';
 import { ResponseEntity } from '../common/response-entity';
@@ -10,7 +10,7 @@ export class CouponController {
   constructor(private readonly couponService: CouponService) {}
 
   @Roles(Role.USER)
-  @Get(':couponId')
+  @Post(':couponId')
   async giveCouponToUser(
     @Param('couponId') couponId: number,
     @Body('userId') userId: number,
