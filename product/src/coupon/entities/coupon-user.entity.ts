@@ -38,6 +38,10 @@ export class CouponUser {
   }
 
   use(now: Date) {
+    if (this.isUsed) {
+      throw new BadRequestException('이미 사용된 쿠폰입니다.');
+    }
+
     if (this.expiredAt && this.expiredAt < now) {
       throw new BadRequestException('유효기간이 만료된 쿠폰입니다.');
     }

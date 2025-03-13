@@ -57,10 +57,6 @@ export class Coupon {
     return coupon;
   }
 
-  isUsed() {
-    return this.isUsed;
-  }
-
   hasStock() {
     if (this.isInfiniteCoupon()) {
       return true;

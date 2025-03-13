@@ -100,10 +100,6 @@ export class OrderService {
       return;
     }
 
-    if (coupon.isUsed()) {
-      throw new BadRequestException('이미 사용된 쿠폰입니다.');
-    }
-
     if (coupon.couponUsers?.length === 0) {
       throw new BadRequestException('쿠폰 정보가 일치하지 않습니다.');
     }
