@@ -7,4 +7,8 @@ export class CouponFactory {
   static signUpCoupon() {
     return Coupon.of('신규회원 쿠폰', CouponType.PRICE, 1_000, -1);
   }
+
+  static eventCoupon() {
+    return Coupon.of('이벤트 쿠폰', CouponType.PRICE, 1_000, 10);
+  }
 }

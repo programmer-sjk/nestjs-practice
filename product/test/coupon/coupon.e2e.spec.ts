@@ -22,12 +22,16 @@ import { CouponType } from '../../src/coupon/enums/coupon-type.enum';
 import { CouponUserRepository } from '../../src/coupon/repositories/coupon-user.repository';
 import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
 import { PointService } from '../../src/point/point.service';
+import { PointHistoryDetailRepository } from '../../src/point/repositories/point-history-detail.repository';
 import { PointHistoryRepository } from '../../src/point/repositories/point-history.repository';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
 import { SignInRequestFactory } from '../fixture/dto/sign-in-request-factory';
 import { AdminFactory } from '../fixture/entities/admin-factory';
+import { CouponFactory } from '../fixture/entities/coupon-factory';
+import { UserFactory } from '../fixture/entities/user-factory';
 import { testTypeormOptions } from '../test-ormconfig';
+import { RedisModule } from './../../src/redis/redis.module';
 
 describe('Coupon E2E', () => {
   let module: TestingModule;
@@ -36,6 +40,7 @@ describe('Coupon E2E', () => {
   let repository: CouponRepository;
   let couponUserRepository: CouponUserRepository;
   let adminRepository: AdminRepository;
+  let userRepository: UserRepository;
 
   beforeAll(async () => {
     initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
@@ -44,6 +49,7 @@ describe('Coupon E2E', () => {
         TypeOrmModule.forRootAsync(testTypeormOptions),
         ConfigModule.forRoot(),
         CategoryModule,
+        RedisModule,
       ],
       providers: [
         CouponService,
@@ -53,6 +59,7 @@ describe('Coupon E2E', () => {
         AdminService,
         PointService,
         PointHistoryRepository,
+        PointHistoryDetailRepository,
         AdminRepository,
         UserService,
         JwtService,
@@ -70,6 +77,7 @@ describe('Coupon E2E', () => {
     couponUserRepository =
       module.get<CouponUserRepository>(CouponUserRepository);
     adminRepository = module.get<AdminRepository>(AdminRepository);
+    userRepository = module.get<UserRepository>(UserRepository);
 
     app = module.createNestApplication();
     setNestApp(app);
@@ -80,11 +88,40 @@ describe('Coupon E2E', () => {
     await repository.clear();
     await adminRepository.clear();
     await couponUserRepository.clear();
+    await userRepository.clear();
   });
 
   afterAll(async () => {
     await module.close();
     await app.close();
+  });
+
+  describe('POST /v1/coupon/:couponId', () => {
+    it('사용자가 쿠폰을 발급받을 수 있다.', async () => {
+      // given
+      const email = 'test@gmail.com';
+      const password = 'password';
+      const user = await userRepository.save(UserFactory.from(email, password));
+
+      const signInResponse = await authService.signIn(
+        SignInRequestFactory.of(email, password),
+      );
+
+      const coupon = await repository.save(CouponFactory.eventCoupon());
+
+      // when
+      await request(app.getHttpServer())
+        .post(`/v1/coupon/${coupon.id}`)
+        .set('Authorization', `Bearer ${signInResponse.accessToken}`)
+        .send({ userId: user.id })
+        .expect(HttpStatus.CREATED);
+
+      // then
+      const result = await couponUserRepository.find();
+      expect(result).toHaveLength(1);
+      expect(result[0].userId).toBe(user.id);
+      expect(result[0].couponId).toBe(coupon.id);
+    });
   });
 
   describe('POST /v1/coupon', () => {
