@@ -11,7 +11,7 @@ export class CouponController {
 
   @Roles(Role.USER)
   @Get(':couponId')
-  async getCoupon(
+  async giveCouponToUser(
     @Param('couponId') couponId: number,
     @Body('userId') userId: number,
   ) {
