@@ -45,7 +45,7 @@ export class CouponUser {
     this.isUsed = true;
   }
 
-  cancelUsed() {
+  unuse() {
     this.isUsed = false;
   }
 }

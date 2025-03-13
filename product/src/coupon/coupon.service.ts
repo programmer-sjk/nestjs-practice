@@ -89,7 +89,7 @@ export class CouponService {
       couponId,
       userId,
     });
-    couponUser.cancelUsed();
+    couponUser.unuse();
     await this.couponUserRepository.save(couponUser);
   }
 }
