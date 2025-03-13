@@ -1,10 +1,10 @@
 import { validate } from 'class-validator';
-import { AdminSignUpRequest } from '../../../src/admin/dto/admin-sign-up.request';
+import { SignInRequest } from './../../../src/auth/dto/sign-in.request';
 
-describe('AdminSignUpRequest', () => {
+describe('SignInRequest', () => {
   it('email은 문자열로 최대 16글자로 필수 값이다.', async () => {
     // given
-    const dto = new AdminSignUpRequest();
+    const dto = new SignInRequest();
     dto.email = undefined;
 
     // when
@@ -22,7 +22,7 @@ describe('AdminSignUpRequest', () => {
 
   it('password는 문자열로 필수 값이다.', async () => {
     // given
-    const dto = new AdminSignUpRequest();
+    const dto = new SignInRequest();
     dto.password = undefined;
 
     // when
