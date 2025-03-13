@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import {
   Column,
   CreateDateColumn,
@@ -68,6 +69,10 @@ export class Coupon {
   decreaseStock() {
     if (this.isInfiniteCoupon()) {
       return true;
+    }
+
+    if (this.stock <= 0) {
+      throw new BadRequestException('쿠폰 재고가 없습니다.');
     }
 
     this.stock -= 1;
