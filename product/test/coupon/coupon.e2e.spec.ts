@@ -5,6 +5,10 @@ import { JwtService } from '@nestjs/jwt';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as request from 'supertest';
+import {
+  initializeTransactionalContext,
+  StorageDriver,
+} from 'typeorm-transactional';
 import { AdminRepository } from '../../src/admin/admin.repository';
 import { AdminService } from '../../src/admin/admin.service';
 import { AuthService } from '../../src/auth/auth.service';
@@ -17,13 +21,13 @@ import { CouponRegisterRequest } from '../../src/coupon/dto/coupon-register.requ
 import { CouponType } from '../../src/coupon/enums/coupon-type.enum';
 import { CouponUserRepository } from '../../src/coupon/repositories/coupon-user.repository';
 import { CouponRepository } from '../../src/coupon/repositories/coupon.repository';
-import { PointRepository } from '../../src/point/repositories/point.repository';
 import { PointService } from '../../src/point/point.service';
+import { PointHistoryRepository } from '../../src/point/repositories/point-history.repository';
 import { UserRepository } from '../../src/user/user.repository';
 import { UserService } from '../../src/user/user.service';
 import { SignInRequestFactory } from '../fixture/dto/sign-in-request-factory';
 import { AdminFactory } from '../fixture/entities/admin-factory';
-import { testConnectionOptions } from '../test-ormconfig';
+import { testTypeormOptions } from '../test-ormconfig';
 
 describe('Coupon E2E', () => {
   let module: TestingModule;
@@ -34,9 +38,10 @@ describe('Coupon E2E', () => {
   let adminRepository: AdminRepository;
 
   beforeAll(async () => {
+    initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
     module = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot(testConnectionOptions),
+        TypeOrmModule.forRootAsync(testTypeormOptions),
         ConfigModule.forRoot(),
         CategoryModule,
       ],
@@ -47,7 +52,7 @@ describe('Coupon E2E', () => {
         AuthService,
         AdminService,
         PointService,
-        PointRepository,
+        PointHistoryRepository,
         AdminRepository,
         UserService,
         JwtService,
@@ -83,7 +88,7 @@ describe('Coupon E2E', () => {
   });
 
   describe('POST /v1/coupon', () => {
-    it('어드민은 카테고리를 등록할 수 있다.', async () => {
+    it('어드민은 쿠폰을 등록할 수 있다.', async () => {
       // given
       const email = 'test@gmail.com';
       const password = 'password';
@@ -115,7 +120,7 @@ describe('Coupon E2E', () => {
       expect(result[0].stock).toBe(50);
     });
 
-    it('어드민이 아니라면 카테고리를 등록할 수 없다.', async () => {
+    it('어드민이 아니라면 쿠폰을 등록할 수 없다.', async () => {
       // given
       const requestDto = new CouponRegisterRequest();
       requestDto.name = '2/17 이벤트 쿠폰';
