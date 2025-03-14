@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { In } from 'typeorm';
+import { Transactional } from 'typeorm-transactional';
 import { CategoryService } from '../category/category.service';
 import { ERROR } from '../common/err-message';
 import { ProductRegisterRequest } from './dto/product-register.request';
@@ -13,6 +14,7 @@ export class ProductService {
     private readonly productRepository: ProductRepository,
   ) {}
 
+  @Transactional()
   async findByIdsWithPessimisticLock(ids: number[]) {
     return this.productRepository.find({
       where: { id: In(ids) },

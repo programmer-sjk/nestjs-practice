@@ -1,5 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  initializeTransactionalContext,
+  StorageDriver,
+} from 'typeorm-transactional';
 import { CategoryModule } from '../../src/category/category.module';
 import { CategoryRepository } from '../../src/category/category.repository';
 import { Category } from '../../src/category/entities/category.entity';
@@ -8,7 +12,7 @@ import { ProductModule } from '../../src/product/product.module';
 import { ProductRepository } from '../../src/product/product.repository';
 import { ProductService } from '../../src/product/product.service';
 import { ProductFactory } from '../fixture/entities/product-factory';
-import { testConnectionOptions } from '../test-ormconfig';
+import { testTypeormOptions } from '../test-ormconfig';
 
 describe('ProductService', () => {
   let module: TestingModule;
@@ -17,9 +21,10 @@ describe('ProductService', () => {
   let categoryRepository: CategoryRepository;
 
   beforeAll(async () => {
+    initializeTransactionalContext({ storageDriver: StorageDriver.AUTO });
     module = await Test.createTestingModule({
       imports: [
-        TypeOrmModule.forRoot(testConnectionOptions),
+        TypeOrmModule.forRootAsync(testTypeormOptions),
         ProductModule,
         CategoryModule,
       ],
@@ -43,7 +48,7 @@ describe('ProductService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('findByIds', () => {
+  describe('findByIdsWithPessimisticLock', () => {
     it('id 배열로 상품을 조회할 수 있다.', async () => {
       // given
       const product1 = await repository.save(ProductFactory.of('검은색 패딩'));
