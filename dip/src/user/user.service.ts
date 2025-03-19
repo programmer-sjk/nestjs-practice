@@ -23,4 +23,9 @@ export class UserService {
     user.updatePassword(newPassword);
     await this.userRepository.save(user);
   }
+
+  async remove(id: number) {
+    const user = await this.find(id);
+    await this.userRepository.remove(user);
+  }
 }
