@@ -7,7 +7,7 @@ export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
   async find(id: number) {
-    return this.userRepository.findBy({ id });
+    return this.userRepository.findOneBy({ id });
   }
 
   async findAll() {
@@ -16,5 +16,11 @@ export class UserService {
 
   async signUp(dto: SignUpRequest) {
     await this.userRepository.save(dto.toEntity());
+  }
+
+  async updatePassword(id: number, newPassword: string) {
+    const user = await this.find(id);
+    user.updatePassword(newPassword);
+    await this.userRepository.save(user);
   }
 }

@@ -27,4 +27,8 @@ export class User {
     user.password = password;
     return user;
   }
+
+  updatePassword(newPassword: string) {
+    this.password = newPassword;
+  }
 }
