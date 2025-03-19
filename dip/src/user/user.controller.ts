@@ -1,4 +1,5 @@
-import { Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { SignUpRequest } from './dto/sign-up.request';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -16,9 +17,11 @@ export class UserController {
   }
 
   @Post()
-  async signUp() {}
+  async signUp(@Body() request: SignUpRequest) {
+    await this.userService.signUp(request);
+  }
 
-  @Patch()
+  @Patch('/:id')
   async updatePassword() {}
 
   @Delete()
