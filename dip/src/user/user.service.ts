@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
+import { UserRepositoryAdaptor } from './adaptors/user-repository.adaptor';
 import { SignUpRequest } from './dto/sign-up.request';
-import { UserRepository } from './user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(private readonly userRepository: UserRepository) {}
+  constructor(private readonly userRepository: UserRepositoryAdaptor) {}
 
   async find(id: number) {
-    return this.userRepository.findOneBy({ id });
+    return this.userRepository.findOneBy(id);
   }
 
   async findAll() {
@@ -15,17 +15,14 @@ export class UserService {
   }
 
   async signUp(dto: SignUpRequest) {
-    await this.userRepository.save(dto.toEntity());
+    await this.userRepository.save(dto);
   }
 
   async updatePassword(id: number, newPassword: string) {
-    const user = await this.find(id);
-    user.updatePassword(newPassword);
-    await this.userRepository.save(user);
+    await this.userRepository.updatePassword(id, newPassword);
   }
 
   async remove(id: number) {
-    const user = await this.find(id);
-    await this.userRepository.remove(user);
+    await this.userRepository.remove(id);
   }
 }
