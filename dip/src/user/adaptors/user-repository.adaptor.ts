@@ -1,7 +1,9 @@
+import { Injectable } from '@nestjs/common';
 import { SignUpRequest } from '../dto/sign-up.request';
 import { IUserRepository } from '../interfaces/user-repository.interface';
 import { UserRepository } from '../user.repository';
 
+@Injectable()
 export class UserRepositoryAdaptor implements IUserRepository {
   constructor(private readonly userRepository: UserRepository) {}
 
