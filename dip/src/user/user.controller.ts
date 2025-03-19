@@ -1,5 +1,14 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { SignUpRequest } from './dto/sign-up.request';
+import { UpdatePasswordRequest } from './dto/update-password.request';
 import { UserService } from './user.service';
 
 @Controller('users')
@@ -22,8 +31,15 @@ export class UserController {
   }
 
   @Patch('/:id')
-  async updatePassword() {}
+  async updatePassword(
+    @Param('id') id: number,
+    @Body() request: UpdatePasswordRequest,
+  ) {
+    await this.userService.updatePassword(id, request.password);
+  }
 
-  @Delete()
-  async withdraw() {}
+  @Delete('/:id')
+  async withdraw(@Param('id') id: number) {
+    await this.userService.remove(id);
+  }
 }
