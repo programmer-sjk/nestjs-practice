@@ -9,6 +9,6 @@ export class CouponFactory {
   }
 
   static eventCoupon() {
-    return Coupon.of('이벤트 쿠폰', CouponType.PRICE, 1_000, 10);
+    return Coupon.of('이벤트 쿠폰', CouponType.PRICE, 1_000, 100);
   }
 }
