@@ -84,8 +84,11 @@ describe('CouponService', () => {
       await Promise.all(functions);
 
       // then
-      const result = await couponUserRepository.find();
-      expect(result.length).toBe(100);
+      const savedCouponUsers = await couponUserRepository.find();
+      expect(savedCouponUsers.length).toBe(100);
+
+      const saveCoupon = await repository.findOneBy({ id: coupon.id });
+      expect(saveCoupon.stock).toBe(0);
     });
   });
 
