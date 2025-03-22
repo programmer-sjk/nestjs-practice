@@ -6,10 +6,11 @@ export class CouponUser1739854093701 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
       `CREATE TABLE \`coupon_user\` (
+        \`id\` int NOT NULL AUTO_INCREMENT, 
         \`coupon_id\` int NOT NULL, 
         \`user_id\` int NOT NULL, 
         \`created_at\` datetime(6) NOT NULL DEFAULT CURRENT_TIMESTAMP(6), 
-        PRIMARY KEY (\`coupon_id\`, \`user_id\`)) ENGINE=InnoDB`,
+        PRIMARY KEY (\`id\`)) ENGINE=InnoDB`,
     );
   }
 
