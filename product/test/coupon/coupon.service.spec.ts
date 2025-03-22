@@ -69,6 +69,24 @@ describe('CouponService', () => {
       expect(result[0].couponId).toBe(coupon.id);
       expect(result[0].userId).toBe(user.id);
     });
+
+    it('여러 사용자가 쿠폰 획득시 재고는 차례대로 감소한다.', async () => {
+      // given
+      const coupon = await repository.save(CouponFactory.eventCoupon());
+      const user = await userRepository.save(UserFactory.of());
+
+      let functions = [];
+      for (let i = 0; i < 100; i++) {
+        functions.push(service.giveCouponToUser(coupon.id, user.id));
+      }
+
+      // when
+      await Promise.all(functions);
+
+      // then
+      const result = await couponUserRepository.find();
+      expect(result.length).toBe(100);
+    });
   });
 
   describe('findUserCoupon', () => {
