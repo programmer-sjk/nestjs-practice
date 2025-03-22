@@ -4,16 +4,19 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Coupon } from './coupon.entity';
 
 @Entity()
 export class CouponUser {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
   couponId: number;
 
-  @PrimaryColumn()
+  @Column()
   userId: number;
 
   @Column({ default: false })
