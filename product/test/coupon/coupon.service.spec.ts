@@ -74,14 +74,12 @@ describe('CouponService', () => {
       // given
       const coupon = await repository.save(CouponFactory.eventCoupon());
       const user = await userRepository.save(UserFactory.of());
-
-      let functions = [];
-      for (let i = 0; i < 100; i++) {
-        functions.push(service.giveCouponToUser(coupon.id, user.id));
-      }
+      const concurrencyRequest = new Array(100)
+        .fill(0)
+        .map(() => service.giveCouponToUser(coupon.id, user.id));
 
       // when
-      await Promise.all(functions);
+      await Promise.all(concurrencyRequest);
 
       // then
       const savedCouponUsers = await couponUserRepository.find();
