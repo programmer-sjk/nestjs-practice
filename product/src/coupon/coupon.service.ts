@@ -41,7 +41,7 @@ export class CouponService {
     } catch (e) {
       throw e;
     } finally {
-      await lock?.unlock();
+      await lock?.release();
     }
   }
 

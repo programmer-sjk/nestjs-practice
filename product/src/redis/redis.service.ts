@@ -1,7 +1,7 @@
 import { InjectRedis } from '@nestjs-modules/ioredis';
 import { Injectable } from '@nestjs/common';
-import * as Redis from 'ioredis';
-import * as Redlock from 'redlock';
+import Redis from 'ioredis';
+import Redlock from 'redlock';
 
 @Injectable()
 export class RedisService {

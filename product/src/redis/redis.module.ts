@@ -5,9 +5,8 @@ import { RedisService } from './redis.service';
 @Module({
   imports: [
     IORedisModule.forRoot({
-      config: {
-        url: 'localhost',
-      },
+      type: 'single',
+      url: 'localhost',
     }),
   ],
   providers: [RedisService],
