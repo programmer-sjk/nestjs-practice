@@ -6,7 +6,7 @@ import Redlock from 'redlock';
 @Injectable()
 export class RedisService {
   private readonly redlock: Redlock;
-  private readonly lockDuration = 5_000;
+  private readonly lockDuration = 3_000;
 
   constructor(@InjectRedis() private readonly redis: Redis) {
     this.redlock = new Redlock([this.redis], { retryCount: 20 });
