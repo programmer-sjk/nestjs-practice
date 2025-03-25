@@ -16,7 +16,7 @@ export class CouponController {
     @Body('userId') userId: number,
   ) {
     try {
-      await this.couponService.giveCouponToUser(couponId, userId);
+      await this.couponService.giveCoupon(couponId, userId);
       return ResponseEntity.OK();
     } catch (err) {
       return ResponseEntity.ERROR(err.message);
