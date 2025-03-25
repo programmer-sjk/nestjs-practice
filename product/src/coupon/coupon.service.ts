@@ -21,7 +21,7 @@ export class CouponService {
     private readonly couponUserRepository: CouponUserRepository,
   ) {}
 
-  async giveCoupon(id: number, userId: number) {
+  async giveCouponByLock(id: number, userId: number) {
     let lock;
     try {
       lock = await this.redisService.acquireLock(`get-coupon:${id}`);

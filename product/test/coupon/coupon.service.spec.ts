@@ -63,7 +63,7 @@ describe('CouponService', () => {
       const user = await userRepository.save(UserFactory.of());
 
       // when
-      await service.giveCoupon(coupon.id, user.id);
+      await service.giveCouponByLock(coupon.id, user.id);
 
       // then
       const result = await couponUserRepository.find();
@@ -79,7 +79,7 @@ describe('CouponService', () => {
 
       const concurrencyRequest = new Array(100)
         .fill(undefined)
-        .map(() => service.giveCoupon(coupon.id, user.id));
+        .map(() => service.giveCouponByLock(coupon.id, user.id));
 
       // when
       await Promise.all(concurrencyRequest);
@@ -98,7 +98,7 @@ describe('CouponService', () => {
       const user = await userRepository.save(UserFactory.of());
       const concurrencyRequest = new Array(11)
         .fill(0)
-        .map(() => service.giveCoupon(coupon.id, user.id));
+        .map(() => service.giveCouponByLock(coupon.id, user.id));
 
       // when
       await expect(Promise.all(concurrencyRequest)).rejects.toThrow(
