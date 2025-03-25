@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import {
@@ -62,7 +63,7 @@ describe('CouponService', () => {
       const user = await userRepository.save(UserFactory.of());
 
       // when
-      await service.giveCouponToUser(coupon.id, user.id);
+      await service.giveCoupon(coupon.id, user.id);
 
       // then
       const result = await couponUserRepository.find();
@@ -70,13 +71,15 @@ describe('CouponService', () => {
       expect(result[0].userId).toBe(user.id);
     });
 
-    it('여러 사용자가 쿠폰 획득시 재고는 차례대로 감소한다.', async () => {
+    it('동시에 쿠폰 획득시 재고는 차례대로 감소한다.', async () => {
       // given
-      const coupon = await repository.save(CouponFactory.eventCoupon());
+      const stock = 100;
+      const coupon = await repository.save(CouponFactory.eventCoupon(stock));
       const user = await userRepository.save(UserFactory.of());
+
       const concurrencyRequest = new Array(100)
-        .fill(0)
-        .map(() => service.giveCouponToUser(coupon.id, user.id));
+        .fill(undefined)
+        .map(() => service.giveCoupon(coupon.id, user.id));
 
       // when
       await Promise.all(concurrencyRequest);
@@ -87,6 +90,20 @@ describe('CouponService', () => {
 
       const saveCoupon = await repository.findOneBy({ id: coupon.id });
       expect(saveCoupon.stock).toBe(0);
+    });
+
+    it('쿠폰의 재고가 소모된 후 요청은 예외가 발생한다.', async () => {
+      // given
+      const coupon = await repository.save(CouponFactory.eventCoupon(10));
+      const user = await userRepository.save(UserFactory.of());
+      const concurrencyRequest = new Array(11)
+        .fill(0)
+        .map(() => service.giveCoupon(coupon.id, user.id));
+
+      // when
+      await expect(Promise.all(concurrencyRequest)).rejects.toThrow(
+        new BadRequestException('쿠폰이 모두 소진되었습니다.'),
+      );
     });
   });
 
