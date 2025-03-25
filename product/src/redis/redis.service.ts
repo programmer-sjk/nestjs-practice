@@ -15,4 +15,8 @@ export class RedisService {
   async acquireLock(key: string) {
     return this.redlock.acquire([`lock:${key}`], this.lockDuration);
   }
+
+  async incr(key: string) {
+    return this.redis.incr(key);
+  }
 }
