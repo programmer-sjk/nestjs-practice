@@ -24,6 +24,9 @@ export class Coupon {
   value: number;
 
   @Column()
+  originalStock: number;
+
+  @Column()
   stock: number;
 
   @Column({ nullable: true })
@@ -52,6 +55,7 @@ export class Coupon {
     coupon.name = name;
     coupon.type = type;
     coupon.value = value;
+    coupon.originalStock = stock;
     coupon.stock = stock;
     coupon.categoryId = categoryId;
     coupon.description = description;
