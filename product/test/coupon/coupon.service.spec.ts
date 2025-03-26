@@ -56,7 +56,7 @@ describe('CouponService', () => {
     expect(service).toBeDefined();
   });
 
-  describe('giveCouponToUser', () => {
+  describe('giveCouponByLock', () => {
     it('쿠폰을 사용자에게 발급할 수 있다.', async () => {
       // given
       const coupon = await repository.save(CouponFactory.signUpCoupon());
@@ -104,6 +104,29 @@ describe('CouponService', () => {
       await expect(Promise.all(concurrencyRequest)).rejects.toThrow(
         new BadRequestException('쿠폰이 모두 소진되었습니다.'),
       );
+    });
+  });
+
+  describe('giveCouponByIncr', () => {
+    it('동시에 쿠폰 획득시 재고는 차례대로 감소한다.', async () => {
+      // given
+      const stock = 100;
+      const coupon = await repository.save(CouponFactory.eventCoupon(stock));
+      const user = await userRepository.save(UserFactory.of());
+
+      const concurrencyRequest = new Array(100)
+        .fill(undefined)
+        .map(() => service.giveCouponByIncr(coupon.id, user.id));
+
+      // when
+      await Promise.all(concurrencyRequest);
+
+      // then
+      const savedCouponUsers = await couponUserRepository.find();
+      expect(savedCouponUsers.length).toBe(100);
+
+      const saveCoupon = await repository.findOneBy({ id: coupon.id });
+      expect(saveCoupon.stock).toBe(0);
     });
   });
 
