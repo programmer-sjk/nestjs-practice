@@ -128,6 +128,20 @@ describe('CouponService', () => {
       const saveCoupon = await repository.findOneBy({ id: coupon.id });
       expect(saveCoupon.stock).toBe(0);
     });
+
+    it('쿠폰의 재고가 소모된 후 요청은 예외가 발생한다.', async () => {
+      // given
+      const coupon = await repository.save(CouponFactory.eventCoupon(10));
+      const user = await userRepository.save(UserFactory.of());
+      const concurrencyRequest = new Array(11)
+        .fill(0)
+        .map(() => service.giveCouponByIncr(coupon.id, user.id));
+
+      // when
+      await expect(Promise.all(concurrencyRequest)).rejects.toThrow(
+        new BadRequestException('쿠폰이 모두 소진되었습니다.'),
+      );
+    });
   });
 
   describe('findUserCoupon', () => {
