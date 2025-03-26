@@ -59,6 +59,26 @@ export class CouponService {
     await this.addCouponToUser(coupon, userId);
   }
 
+  async giveOneCouponToUser(id: number, userId: number) {
+    const success = await this.redisService.sadd(`coupon:${id}`, userId);
+    if (!success) {
+      throw new BadRequestException('사용자에게 발급된 쿠폰입니다.');
+    }
+
+    const coupon = await this.couponRepository.findOneBy({ id });
+    if (!coupon) {
+      throw new BadRequestException('존재하지 않는 쿠폰입니다.');
+    }
+
+    const couponCount = await this.redisService.incr(`coupon:count:${id}`);
+    if (couponCount > coupon.originalStock) {
+      throw new BadRequestException('쿠폰이 모두 소진되었습니다.');
+    }
+
+    coupon.updateStock(coupon.originalStock - couponCount);
+    await this.addCouponToUser(coupon, userId);
+  }
+
   @Transactional()
   private async addCouponToUser(coupon: Coupon, userId: number) {
     await this.couponRepository.save(coupon);
