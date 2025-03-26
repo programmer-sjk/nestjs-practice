@@ -19,4 +19,8 @@ export class RedisService {
   async incr(key: string) {
     return this.redis.incr(key);
   }
+
+  async sadd(key: string) {
+    return this.redis.sadd(key);
+  }
 }
