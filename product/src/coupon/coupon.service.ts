@@ -52,7 +52,7 @@ export class CouponService {
 
     const couponCount = await this.redisService.incr(`coupon:incr:${id}`);
     if (couponCount > coupon.originalStock) {
-      return;
+      throw new BadRequestException('쿠폰이 모두 소진되었습니다.');
     }
 
     coupon.updateStock(coupon.originalStock - couponCount);
