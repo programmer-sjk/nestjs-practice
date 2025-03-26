@@ -20,7 +20,7 @@ export class RedisService {
     return this.redis.incr(key);
   }
 
-  async sadd(key: string) {
-    return this.redis.sadd(key);
+  async sadd(key: string, member: number) {
+    return this.redis.sadd(key, member);
   }
 }
