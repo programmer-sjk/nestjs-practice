@@ -44,6 +44,21 @@ export class CouponService {
     }
   }
 
+  async giveCouponByIncr(id: number, userId: number) {
+    const coupon = await this.couponRepository.findOneBy({ id });
+    if (!coupon) {
+      throw new BadRequestException('존재하지 않는 쿠폰입니다.');
+    }
+
+    const couponCount = await this.redisService.incr(`coupon:incr:${id}`);
+    if (couponCount > coupon.originalStock) {
+      return;
+    }
+
+    coupon.updateStock(coupon.originalStock - couponCount);
+    await this.addCouponToUser(coupon, userId);
+  }
+
   @Transactional()
   private async addCouponToUser(coupon: Coupon, userId: number) {
     await this.couponRepository.save(coupon);
@@ -57,10 +72,7 @@ export class CouponService {
     });
   }
 
-  async addCoupon(dto: CouponRegisterRequest) {
-    await this.validateCategory(dto.categoryId);
-    await this.couponRepository.save(dto.toEntity());
-  }
+  async addCoupon(dto: CouponRegisterRequest) {}
 
   private async validateCategory(categoryId?: number) {
     if (!categoryId) {
