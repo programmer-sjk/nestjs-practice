@@ -144,6 +144,51 @@ describe('CouponService', () => {
     });
   });
 
+  describe('giveOneCouponToUser', () => {
+    it(
+      '동시에 쿠폰 획득시 재고는 차례대로 감소한다.',
+      async () => {
+        // given
+        const stock = 30;
+        const coupon = await repository.save(CouponFactory.eventCoupon(stock));
+        const userEntites = new Array(30)
+          .fill(undefined)
+          .map((_, i) => UserFactory.of(`test${i}@gmail.com`));
+        const users = await userRepository.save(userEntites);
+
+        const concurrencyRequest = users.map((user) =>
+          service.giveOneCouponToUser(coupon.id, user.id),
+        );
+
+        // when
+        await Promise.all(concurrencyRequest);
+
+        // then
+        const savedCouponUsers = await couponUserRepository.find();
+        expect(savedCouponUsers.length).toBe(30);
+
+        const saveCoupon = await repository.findOneBy({ id: coupon.id });
+        expect(saveCoupon.stock).toBe(0);
+      },
+      30 * 1000,
+    );
+
+    it('사용자는 쿠폰을 중복해서 받을 수 없다.', async () => {
+      // given
+      const stock = 30;
+      const coupon = await repository.save(CouponFactory.eventCoupon(stock));
+      const user = await userRepository.save(UserFactory.of());
+      const concurrencyRequest = new Array(11)
+        .fill(0)
+        .map(() => service.giveOneCouponToUser(coupon.id, user.id));
+
+      // when
+      await expect(Promise.all(concurrencyRequest)).rejects.toThrow(
+        new BadRequestException('사용자에게 발급된 쿠폰입니다.'),
+      );
+    });
+  });
+
   describe('findUserCoupon', () => {
     it('사용자의 쿠폰을 조회할 수 있다.', async () => {
       // given
