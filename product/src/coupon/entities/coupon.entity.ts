@@ -82,6 +82,14 @@ export class Coupon {
     this.stock -= 1;
   }
 
+  updateStock(stock: number) {
+    if (stock < 0) {
+      throw new BadRequestException('업데이트 하려는 재고가 음수입니다.');
+    }
+
+    this.stock = stock;
+  }
+
   private isInfiniteCoupon() {
     return this.stock === Coupon.INFINITE_COUPON;
   }
