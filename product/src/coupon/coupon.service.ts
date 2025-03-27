@@ -92,7 +92,10 @@ export class CouponService {
     });
   }
 
-  async addCoupon(dto: CouponRegisterRequest) {}
+  async addCoupon(dto: CouponRegisterRequest) {
+    await this.validateCategory(dto.categoryId);
+    await this.couponRepository.save(dto.toEntity());
+  }
 
   private async validateCategory(categoryId?: number) {
     if (!categoryId) {
