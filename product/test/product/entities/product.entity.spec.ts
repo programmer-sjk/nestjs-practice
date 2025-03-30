@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { Product } from '../../../src/product/entities/product.entity';
 
 describe('Product', () => {
-  describe('use', () => {
+  describe('decreaseStock', () => {
     it('상품의 재고를 감소한다.', () => {
       // given
       const product = new Product();
