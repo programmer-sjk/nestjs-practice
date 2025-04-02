@@ -32,11 +32,6 @@ export class ShortUrlService {
       return existShortUrl.url;
     }
 
-    // base 62 계산은 로직이 완전 달라서 구분.
-    if (type === CreateType.BASE62) {
-      return this.shortUrlByBaseCalculation(longUrl);
-    }
-
     const shortUrl = UrlFactory.of(type).createUrl(longUrl);
     await this.shortUrlRepository.save(ShortUrl.of(longUrl, shortUrl));
     return shortUrl;
