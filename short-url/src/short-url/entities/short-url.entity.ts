@@ -28,8 +28,4 @@ export class ShortUrl {
 
     return entity;
   }
-
-  updateShortUrl(url: string) {
-    this.url = url;
-  }
 }
