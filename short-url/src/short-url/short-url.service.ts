@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -43,12 +44,13 @@ export class ShortUrlService {
       return existShortUrl.url;
     }
 
-    if (type === CreateType.HASH) {
-      return this.addShortUrlByHash(longUrl);
-    }
-
-    if (type === CreateType.SNOW_FLAKE) {
-      return this.addShortUrlBySnowFlake(longUrl);
+    switch (type) {
+      case CreateType.HASH:
+        return this.addShortUrlByHash(longUrl);
+      case CreateType.SNOW_FLAKE:
+        return this.addShortUrlBySnowFlake(longUrl);
+      default:
+        throw new BadRequestException('잘못된 생성 타입입니다.');
     }
   }
 
