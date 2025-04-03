@@ -62,7 +62,7 @@ export class ShortUrlService {
   }
 
   private async getUniqueShortUrl(shortUrl: string, retryCount = 0) {
-    if (retryCount > 5) {
+    if (retryCount >= 5) {
       throw new InternalServerErrorException(
         'short url hash 생성에 문제가 발생했습니다.',
       );
