@@ -3,8 +3,9 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
+import { Snowflake } from 'nodejs-snowflake';
+import { Base62Converter } from '../common/base-62-converter';
 import { hash } from '../common/hash';
-import { UrlFactory } from './classes/url-factory';
 import { ShortUrl } from './entities/short-url.entity';
 import { CreateType } from './enums/create-type.enum';
 import { ShortUrlRepository } from './short-url.repository';
@@ -15,8 +16,11 @@ export class ShortUrlService {
   private readonly PADDING_VALUE = '-';
   private readonly URL_LENGTH = 7;
   private readonly MAX_DUPLICATE_COUNT = 5;
+  private readonly snowFlake: Snowflake;
 
-  constructor(private readonly shortUrlRepository: ShortUrlRepository) {}
+  constructor(private readonly shortUrlRepository: ShortUrlRepository) {
+    this.snowFlake = new Snowflake();
+  }
 
   async getOriginalUrl(shortUrl: string) {
     const url = await this.shortUrlRepository.findOneBy({
@@ -43,9 +47,9 @@ export class ShortUrlService {
       return this.addShortUrlByHash(longUrl);
     }
 
-    const shortUrl = UrlFactory.of(type).createUrl(longUrl);
-    await this.shortUrlRepository.save(ShortUrl.of(longUrl, shortUrl));
-    return shortUrl;
+    if (type === CreateType.SNOW_FLAKE) {
+      return this.addShortUrlBySnowFlake(longUrl);
+    }
   }
 
   private async addShortUrlByHash(longUrl: string) {
@@ -79,5 +83,13 @@ export class ShortUrlService {
     }
 
     return shortUrlWithPadding;
+  }
+
+  private async addShortUrlBySnowFlake(longUrl: string) {
+    const uniqueId = Number(this.snowFlake.getUniqueID());
+    const shortUrl = `${this.DOMAIN}/${Base62Converter.encode(uniqueId)}`;
+    await this.shortUrlRepository.save(ShortUrl.of(longUrl, shortUrl));
+
+    return shortUrl;
   }
 }
