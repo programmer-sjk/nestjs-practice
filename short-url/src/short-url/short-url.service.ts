@@ -14,6 +14,7 @@ export class ShortUrlService {
   private readonly DOMAIN = 'https://short.com';
   private readonly PADDING_VALUE = '-';
   private readonly URL_LENGTH = 7;
+  private readonly MAX_DUPLICATE_COUNT = 5;
 
   constructor(private readonly shortUrlRepository: ShortUrlRepository) {}
 
@@ -62,7 +63,7 @@ export class ShortUrlService {
   }
 
   private async getUniqueShortUrl(shortUrl: string, retryCount = 0) {
-    if (retryCount >= 5) {
+    if (retryCount >= this.MAX_DUPLICATE_COUNT) {
       throw new InternalServerErrorException(
         'short url hash 생성에 문제가 발생했습니다.',
       );
