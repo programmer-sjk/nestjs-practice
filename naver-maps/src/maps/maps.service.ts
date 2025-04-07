@@ -5,6 +5,8 @@ import axios from 'axios';
 @Injectable()
 export class MapsService {
   private readonly staticUrl = 'https://maps.apigw.ntruss.com/map-static/v2';
+  private readonly geocodeUrl =
+    'https://maps.apigw.ntruss.com/map-geocode/v2/geocode';
   private readonly clientId: string;
   private readonly secret: string;
 
