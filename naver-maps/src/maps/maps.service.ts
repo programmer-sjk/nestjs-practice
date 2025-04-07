@@ -18,7 +18,14 @@ export class MapsService {
       this.staticUrl +
       `/raster?w=800&h=800&center=127.1054221,37.3591614&level=16`;
 
-    const result = await axios.get(url, {
+    const result = await this.sendRequestNaver(url);
+    return result.data;
+  }
+
+  async search(address: string) {}
+
+  private async sendRequestNaver(url) {
+    return axios.get(url, {
       responseType: 'arraybuffer',
       headers: {
         'Content-Type': 'application/json',
@@ -26,7 +33,5 @@ export class MapsService {
         'x-ncp-apigw-api-key': this.secret,
       },
     });
-
-    return result.data;
   }
 }
