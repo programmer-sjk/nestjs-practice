@@ -7,12 +7,10 @@ export class MapsService {
   private readonly staticUrl = 'https://maps.apigw.ntruss.com/map-static/v2';
   private readonly clientId: string;
   private readonly secret: string;
-  private readonly apiKeyId: string;
 
   constructor(private readonly configService: ConfigService) {
     this.clientId = this.configService.get<string>('CLIENT_ID');
     this.secret = this.configService.get<string>('CLIENT_SECRET');
-    this.apiKeyId = this.configService.get<string>('API_KEY_ID');
   }
 
   async getMaps() {
