@@ -8,7 +8,7 @@ export class MapsController {
 
   @Get()
   async getStaticMaps(@Res() res: Response) {
-    const result = await this.mapsService.getMaps();
+    const result = await this.mapsService.getStaticMaps();
     return res.contentType('image/jpeg').send(result);
   }
 }

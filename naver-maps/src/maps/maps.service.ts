@@ -13,7 +13,7 @@ export class MapsService {
     this.secret = this.configService.get<string>('CLIENT_SECRET');
   }
 
-  async getMaps() {
+  async getStaticMaps() {
     const url =
       this.staticUrl +
       `/raster?w=800&h=800&center=127.1054221,37.3591614&level=16`;
