@@ -7,7 +7,7 @@ export class MapsController {
   constructor(private readonly mapsService: MapsService) {}
 
   @Get()
-  async getNaverMaps(@Res() res: Response) {
+  async getStaticMaps(@Res() res: Response) {
     const result = await this.mapsService.getMaps();
     return res.contentType('image/jpeg').send(result);
   }
