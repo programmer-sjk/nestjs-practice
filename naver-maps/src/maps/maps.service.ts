@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import axios from 'axios';
 
 @Injectable()
 export class MapsService {
@@ -17,7 +18,17 @@ export class MapsService {
   async getMaps() {
     const url =
       this.staticUrl +
-      `/raster-cors?w=300&h=300&center=127.1054221,37.3591614&level=16&X-NCP-APIGW-API-KEY-ID=${this.apiKeyId}`;
-    // const result = await axios.get(``);
+      `/raster?w=800&h=800&center=127.1054221,37.3591614&level=16`;
+
+    const result = await axios.get(url, {
+      responseType: 'arraybuffer',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-ncp-apigw-api-key-id': this.clientId,
+        'x-ncp-apigw-api-key': this.secret,
+      },
+    });
+
+    return result.data;
   }
 }
