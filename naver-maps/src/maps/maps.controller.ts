@@ -1,4 +1,4 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { MapsService } from './maps.service';
 
@@ -10,5 +10,10 @@ export class MapsController {
   async getStaticMaps(@Res() res: Response) {
     const result = await this.mapsService.getStaticMaps();
     return res.contentType('image/jpeg').send(result);
+  }
+
+  @Get('search')
+  async search(@Query('addr') address: string) {
+    return this.mapsService.search(address);
   }
 }
