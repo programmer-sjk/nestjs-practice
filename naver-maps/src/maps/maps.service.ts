@@ -27,14 +27,20 @@ export class MapsService {
   }
 
   async getAddress(address: string) {
-    const url = `${this.geocodeUrl}?query=${address}`;
-    const result = await this.sendRequestNaver(url);
+    const result = await this.getAddressInfo(address);
     const addressInfo = result.data.addresses[0];
 
     return new AddressResponse(
       addressInfo.roadAddress,
       addressInfo.jibunAddress,
     );
+  }
+
+  async searchMaps(address: string) {}
+
+  private async getAddressInfo(address: string) {
+    const url = `${this.geocodeUrl}?query=${address}`;
+    return this.sendRequestNaver(url);
   }
 
   private async sendRequestNaver(url, responseType?: ResponseType) {
