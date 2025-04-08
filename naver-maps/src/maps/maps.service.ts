@@ -49,7 +49,7 @@ export class MapsService {
     return `${this.dynamicUrl}?ncpKeyId=${this.clientId}`;
   }
 
-  private async getAddressInfo(address: string) {
+  async getAddressInfo(address: string) {
     const url = `${this.geocodeUrl}?query=${address}`;
     const result = await this.sendRequestNaver(url);
     return result.data.addresses[0];
