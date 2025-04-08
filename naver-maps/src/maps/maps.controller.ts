@@ -1,4 +1,11 @@
-import { Controller, Get, Query, Res } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Query,
+  Res,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { MapsService } from './maps.service';
 
@@ -12,6 +19,7 @@ export class MapsController {
     return res.contentType('image/jpeg').send(result);
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get('address')
   async getAddress(@Query('q') address: string) {
     return this.mapsService.getAddress(address);
