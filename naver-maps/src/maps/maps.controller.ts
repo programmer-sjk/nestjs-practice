@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Query,
+  Render,
   Res,
   UseInterceptors,
 } from '@nestjs/common';
@@ -17,6 +18,12 @@ export class MapsController {
   async getStaticMaps(@Res() res: Response) {
     const result = await this.mapsService.getStaticMaps();
     return res.contentType('image/jpeg').send(result);
+  }
+
+  @Get('dynamic')
+  @Render('dynamic-map')
+  async getDynamicMaps() {
+    return { requestUrl: this.mapsService.getDynamicMapUrl() };
   }
 
   @UseInterceptors(ClassSerializerInterceptor)

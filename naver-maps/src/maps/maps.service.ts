@@ -5,6 +5,7 @@ import { AddressResponse } from './dto/address.response';
 
 @Injectable()
 export class MapsService {
+  private readonly dynamicUrl = 'https://oapi.map.naver.com/openapi/v3/maps.js';
   private readonly staticUrl = 'https://maps.apigw.ntruss.com/map-static/v2';
   private readonly geocodeUrl =
     'https://maps.apigw.ntruss.com/map-geocode/v2/geocode';
@@ -42,6 +43,10 @@ export class MapsService {
   async searchMaps(address: string) {
     const addressInfo = await this.getAddressInfo(address);
     return this.getStaticMaps(addressInfo.x, addressInfo.y);
+  }
+
+  getDynamicMapUrl() {
+    return `${this.dynamicUrl}?ncpKeyId=${this.clientId}`;
   }
 
   private async getAddressInfo(address: string) {
