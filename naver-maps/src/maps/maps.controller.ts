@@ -14,6 +14,6 @@ export class MapsController {
 
   @Get('search')
   async search(@Query('addr') address: string) {
-    return this.mapsService.search(address);
+    return this.mapsService.searchAddress(address);
   }
 }

@@ -25,7 +25,7 @@ export class MapsService {
     return result.data;
   }
 
-  async search(address: string) {
+  async searchAddress(address: string) {
     const url = `${this.geocodeUrl}?query=${address}`;
     const result = await this.sendRequestNaver(url);
     return result.data;
