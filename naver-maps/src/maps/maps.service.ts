@@ -17,10 +17,14 @@ export class MapsService {
     this.secret = this.configService.get<string>('CLIENT_SECRET');
   }
 
-  async getStaticMaps() {
+  async getStaticMaps(x?: string, y?: string) {
+    // 값이 없으면 홍제동을 기본주소로
+    const xCoordinate = x ?? '126.944878';
+    const yCoordinate = y ?? '37.587699';
+
     const url =
       this.staticUrl +
-      `/raster?w=800&h=800&center=126.944878,37.587699&level=16`;
+      `/raster?w=800&h=800&center=${xCoordinate},${yCoordinate}&level=16`;
 
     const result = await this.sendRequestNaver(url, this.bufferType);
     return result.data;
@@ -36,7 +40,10 @@ export class MapsService {
     );
   }
 
-  async searchMaps(address: string) {}
+  async searchMaps(address: string) {
+    const result = await this.getAddressInfo(address);
+    console.log(result.data.addresses[0]);
+  }
 
   private async getAddressInfo(address: string) {
     const url = `${this.geocodeUrl}?query=${address}`;
