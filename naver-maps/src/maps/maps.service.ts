@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios, { ResponseType } from 'axios';
-import { SearchAddressResponse } from './dto/search-address.response';
+import { AddressResponse } from './dto/address.response';
 
 @Injectable()
 export class MapsService {
@@ -26,12 +26,12 @@ export class MapsService {
     return result.data;
   }
 
-  async searchAddress(address: string) {
+  async getAddress(address: string) {
     const url = `${this.geocodeUrl}?query=${address}`;
     const result = await this.sendRequestNaver(url);
     const addressInfo = result.data.addresses[0];
 
-    return new SearchAddressResponse(
+    return new AddressResponse(
       addressInfo.roadAddress,
       addressInfo.jibunAddress,
     );

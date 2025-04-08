@@ -12,8 +12,8 @@ export class MapsController {
     return res.contentType('image/jpeg').send(result);
   }
 
-  @Get('search')
-  async searchAddress(@Query('addr') address: string) {
-    return this.mapsService.searchAddress(address);
+  @Get('address')
+  async getAddress(@Query('q') address: string) {
+    return this.mapsService.getAddress(address);
   }
 }
