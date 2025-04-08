@@ -19,7 +19,7 @@ export class MapsController {
 
   @Get('search')
   async search(@Query('addr') address: string, @Res() res: Response) {
-    const result = this.mapsService.searchMaps(address);
+    const result = await this.mapsService.searchMaps(address);
     return res.contentType('image/jpeg').send(result);
   }
 }

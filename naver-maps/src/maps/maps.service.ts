@@ -31,8 +31,7 @@ export class MapsService {
   }
 
   async getAddress(address: string) {
-    const result = await this.getAddressInfo(address);
-    const addressInfo = result.data.addresses[0];
+    const addressInfo = await this.getAddressInfo(address);
 
     return new AddressResponse(
       addressInfo.roadAddress,
@@ -41,13 +40,14 @@ export class MapsService {
   }
 
   async searchMaps(address: string) {
-    const result = await this.getAddressInfo(address);
-    console.log(result.data.addresses[0]);
+    const addressInfo = await this.getAddressInfo(address);
+    return this.getStaticMaps(addressInfo.x, addressInfo.y);
   }
 
   private async getAddressInfo(address: string) {
     const url = `${this.geocodeUrl}?query=${address}`;
-    return this.sendRequestNaver(url);
+    const result = await this.sendRequestNaver(url);
+    return result.data.addresses[0];
   }
 
   private async sendRequestNaver(url, responseType?: ResponseType) {
