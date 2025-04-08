@@ -22,8 +22,13 @@ export class MapsController {
 
   @Get('dynamic')
   @Render('dynamic-map')
-  async getDynamicMaps() {
-    return { requestUrl: this.mapsService.getDynamicMapUrl() };
+  async getDynamicMaps(@Query('addr') address: string) {
+    const addressInfo = await this.mapsService.getAddressInfo(address);
+    return {
+      requestUrl: this.mapsService.getDynamicMapUrl(),
+      x: addressInfo.x,
+      y: addressInfo.y,
+    };
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
