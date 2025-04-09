@@ -1,4 +1,5 @@
 import { Exclude, Expose } from 'class-transformer';
+import { PmStatusUtil } from '../utils/pm-status.util';
 
 export class DustResponse {
   @Exclude() private readonly _time: string;
@@ -20,23 +21,28 @@ export class DustResponse {
     return this._time;
   }
 
-  @Expose() get districtName(): string {
+  @Expose()
+  get districtName(): string {
     return this._districtName;
   }
 
-  @Expose() get pm10(): number {
-    return this._pm10;
+  @Expose()
+  get pm10(): number {
+    return Number(this._pm10);
   }
 
-  @Expose() get pm10Status() {
-    return;
+  @Expose()
+  get pm10Status(): string {
+    return PmStatusUtil.of(Number(this._pm10));
   }
 
-  @Expose() get pm25(): number {
-    return this._pm25;
+  @Expose()
+  get pm25(): number {
+    return Number(this._pm25);
   }
 
-  @Expose() get pm25Status() {
-    return;
+  @Expose()
+  get pm25Status(): string {
+    return PmStatusUtil.of(Number(this._pm25));
   }
 }
