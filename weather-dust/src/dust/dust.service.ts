@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
+import { DustResponse } from './dto/dust-response';
 
 @Injectable()
 export class DustService {
@@ -16,7 +17,10 @@ export class DustService {
   }
 
   async getCurrentInfo() {
-    const dustInfo = await axios.get(this.dustUrl);
-    return dustInfo.data;
+    const response = await axios.get(this.dustUrl);
+    return response.data.ListAirQualityByDistrictService.row.map(
+      (row) =>
+        new DustResponse(row.MSRDATE, row.MSRSTENAME, row.PM10, row.PM25),
+    );
   }
 }
