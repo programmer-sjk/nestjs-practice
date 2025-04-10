@@ -1,6 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 
-export class DustResponse {
+export class WeatherResponse {
   @Exclude() private readonly _summary: string;
   @Exclude() private readonly _temp: number;
   @Exclude() private readonly _feelTemp: number;
