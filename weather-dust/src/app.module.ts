@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { DustModule } from './dust/dust.module';
+import { WeatherModule } from './weather/weather.module';
 
 @Module({
   imports: [
@@ -8,6 +9,7 @@ import { DustModule } from './dust/dust.module';
       isGlobal: true,
     }),
     DustModule,
+    WeatherModule,
   ],
 })
 export class AppModule {}
