@@ -4,6 +4,6 @@
 
 ## Dynamic vs Static
 
-- Dynamic Map의 경우 @types/navermaps 모듈을 별도로 설치해서 사용해야 함.
+- Dynamic Map의 경우 `@types/navermaps` 모듈을 별도로 설치해서 사용해야 함.
   - 지도를 줌인, 줌 아웃 하려면 Dynamic Map을 사용
 - Static Map은 고정된 지도 이미지가 응답됨
