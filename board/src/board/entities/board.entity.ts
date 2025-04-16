@@ -23,4 +23,13 @@ export class Board {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  static of(userId: number, title: string, body: string) {
+    const board = new Board();
+    board.userId = userId;
+    board.title = title;
+    board.body = body;
+
+    return board;
+  }
 }
