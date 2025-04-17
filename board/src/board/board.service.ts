@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { PaginationResponse } from '../common/pagination-response';
 import { BoardRepository } from './board.repository';
 import { AddBoardRequest } from './dto/add-board.request';
 import { RemoveBoardRequest } from './dto/remove-board.request';
@@ -18,13 +19,22 @@ export class BoardService {
   }
 
   async findAll(limit, offset) {
-    const board = await this.boardRepository.find({
+    const boardsAndCount = await this.boardRepository.findAndCount({
       take: limit,
       skip: offset,
+      order: { id: 'DESC' },
     });
 
-    // 여기서 전체 페이지 개수나 row 추가예정
-    return board;
+    const totalCount = boardsAndCount[1];
+    const totalPage = Math.ceil(totalCount / limit);
+
+    return new PaginationResponse(
+      limit,
+      offset,
+      totalCount,
+      totalPage,
+      boardsAndCount[0],
+    );
   }
 
   async add(dto: AddBoardRequest) {
