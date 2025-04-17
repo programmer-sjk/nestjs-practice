@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class Board1744780525947 implements MigrationInterface {
-  name = 'Board1744780525947';
+export class Post1744780525947 implements MigrationInterface {
+  name = 'Post1744780525947';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE \`board\` (
+      `CREATE TABLE \`post\` (
         \`id\` int NOT NULL AUTO_INCREMENT, 
         \`user_id\` int NOT NULL, 
         \`title\` varchar(64) NOT NULL, 
@@ -17,7 +17,7 @@ export class Board1744780525947 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP INDEX \`userId\` ON \`board\``);
-    await queryRunner.query(`DROP TABLE \`board\``);
+    await queryRunner.query(`DROP INDEX \`userId\` ON \`post\``);
+    await queryRunner.query(`DROP TABLE \`post\``);
   }
 }
