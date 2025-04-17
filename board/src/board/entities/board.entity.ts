@@ -32,4 +32,9 @@ export class Board {
 
     return board;
   }
+
+  update(title: string, body: string) {
+    this.title = title;
+    this.body = body;
+  }
 }
