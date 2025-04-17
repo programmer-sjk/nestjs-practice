@@ -1,7 +1,9 @@
+import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 
 export class UpdateBoardRequest {
   @IsNotEmpty()
+  @Type(() => Number)
   @IsInt()
   id: number;
 

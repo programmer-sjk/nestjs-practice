@@ -1,8 +1,10 @@
+import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { Board } from '../entities/board.entity';
 
 export class AddBoardRequest {
   @IsNotEmpty()
+  @Type(() => Number)
   @IsInt()
   userId: number;
 
