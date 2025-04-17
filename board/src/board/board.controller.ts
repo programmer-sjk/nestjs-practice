@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { ResponseEntity } from '../common/response-entity';
 import { BoardService } from './board.service';
 import { AddBoardRequest } from './dto/add-board.request';
+import { FindAllBoardRequest } from './dto/find-all-board.request';
 
 @Controller('board')
 export class BoardController {
@@ -13,9 +14,14 @@ export class BoardController {
     return ResponseEntity.OK(board);
   }
 
-  // 페이지네이션
   @Get()
-  async findAll() {}
+  async findAll(@Query() query: FindAllBoardRequest) {
+    const board = await this.boardService.findAll(
+      query.limit,
+      query.offset ?? 0,
+    );
+    return ResponseEntity.OK(board);
+  }
 
   @Post()
   async register(@Body() request: AddBoardRequest) {
