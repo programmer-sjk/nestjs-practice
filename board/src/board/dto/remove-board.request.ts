@@ -1,6 +1,6 @@
 import { IsInt, IsNotEmpty } from 'class-validator';
 
-export class UpdateBoardRequest {
+export class RemoveBoardRequest {
   @IsNotEmpty()
   @IsInt()
   id: number;
