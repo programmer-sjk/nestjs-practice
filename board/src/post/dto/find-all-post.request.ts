@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 
-export class FindAllBoardRequest {
+export class FindAllPostRequest {
   @IsNotEmpty()
   @Type(() => Number)
   @IsInt()

@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export class Board {
+export class Post {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -25,12 +25,12 @@ export class Board {
   createdAt: Date;
 
   static of(userId: number, title: string, body: string) {
-    const board = new Board();
-    board.userId = userId;
-    board.title = title;
-    board.body = body;
+    const post = new Post();
+    post.userId = userId;
+    post.title = title;
+    post.body = body;
 
-    return board;
+    return post;
   }
 
   update(title: string, body: string) {

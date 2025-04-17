@@ -1,11 +1,12 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { Post } from '../entities/post.entity';
 
-export class UpdateBoardRequest {
+export class AddPostRequest {
   @IsNotEmpty()
   @Type(() => Number)
   @IsInt()
-  id: number;
+  userId: number;
 
   @IsNotEmpty()
   @IsString()
@@ -16,4 +17,8 @@ export class UpdateBoardRequest {
   @IsString()
   @MaxLength(1024)
   body: string;
+
+  toEntity() {
+    return Post.of(this.userId, this.title, this.body);
+  }
 }
