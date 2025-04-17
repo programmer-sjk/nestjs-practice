@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { ResponseEntity } from '../common/response-entity';
 import { BoardService } from './board.service';
 import { AddBoardRequest } from './dto/add-board.request';
@@ -33,6 +33,12 @@ export class BoardController {
   @Put()
   async update(@Body() request: UpdateBoardRequest) {
     await this.boardService.update(request);
+    return ResponseEntity.OK();
+  }
+
+  @Delete()
+  async remove(@Body() request: UpdateBoardRequest) {
+    await this.boardService.remove(request);
     return ResponseEntity.OK();
   }
 }

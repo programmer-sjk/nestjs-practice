@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { BoardRepository } from './board.repository';
 import { AddBoardRequest } from './dto/add-board.request';
+import { RemoveBoardRequest } from './dto/remove-board.request';
 import { UpdateBoardRequest } from './dto/update-board.request';
 
 @Injectable()
@@ -34,5 +35,10 @@ export class BoardService {
     const board = await this.find(dto.id);
     board.update(dto.title, dto.body);
     await this.boardRepository.save(board);
+  }
+
+  async remove(dto: RemoveBoardRequest) {
+    const board = await this.find(dto.id);
+    await this.boardRepository.remove(board);
   }
 }
