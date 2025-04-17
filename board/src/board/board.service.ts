@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { BoardRepository } from './board.repository';
 import { AddBoardRequest } from './dto/add-board.request';
+import { UpdateBoardRequest } from './dto/update-board.request';
 
 @Injectable()
 export class BoardService {
@@ -21,10 +22,17 @@ export class BoardService {
       skip: offset,
     });
 
+    // 여기서 전체 페이지 개수나 row 추가예정
     return board;
   }
 
   async add(dto: AddBoardRequest) {
     return this.boardRepository.save(dto.toEntity());
+  }
+
+  async update(dto: UpdateBoardRequest) {
+    const board = await this.find(dto.id);
+    board.update(dto.title, dto.body);
+    await this.boardRepository.save(board);
   }
 }
