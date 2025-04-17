@@ -3,6 +3,7 @@ import { ResponseEntity } from '../common/response-entity';
 import { BoardService } from './board.service';
 import { AddBoardRequest } from './dto/add-board.request';
 import { FindAllBoardRequest } from './dto/find-all-board.request';
+import { RemoveBoardRequest } from './dto/remove-board.request';
 import { UpdateBoardRequest } from './dto/update-board.request';
 
 @Controller('board')
@@ -37,7 +38,7 @@ export class BoardController {
   }
 
   @Delete()
-  async remove(@Body() request: UpdateBoardRequest) {
+  async remove(@Body() request: RemoveBoardRequest) {
     await this.boardService.remove(request);
     return ResponseEntity.OK();
   }
