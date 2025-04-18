@@ -36,4 +36,8 @@ export class Comment {
     comment.parentId = parentId;
     return comment;
   }
+
+  update(body: string) {
+    this.body = body;
+  }
 }
