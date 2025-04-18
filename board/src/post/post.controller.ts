@@ -8,6 +8,8 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../auth/enums/role.enum';
 import { ResponseEntity } from '../common/response-entity';
 import { AddPostRequest } from './dto/add-post.request';
 import { FindAllPostRequest } from './dto/find-all-post.request';
@@ -34,18 +36,21 @@ export class PostController {
     return ResponseEntity.OK(post);
   }
 
+  @Roles(Role.USER)
   @Post()
   async register(@Body() request: AddPostRequest) {
     await this.postService.add(request);
     return ResponseEntity.OK();
   }
 
+  @Roles(Role.USER)
   @Put()
   async update(@Body() request: UpdatePostRequest) {
     await this.postService.update(request);
     return ResponseEntity.OK();
   }
 
+  @Roles(Role.USER)
   @Delete()
   async remove(@Body() request: RemovePostRequest) {
     await this.postService.remove(request);
