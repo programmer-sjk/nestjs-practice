@@ -43,12 +43,21 @@ export class PostService {
 
   async update(dto: UpdatePostRequest) {
     const post = await this.find(dto.id);
+    this.validate(dto.userId, post.userId);
+
     post.update(dto.title, dto.body);
     await this.postRepository.save(post);
   }
 
   async remove(dto: RemovePostRequest) {
     const post = await this.find(dto.id);
+    this.validate(dto.userId, post.userId);
     await this.postRepository.remove(post);
+  }
+
+  private validate(userId: number, postUseId: number) {
+    if (userId != postUseId) {
+      throw new BadRequestException('권한이 없습니다.');
+    }
   }
 }
