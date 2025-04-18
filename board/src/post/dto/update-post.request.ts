@@ -8,6 +8,11 @@ export class UpdatePostRequest {
   id: number;
 
   @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
+  userId: number;
+
+  @IsNotEmpty()
   @IsString()
   @MaxLength(64)
   title: string;

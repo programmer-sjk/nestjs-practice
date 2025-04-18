@@ -6,4 +6,9 @@ export class RemovePostRequest {
   @Type(() => Number)
   @IsInt()
   id: number;
+
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
+  userId: number;
 }
