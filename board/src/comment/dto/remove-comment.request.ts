@@ -1,7 +1,7 @@
 import { Type } from 'class-transformer';
 import { IsInt, IsNotEmpty } from 'class-validator';
 
-export class UpdateCommentRequest {
+export class RemoveCommentRequest {
   @IsNotEmpty()
   @Type(() => Number)
   @IsInt()
