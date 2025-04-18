@@ -3,8 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Post } from '../../post/entities/post.entity';
 
 @Entity()
 export class Comment {
@@ -27,6 +29,12 @@ export class Comment {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @ManyToOne(() => Post, (post) => post.comments, {
+    createForeignKeyConstraints: false,
+    orphanedRowAction: 'delete',
+  })
+  post: Post;
 
   static of(userId: number, postId: number, body: string, parentId?: number) {
     const comment = new Comment();

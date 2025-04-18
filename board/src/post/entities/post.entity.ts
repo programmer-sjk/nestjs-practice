@@ -3,8 +3,10 @@ import {
   CreateDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Comment } from '../../comment/entities/comment.entity';
 
 @Entity()
 export class Post {
@@ -23,6 +25,9 @@ export class Post {
 
   @CreateDateColumn()
   createdAt: Date;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment[];
 
   static of(userId: number, title: string, body: string) {
     const post = new Post();
