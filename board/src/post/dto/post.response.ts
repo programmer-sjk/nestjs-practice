@@ -1,5 +1,6 @@
 import { Exclude, Expose } from 'class-transformer';
 import { Comment } from '../../comment/entities/comment.entity';
+import { Post } from './../entities/post.entity';
 
 export class PostResponse {
   @Exclude() private _id: number;
@@ -8,17 +9,11 @@ export class PostResponse {
   @Exclude() private _body: string;
   @Exclude() private _comments: Comment[];
 
-  constructor(
-    id: number,
-    userId: number,
-    title: string,
-    body: string,
-    comments: Comment[],
-  ) {
-    this._id = id;
-    this._userId = userId;
-    this._title = title;
-    this._body = body;
+  constructor(post: Post, comments: Comment[]) {
+    this._id = post.id;
+    this._userId = post.userId;
+    this._title = post.title;
+    this._body = post.body;
     this._comments = comments;
   }
 

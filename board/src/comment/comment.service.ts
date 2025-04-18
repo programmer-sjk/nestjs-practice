@@ -8,6 +8,10 @@ import { UpdateCommentRequest } from './dto/update-comment.request';
 export class CommentService {
   constructor(private readonly commentRepository: CommentRepository) {}
 
+  async findAllByPostId(postId: number) {
+    return this.commentRepository.findBy({ postId });
+  }
+
   async register(dto: AddCommentRequest) {
     return this.commentRepository.save(dto.toEntity());
   }

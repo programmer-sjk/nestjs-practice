@@ -1,13 +1,18 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { CommentService } from '../comment/comment.service';
 import { PaginationResponse } from '../common/pagination-response';
 import { AddPostRequest } from './dto/add-post.request';
+import { PostResponse } from './dto/post.response';
 import { RemovePostRequest } from './dto/remove-post.request';
 import { UpdatePostRequest } from './dto/update-post.request';
 import { PostRepository } from './post.repository';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    private readonly commentService: CommentService,
+    private readonly postRepository: PostRepository,
+  ) {}
 
   async find(id: number) {
     const post = await this.postRepository.findOneBy({ id });
@@ -15,7 +20,8 @@ export class PostService {
       throw new BadRequestException('게시물이 존재하지 않습니다.');
     }
 
-    return post;
+    const comments = await this.commentService.findAllByPostId(post.id);
+    return new PostResponse(post, comments);
   }
 
   async findAll(limit, offset) {
