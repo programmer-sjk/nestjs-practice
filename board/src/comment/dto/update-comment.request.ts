@@ -8,6 +8,11 @@ export class UpdateCommentRequest {
   id: number;
 
   @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
+  userId: number;
+
+  @IsNotEmpty()
   @IsString()
   @MaxLength(255)
   body: string;
