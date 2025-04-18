@@ -4,6 +4,7 @@ import { connectionOptions } from '../ormconfig';
 import { CommentModule } from './comment/comment.module';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { UserModule } from './user/user.module';
     PostModule,
     UserModule,
     CommentModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
