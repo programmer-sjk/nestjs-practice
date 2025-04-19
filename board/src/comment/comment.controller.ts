@@ -8,6 +8,7 @@ import { FindUserCommentRequest } from './dto/find-user-comment.request';
 import { RemoveCommentRequest } from './dto/remove-comment.request';
 import { UpdateCommentRequest } from './dto/update-comment.request';
 
+@Roles(Role.USER)
 @Controller('comment')
 export class CommentController {
   constructor(private readonly commentService: CommentService) {}
@@ -18,21 +19,18 @@ export class CommentController {
     return ResponseEntity.OK(comments);
   }
 
-  @Roles(Role.USER)
   @Post()
   async register(@Body() request: AddCommentRequest) {
     await this.commentService.register(request);
     return ResponseEntity.OK();
   }
 
-  @Roles(Role.USER)
   @Patch()
   async update(@Body() request: UpdateCommentRequest) {
     await this.commentService.update(request);
     return ResponseEntity.OK();
   }
 
-  @Roles(Role.USER)
   @Delete()
   async remove(@Body() request: RemoveCommentRequest) {
     await this.commentService.remove(request);
