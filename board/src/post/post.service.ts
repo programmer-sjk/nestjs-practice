@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { CommentService } from '../comment/comment.service';
 import { Comment } from '../comment/entities/comment.entity';
 import { PaginationResponse } from '../common/pagination-response';
 import { AddPostRequest } from './dto/add-post.request';
@@ -9,7 +10,10 @@ import { PostRepository } from './post.repository';
 
 @Injectable()
 export class PostService {
-  constructor(private readonly postRepository: PostRepository) {}
+  constructor(
+    private readonly commentService: CommentService,
+    private readonly postRepository: PostRepository,
+  ) {}
 
   async find(id: number) {
     const post = await this.postRepository.findOne({
@@ -60,6 +64,7 @@ export class PostService {
     const post = await this.findOne(dto.id);
     this.validate(dto.userId, post.userId);
     await this.postRepository.remove(post);
+    await this.commentService.removeByPostId(post.id);
   }
 
   private validate(userId: number, postUseId: number) {

@@ -31,6 +31,10 @@ export class CommentService {
     await this.commentRepository.remove(comment);
   }
 
+  async removeByPostId(postId: number) {
+    return this.commentRepository.delete({ postId });
+  }
+
   private async findComment(id: number) {
     return this.commentRepository.findOneBy({ id });
   }
