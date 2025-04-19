@@ -1,12 +1,17 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CommentRepository } from './comment.repository';
 import { AddCommentRequest } from './dto/add-comment.request';
+import { FindUserCommentRequest } from './dto/find-user-comment.request';
 import { RemoveCommentRequest } from './dto/remove-comment.request';
 import { UpdateCommentRequest } from './dto/update-comment.request';
 
 @Injectable()
 export class CommentService {
   constructor(private readonly commentRepository: CommentRepository) {}
+
+  async findUserComments(dto: FindUserCommentRequest) {
+    return this.commentRepository.findBy({ userId: dto.userId });
+  }
 
   async findAllByPostId(postId: number) {
     return this.commentRepository.findBy({ postId });
