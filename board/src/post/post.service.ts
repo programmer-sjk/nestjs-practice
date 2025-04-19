@@ -27,6 +27,10 @@ export class PostService {
       },
     });
 
+    if (!post) {
+      throw new BadRequestException('게시물이 존재하지 않습니다.');
+    }
+
     return new PostResponse(post, this.convertComments(post.comments));
   }
 
