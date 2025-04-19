@@ -37,6 +37,7 @@ export class PostController {
     return ResponseEntity.OK(posts);
   }
 
+  @Roles(Role.USER)
   @Get('/user')
   async findUserPosts(@Body() request: FindUserPostRequest) {
     const posts = await this.postService.findUserPosts(request);
