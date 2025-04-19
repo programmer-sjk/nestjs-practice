@@ -89,7 +89,7 @@ export class PostService {
     const post = await this.findOne(dto.id);
     this.validate(dto.userId, post.userId);
     await this.postRepository.remove(post);
-    await this.commentService.removeByPostId(post.id);
+    await this.commentService.removeByPostId(dto.id);
   }
 
   private validate(userId: number, postUseId: number) {
