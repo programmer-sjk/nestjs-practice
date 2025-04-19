@@ -13,6 +13,7 @@ import { Role } from '../auth/enums/role.enum';
 import { ResponseEntity } from '../common/response-entity';
 import { AddPostRequest } from './dto/add-post.request';
 import { FindAllPostRequest } from './dto/find-all-post.request';
+import { FindUserPostRequest } from './dto/find-user-post.request';
 import { RemovePostRequest } from './dto/remove-post.request';
 import { UpdatePostRequest } from './dto/update-post.request';
 import { PostService } from './post.service';
@@ -29,11 +30,17 @@ export class PostController {
 
   @Get()
   async findAll(@Query() query: FindAllPostRequest) {
-    const post = await this.postService.findAll(
+    const posts = await this.postService.findAll(
       query.limit,
       query.offset ?? 0,
     );
-    return ResponseEntity.OK(post);
+    return ResponseEntity.OK(posts);
+  }
+
+  @Get('/user')
+  async findUserPosts(@Body() request: FindUserPostRequest) {
+    const posts = await this.postService.findUserPosts(request);
+    return ResponseEntity.OK(posts);
   }
 
   @Roles(Role.USER)

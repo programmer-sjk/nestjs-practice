@@ -3,6 +3,7 @@ import { CommentService } from '../comment/comment.service';
 import { Comment } from '../comment/entities/comment.entity';
 import { PaginationResponse } from '../common/pagination-response';
 import { AddPostRequest } from './dto/add-post.request';
+import { FindUserPostRequest } from './dto/find-user-post.request';
 import { PostResponse } from './dto/post.response';
 import { RemovePostRequest } from './dto/remove-post.request';
 import { UpdatePostRequest } from './dto/update-post.request';
@@ -42,6 +43,26 @@ export class PostService {
     return new PaginationResponse(
       limit,
       offset,
+      totalCount,
+      totalPage,
+      postsAndCount[0],
+    );
+  }
+
+  async findUserPosts(dto: FindUserPostRequest) {
+    const postsAndCount = await this.postRepository.findAndCount({
+      where: { userId: dto.userId },
+      take: dto.limit,
+      skip: dto.offset,
+      order: { id: 'DESC' },
+    });
+
+    const totalCount = postsAndCount[1];
+    const totalPage = Math.ceil(totalCount / dto.limit);
+
+    return new PaginationResponse(
+      dto.limit,
+      dto.offset,
       totalCount,
       totalPage,
       postsAndCount[0],
