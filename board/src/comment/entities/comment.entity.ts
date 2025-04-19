@@ -32,7 +32,6 @@ export class Comment {
 
   @ManyToOne(() => Post, (post) => post.comments, {
     createForeignKeyConstraints: false,
-    orphanedRowAction: 'delete',
   })
   post: Post;
 
