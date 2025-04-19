@@ -22,6 +22,13 @@ import { PostService } from './post.service';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
+  @Roles(Role.USER)
+  @Get('user')
+  async findUserPosts(@Body() request: FindUserPostRequest) {
+    const posts = await this.postService.findUserPosts(request);
+    return ResponseEntity.OK(posts);
+  }
+
   @Get(':id')
   async find(@Param('id') id: number) {
     const post = await this.postService.find(id);
@@ -34,13 +41,6 @@ export class PostController {
       query.limit,
       query.offset ?? 0,
     );
-    return ResponseEntity.OK(posts);
-  }
-
-  @Roles(Role.USER)
-  @Get('/user')
-  async findUserPosts(@Body() request: FindUserPostRequest) {
-    const posts = await this.postService.findUserPosts(request);
     return ResponseEntity.OK(posts);
   }
 
