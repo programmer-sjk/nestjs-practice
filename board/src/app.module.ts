@@ -8,6 +8,7 @@ import { AuthGuard } from './auth/guards/auth.guard';
 import { CommentModule } from './comment/comment.module';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
+import { RedisModule } from './redis/redis.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UserModule } from './user/user.module';
     CommentModule,
     AuthModule,
     JwtModule,
+    RedisModule,
   ],
   providers: [
     {
