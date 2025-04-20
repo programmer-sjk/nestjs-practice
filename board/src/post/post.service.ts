@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { Like } from 'typeorm';
 import { CommentService } from '../comment/comment.service';
 import { Comment } from '../comment/entities/comment.entity';
 import { PaginationResponse } from '../common/pagination-response';
@@ -71,6 +72,10 @@ export class PostService {
       totalPage,
       postsAndCount[0],
     );
+  }
+
+  async search(keyword: string) {
+    return this.postRepository.findBy({ title: Like(`%${keyword}%`) });
   }
 
   async add(dto: AddPostRequest) {

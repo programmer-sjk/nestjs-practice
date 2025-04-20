@@ -29,6 +29,12 @@ export class PostController {
     return ResponseEntity.OK(posts);
   }
 
+  @Get('search')
+  async search(@Query('keyword') keyword: string) {
+    const post = await this.postService.search(keyword);
+    return ResponseEntity.OK(post);
+  }
+
   @Get(':id')
   async find(@Param('id') id: number) {
     const post = await this.postService.find(id);
