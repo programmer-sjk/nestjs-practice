@@ -9,6 +9,7 @@ import { CommentModule } from './comment/comment.module';
 import { PostModule } from './post/post.module';
 import { UserModule } from './user/user.module';
 import { RedisModule } from './redis/redis.module';
+import { KeywordModule } from './keyword/keyword.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { RedisModule } from './redis/redis.module';
     AuthModule,
     JwtModule,
     RedisModule,
+    KeywordModule,
   ],
   providers: [
     {
