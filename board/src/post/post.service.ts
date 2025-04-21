@@ -3,6 +3,7 @@ import { Like } from 'typeorm';
 import { CommentService } from '../comment/comment.service';
 import { Comment } from '../comment/entities/comment.entity';
 import { PaginationResponse } from '../common/pagination-response';
+import { RedisService } from '../redis/redis.service';
 import { AddPostRequest } from './dto/add-post.request';
 import { FindUserPostRequest } from './dto/find-user-post.request';
 import { PostResponse } from './dto/post.response';
@@ -12,8 +13,11 @@ import { PostRepository } from './post.repository';
 
 @Injectable()
 export class PostService {
+  private readonly postKeywordKey = 'sorted-set:post:popular-keyword';
+
   constructor(
     private readonly commentService: CommentService,
+    private readonly redisService: RedisService,
     private readonly postRepository: PostRepository,
   ) {}
 
@@ -75,6 +79,7 @@ export class PostService {
   }
 
   async search(keyword: string) {
+    await this.redisService.zincrby(this.postKeywordKey, keyword);
     return this.postRepository.findBy({ title: Like(`%${keyword}%`) });
   }
 
