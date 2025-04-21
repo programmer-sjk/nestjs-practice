@@ -11,4 +11,8 @@ export class RedisService {
   async zincrby(key: string, member: string) {
     return this.redis.zincrby(key, this.incrAmount, member);
   }
+
+  async zrevrange(key: string, limit: number) {
+    return this.redis.zrevrange(key, 0, limit);
+  }
 }
