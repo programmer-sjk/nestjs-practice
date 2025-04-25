@@ -10,6 +10,7 @@ import { FindUserPostRequest } from './dto/find-user-post.request';
 import { PostResponse } from './dto/post.response';
 import { RemovePostRequest } from './dto/remove-post.request';
 import { UpdatePostRequest } from './dto/update-post.request';
+import { PostSearchedEvent } from './events/post-searched.event';
 import { PostRepository } from './post.repository';
 
 @Injectable()
@@ -81,7 +82,8 @@ export class PostService {
   }
 
   async search(keyword: string) {
-    await this.redisService.zincrby(this.postKeywordKey, keyword);
+    this.eventEmitter.emit('post.searched', new PostSearchedEvent(keyword));
+    // await this.redisService.zincrby(this.postKeywordKey, keyword);
     return this.postRepository.findBy({ title: Like(`%${keyword}%`) });
   }
 
