@@ -15,11 +15,8 @@ import { PostRepository } from './post.repository';
 
 @Injectable()
 export class PostService {
-  private readonly postKeywordKey = 'sorted-set:post:popular-keyword';
-
   constructor(
     private readonly commentService: CommentService,
-    private readonly redisService: RedisService,
     private readonly postRepository: PostRepository,
     private readonly eventEmitter: EventEmitter2,
   ) {}
@@ -83,7 +80,6 @@ export class PostService {
 
   async search(keyword: string) {
     this.eventEmitter.emit('post.searched', new PostSearchedEvent(keyword));
-    // await this.redisService.zincrby(this.postKeywordKey, keyword);
     return this.postRepository.findBy({ title: Like(`%${keyword}%`) });
   }
 
