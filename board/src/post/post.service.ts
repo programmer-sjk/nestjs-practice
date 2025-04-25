@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Like } from 'typeorm';
 import { CommentService } from '../comment/comment.service';
 import { Comment } from '../comment/entities/comment.entity';
@@ -19,6 +20,7 @@ export class PostService {
     private readonly commentService: CommentService,
     private readonly redisService: RedisService,
     private readonly postRepository: PostRepository,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async find(id: number) {
