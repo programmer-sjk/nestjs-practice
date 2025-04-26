@@ -15,6 +15,7 @@
   - 이때 **`검색된 횟수에 따라 게시글 인기 검색어에서 조회할 수 있다`**.
   - 인기 검색어는 과거 데이터가 필요하지 않다고 가정하여 redis sorted set을 활용한다.
   - 해당keyword에 대해 **`sorted set에 incr를 수행한다`**.
+  - event를 활용해 post 리스너가 sorted set에 작업을 수행한다.
 
 ### 댓글 (Comment)
 
