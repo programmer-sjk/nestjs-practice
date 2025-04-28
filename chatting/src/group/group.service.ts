@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { AddGroupRequest } from './dto/add-group.request';
-import { GroupRepository } from './group.repository';
+import { GroupRepository } from './repositories/group.repository';
 
 @Injectable()
 export class GroupService {

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { GroupController } from './group.controller';
-import { GroupRepository } from './group.repository';
+import { GroupRepository } from './repositories/group.repository';
 import { GroupService } from './group.service';
 
 @Module({
