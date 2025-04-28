@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -14,13 +13,12 @@ export class Group {
   @Column({ length: 32 })
   name: string;
 
-  @Index('userId')
-  @Column()
-  userId: number;
-
-  @Column('boolean')
-  isAlarm: boolean;
-
   @CreateDateColumn()
   createdAt: Date;
+
+  static of(name: string) {
+    const group = new Group();
+    group.name = name;
+    return group;
+  }
 }
