@@ -22,6 +22,13 @@ export class GroupService {
     await this.groupUserRepository.save(GroupUser.of(group, dto.inviteeId));
   }
 
+  async leave(userId: number) {
+    const groupUser = await this.groupUserRepository.findOneBy({ userId });
+    if (groupUser) {
+      await this.groupUserRepository.remove(groupUser);
+    }
+  }
+
   private async validateInvite(groupId: number, invitorId: number) {
     const userInGroup = await this.groupUserRepository.findOneBy({
       groupId,
