@@ -10,5 +10,15 @@ services:
     environment:
       MYSQL_DATABASE: 'chatting'
       MYSQL_ROOT_PASSWORD: password
+  mongodb:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - data:/data
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
 volumes:
   chatVol:
+  data:
