@@ -1,5 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { AddGroupRequest } from './dto/add-group.request';
+import { InviteGroupRequest } from './dto/invite-group.request';
+import { GroupUser } from './entities/group-user.entity';
 import { GroupUserRepository } from './repositories/group-user.repository';
 import { GroupRepository } from './repositories/group.repository';
 
@@ -14,13 +16,29 @@ export class GroupService {
     await this.groupRepository.save(dto.toEntity());
   }
 
+  async invite(dto: InviteGroupRequest) {
+    await this.validateInvite(dto.groupId, dto.invitorId);
+    const group = await this.findGroup(dto.groupId);
+    await this.groupUserRepository.save(GroupUser.of(group, dto.inviteeId));
+  }
+
   private async validateInvite(groupId: number, invitorId: number) {
     const userInGroup = await this.groupUserRepository.findOneBy({
       groupId,
       userId: invitorId,
     });
+
     if (!userInGroup) {
       throw new BadRequestException('사용자가 채팅 그룹에 속해있지 않습니다.');
     }
+  }
+
+  private async findGroup(groupId: number) {
+    const group = await this.groupRepository.findOneBy({ id: groupId });
+    if (!group) {
+      throw new BadRequestException('채팅 그룹이 존재하지 않습니다');
+    }
+
+    return group;
   }
 }
