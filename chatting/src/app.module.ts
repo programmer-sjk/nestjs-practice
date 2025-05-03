@@ -9,7 +9,9 @@ import { UserModule } from './user/user.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(connectionOptions),
-    MongooseModule.forRoot('mongodb://root:password@localhost:27017/chat'),
+    MongooseModule.forRoot(
+      'mongodb://root:password@localhost:27017/chat?authSource=admin',
+    ),
     UserModule,
     GroupModule,
     ChatModule,
