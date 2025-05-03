@@ -1,6 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { AddGroupRequest } from './dto/add-group.request';
 import { InviteGroupRequest } from './dto/invite-group.request';
+import { LeaveGroupRequest } from './dto/leave-group.request';
 import { GroupUser } from './entities/group-user.entity';
 import { GroupUserRepository } from './repositories/group-user.repository';
 import { GroupRepository } from './repositories/group.repository';
@@ -26,8 +27,13 @@ export class GroupService {
     await this.groupUserRepository.save(GroupUser.of(group, dto.inviteeId));
   }
 
-  async leave(userId: number) {
-    const groupUser = await this.groupUserRepository.findOneBy({ userId });
+  async leave(dto: LeaveGroupRequest) {
+    const { userId, groupId } = dto;
+    const groupUser = await this.groupUserRepository.findOneBy({
+      userId,
+      groupId,
+    });
+
     if (groupUser) {
       await this.groupUserRepository.remove(groupUser);
     }

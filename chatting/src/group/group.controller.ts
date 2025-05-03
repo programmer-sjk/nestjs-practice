@@ -29,7 +29,7 @@ export class GroupController {
 
   @Delete('user')
   async leave(@Body() request: LeaveGroupRequest) {
-    await this.groupService.leave(request.userId);
+    await this.groupService.leave(request);
     return ResponseEntity.OK();
   }
 }
