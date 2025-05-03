@@ -6,6 +6,10 @@ import { UserRepository } from './user.repository';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  async findAll() {
+    return this.userRepository.find();
+  }
+
   async signUp(dto: SignUpRequest) {
     return this.userRepository.save(dto.toEntity());
   }
