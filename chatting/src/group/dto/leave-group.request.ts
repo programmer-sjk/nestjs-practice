@@ -5,5 +5,10 @@ export class LeaveGroupRequest {
   @IsNotEmpty()
   @Type(() => Number)
   @IsInt()
+  groupId: number;
+
+  @IsNotEmpty()
+  @Type(() => Number)
+  @IsInt()
   userId: number;
 }
