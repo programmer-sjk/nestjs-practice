@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ResponseEntity } from '../common/response-entity';
 import { AddGroupRequest } from './dto/add-group.request';
 import { InviteGroupRequest } from './dto/invite-group.request';
@@ -8,6 +8,12 @@ import { GroupService } from './group.service';
 @Controller('group')
 export class GroupController {
   constructor(private readonly groupService: GroupService) {}
+
+  @Get(':id/user')
+  async findGroupUsers(@Param('id') groupId: number) {
+    const users = await this.groupService.findGroupUsers(groupId);
+    return ResponseEntity.OK(users);
+  }
 
   @Post()
   async addGroup(@Body() request: AddGroupRequest) {

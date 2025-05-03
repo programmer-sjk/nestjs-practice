@@ -12,6 +12,10 @@ export class GroupService {
     private readonly groupUserRepository: GroupUserRepository,
   ) {}
 
+  async findGroupUsers(groupId: number) {
+    return this.groupUserRepository.findBy({ groupId });
+  }
+
   async addGroup(dto: AddGroupRequest) {
     await this.groupRepository.save(dto.toEntity());
   }
