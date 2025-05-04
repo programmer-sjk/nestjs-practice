@@ -14,4 +14,8 @@ export class ChatService {
     const data = new this.chatModel(dto);
     return data.save();
   }
+
+  async findAll(groupId: number) {
+    return this.chatModel.find({ groupId }).exec();
+  }
 }
