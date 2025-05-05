@@ -22,7 +22,7 @@ export class GroupService {
   }
 
   async invite(dto: InviteGroupRequest) {
-    await this.validateInvite(dto.groupId, dto.invitorId);
+    await this.validateUserInGroup(dto.groupId, dto.invitorId);
     const group = await this.findGroup(dto.groupId);
     await this.groupUserRepository.save(GroupUser.of(group, dto.inviteeId));
   }
@@ -39,7 +39,7 @@ export class GroupService {
     }
   }
 
-  private async validateInvite(groupId: number, invitorId: number) {
+  private async validateUserInGroup(groupId: number, invitorId: number) {
     const userInGroup = await this.groupUserRepository.findOneBy({
       groupId,
       userId: invitorId,
