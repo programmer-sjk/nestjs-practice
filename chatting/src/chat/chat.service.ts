@@ -16,6 +16,9 @@ export class ChatService {
   }
 
   async findAll(groupId: number) {
-    return this.chatModel.find({ groupId }, { _id: false }).lean();
+    return this.chatModel
+      .find({ groupId }, { _id: false })
+      .sort({ createdAt: 'asc' })
+      .lean();
   }
 }
