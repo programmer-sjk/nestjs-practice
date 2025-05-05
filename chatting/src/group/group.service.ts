@@ -39,10 +39,10 @@ export class GroupService {
     }
   }
 
-  private async validateUserInGroup(groupId: number, invitorId: number) {
+  async validateUserInGroup(groupId: number, userId: number) {
     const userInGroup = await this.groupUserRepository.findOneBy({
       groupId,
-      userId: invitorId,
+      userId,
     });
 
     if (!userInGroup) {
