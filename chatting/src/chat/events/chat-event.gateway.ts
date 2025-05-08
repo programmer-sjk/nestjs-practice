@@ -21,12 +21,6 @@ export class ChatEventsGateway
     this.server.emit('events', data);
   }
 
-  @SubscribeMessage('identity')
-  async identity(@MessageBody() data: number): Promise<number> {
-    console.log(data);
-    return data;
-  }
-
   afterInit() {
     console.log('웹소켓 서버 초기화 ✅');
   }
