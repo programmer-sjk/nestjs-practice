@@ -18,8 +18,7 @@ export class ChatEventsGateway
 
   @SubscribeMessage('events')
   findAll(@MessageBody() data: any) {
-    console.log(data);
-    return data;
+    this.server.emit('events', data);
   }
 
   @SubscribeMessage('identity')
@@ -32,9 +31,7 @@ export class ChatEventsGateway
     console.log('웹소켓 서버 초기화 ✅');
   }
 
-  handleConnection(client: Socket, ...args: any[]) {
-    console.log(client, args);
-  }
+  handleConnection(client: Socket, ...args: any[]) {}
 
   handleDisconnect(client: Socket) {
     console.log(`Client Disconnected : ${client.id}`);
