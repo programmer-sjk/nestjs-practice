@@ -1,29 +1,42 @@
 import {
   MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
+  OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
-import { from, map, Observable } from 'rxjs';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({ namespace: 'events' })
-export class ChatEventsGateway {
+@WebSocketGateway({ cors: { origin: '*' } })
+export class ChatEventsGateway
+  implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect
+{
   @WebSocketServer()
   server: Server;
 
   @SubscribeMessage('events')
-  findAll(@MessageBody() data: any): Observable<WsResponse<number>> {
+  findAll(@MessageBody() data: any) {
     console.log(data);
-    return from([1, 2, 3]).pipe(
-      map((item) => ({ event: 'events', data: item })),
-    );
+    return data;
   }
 
   @SubscribeMessage('identity')
   async identity(@MessageBody() data: number): Promise<number> {
     console.log(data);
     return data;
+  }
+
+  afterInit() {
+    console.log('웹소켓 서버 초기화 ✅');
+  }
+
+  handleConnection(client: Socket, ...args: any[]) {
+    console.log(client, args);
+  }
+
+  handleDisconnect(client: Socket) {
+    console.log(`Client Disconnected : ${client.id}`);
   }
 }
