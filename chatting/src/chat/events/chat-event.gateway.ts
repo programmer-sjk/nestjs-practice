@@ -5,9 +5,10 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer
+  WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { IChat } from '../interfaces/chat.interface';
 
 @WebSocketGateway({ cors: { origin: '*' } })
 export class ChatEventsGateway
@@ -17,8 +18,8 @@ export class ChatEventsGateway
   server: Server;
 
   @SubscribeMessage('chatting')
-  findAll(@MessageBody() data: any) {
-    this.server.emit('chatting', data);
+  findAll(@MessageBody() chatting: IChat) {
+    this.server.emit('chatting', chatting.body);
   }
 
   afterInit() {
