@@ -5,7 +5,7 @@ import {
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
-  WebSocketServer,
+  WebSocketServer
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
@@ -16,9 +16,9 @@ export class ChatEventsGateway
   @WebSocketServer()
   server: Server;
 
-  @SubscribeMessage('events')
+  @SubscribeMessage('chatting')
   findAll(@MessageBody() data: any) {
-    this.server.emit('events', data);
+    this.server.emit('chatting', data);
   }
 
   afterInit() {
