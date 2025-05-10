@@ -1,4 +1,9 @@
-import { IsNotEmpty, IsPhoneNumber, IsString, MaxLength } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsPhoneNumber,
+  IsString,
+  MaxLength,
+} from 'class-validator';
 import { User } from '../entities/user.entity';
 
 export class SignUpRequest {
@@ -17,7 +22,11 @@ export class SignUpRequest {
   @IsPhoneNumber('KR')
   phoneNumber: string;
 
+  @IsNotEmpty()
+  @IsString()
+  password: string;
+
   toEntity() {
-    return User.of(this.name, this.email, this.phoneNumber);
+    return User.of(this.name, this.email, this.phoneNumber, this.password);
   }
 }

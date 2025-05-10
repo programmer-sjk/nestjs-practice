@@ -20,16 +20,25 @@ export class User {
   @Column({ length: 32 })
   phoneNumber: string;
 
+  @Column()
+  password: string;
+
   @CreateDateColumn()
   createdAt: Date;
 
   @DeleteDateColumn()
   deletedAt: Date;
 
-  static of(name: string, email: string, phoneNumber: string) {
+  static of(
+    name: string,
+    email: string,
+    phoneNumber: string,
+    password: string,
+  ) {
     const user = new User();
     user.name = name;
     user.email = email;
+    user.password = password;
     user.phoneNumber = phoneNumber;
     return user;
   }
