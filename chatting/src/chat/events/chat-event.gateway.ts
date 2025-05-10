@@ -8,6 +8,8 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { DateUtil } from '../../common/date-util';
+import { ChatResponse } from '../dto/chat.response';
 import { IChat } from '../interfaces/chat.interface';
 
 @WebSocketGateway({ cors: { origin: '*' } })
@@ -19,7 +21,9 @@ export class ChatEventsGateway
 
   @SubscribeMessage('chatting')
   findAll(@MessageBody() chatting: IChat) {
-    this.server.emit('chatting', chatting.body);
+    const time = DateUtil.now().toFormat('yyyy-mm-dd HH:mm');
+    const response = new ChatResponse(chatting.body, time);
+    this.server.emit('chatting', response);
   }
 
   afterInit() {
