@@ -5,6 +5,7 @@ import { connectionOptions } from '../ormconfig';
 import { ChatModule } from './chat/chat.module';
 import { GroupModule } from './group/group.module';
 import { UserModule } from './user/user.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { UserModule } from './user/user.module';
     UserModule,
     GroupModule,
     ChatModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
