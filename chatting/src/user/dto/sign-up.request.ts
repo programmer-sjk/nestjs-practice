@@ -4,6 +4,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
+import { hash } from '../../common/bcrypt';
 import { User } from '../entities/user.entity';
 
 export class SignUpRequest {
@@ -27,6 +28,11 @@ export class SignUpRequest {
   password: string;
 
   toEntity() {
-    return User.of(this.name, this.email, this.phoneNumber, this.password);
+    return User.of(
+      this.name,
+      this.email,
+      this.phoneNumber,
+      hash(this.password),
+    );
   }
 }
