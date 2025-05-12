@@ -6,6 +6,10 @@ import { UserRepository } from './user.repository';
 export class UserService {
   constructor(private readonly userRepository: UserRepository) {}
 
+  async findOneByEmail(email: string) {
+    return this.userRepository.findOneBy({ email });
+  }
+
   async findAll() {
     return this.userRepository.find();
   }
