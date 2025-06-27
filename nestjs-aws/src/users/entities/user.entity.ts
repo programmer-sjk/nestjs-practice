@@ -27,4 +27,13 @@ export class User {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  toEntity(name: string, email: string, password: string) {
+    const user = new User();
+    user.name = name;
+    user.email = email;
+    user.password = password;
+
+    return user;
+  }
 }
