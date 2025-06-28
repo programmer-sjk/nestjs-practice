@@ -1,4 +1,11 @@
 import { Injectable } from '@nestjs/common';
-
+import { SignUpRequest } from './dto/sign-up.request';
+import { UserRepository } from './user.repository';
 @Injectable()
-export class UsersService {}
+export class UserService {
+  constructor(private readonly userRepository: UserRepository) {}
+
+  async signUp(dto: SignUpRequest) {
+    return this.userRepository.save(dto.toEntity());
+  }
+}
