@@ -28,7 +28,7 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  of(name: string, email: string, password: string) {
+  static of(name: string, email: string, password: string) {
     const user = new User();
     user.name = name;
     user.email = email;
