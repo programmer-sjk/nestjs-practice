@@ -28,7 +28,7 @@ export class User {
   @DeleteDateColumn()
   deletedAt: Date;
 
-  toEntity(name: string, email: string, password: string) {
+  of(name: string, email: string, password: string) {
     const user = new User();
     user.name = name;
     user.email = email;
