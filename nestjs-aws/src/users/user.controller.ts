@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { ResponseEntity } from '../common/response-entity';
 import { SignUpRequest } from './dto/sign-up.request';
 import { UserService } from './user.service';
 
@@ -8,6 +9,13 @@ export class UserController {
 
   @Post()
   async signUp(@Body() body: SignUpRequest) {
-    return this.usersService.signUp(body);
+    await this.usersService.signUp(body);
+    return ResponseEntity.OK();
+  }
+
+  @Post('profile')
+  async registerProfile() {
+    await this.usersService.uploadProfile();
+    return ResponseEntity.OK();
   }
 }
