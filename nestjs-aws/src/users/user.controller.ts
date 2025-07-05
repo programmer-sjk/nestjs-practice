@@ -1,4 +1,11 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ResponseEntity } from '../common/response-entity';
 import { SignUpRequest } from './dto/sign-up.request';
 import { UserService } from './user.service';
@@ -14,7 +21,9 @@ export class UserController {
   }
 
   @Post('profile')
-  async registerProfile() {
+  @UseInterceptors(FileInterceptor('file'))
+  async registerProfile(@UploadedFile() file: Express.Multer.File) {
+    console.log(file);
     await this.usersService.uploadProfile();
     return ResponseEntity.OK();
   }
