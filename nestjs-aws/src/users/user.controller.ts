@@ -23,8 +23,7 @@ export class UserController {
   @Post('profile')
   @UseInterceptors(FileInterceptor('file'))
   async registerProfile(@UploadedFile() file: Express.Multer.File) {
-    console.log(file);
-    await this.usersService.uploadProfile();
+    await this.usersService.uploadProfile(file);
     return ResponseEntity.OK();
   }
 }
