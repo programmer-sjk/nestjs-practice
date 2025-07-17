@@ -40,13 +40,10 @@ export class UserService {
       ContentType: file.mimetype,
     });
     try {
-      const result = await this.s3Client.send(command);
+      await this.s3Client.send(command);
       const imagePath = `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${key}`;
-      console.log(imagePath);
-      // 2. db 저장
-      // 여기서 userProfileRepository에 파일 URL 저장
-      // await this.userProfileRepository.save({ userId, profileUrl: fileUrl });
-      console.log(result);
+
+      await this.userProfileRepository.save({ userId, path: imagePath });
       return { imagePath };
     } catch (error) {
       console.error('S3 업로드 에러:', error);
