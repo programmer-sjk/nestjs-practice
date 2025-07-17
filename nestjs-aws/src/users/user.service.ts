@@ -31,7 +31,7 @@ export class UserService {
     return this.userRepository.save(dto.toEntity());
   }
 
-  async uploadProfile(file: Express.Multer.File) {
+  async uploadProfile(userId: number, file: Express.Multer.File) {
     const key = `${this.directory}/${Date.now()}-profile`;
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
@@ -39,7 +39,6 @@ export class UserService {
       Body: file.buffer,
       ContentType: file.mimetype,
     });
-
     try {
       const result = await this.s3Client.send(command);
       const imagePath = `https://${this.bucketName}.s3.${this.region}.amazonaws.com/${key}`;
@@ -47,9 +46,7 @@ export class UserService {
       // 2. db 저장
       // 여기서 userProfileRepository에 파일 URL 저장
       // await this.userProfileRepository.save({ userId, profileUrl: fileUrl });
-
       console.log(result);
-
       return { imagePath };
     } catch (error) {
       console.error('S3 업로드 에러:', error);
