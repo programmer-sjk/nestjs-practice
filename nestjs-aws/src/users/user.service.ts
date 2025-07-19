@@ -17,7 +17,7 @@ export class UserService {
   }
 
   async uploadProfile(userId: number, file: Express.Multer.File) {
-    const imagePath = await this.uploadService.uploadProfile(file);
+    const imagePath = await this.uploadService.uploadProfile(userId, file);
     await this.userProfileRepository.save({ userId, path: imagePath });
     return { imagePath };
   }

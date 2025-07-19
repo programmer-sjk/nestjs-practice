@@ -20,8 +20,8 @@ export class UploadService {
     });
   }
 
-  async uploadProfile(file: Express.Multer.File) {
-    const key = `${this.directory}/${Date.now()}-profile`;
+  async uploadProfile(userId: number, file: Express.Multer.File) {
+    const key = `${this.directory}/${userId}/${Date.now()}-profile`;
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
