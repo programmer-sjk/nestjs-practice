@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsNotEmpty, IsString, ValidateNested } from 'class-validator';
-import { Address } from '../entities/address.entity';
+import { AddressRequest } from './address.request';
 
 export class SignUpRequest {
   @IsNotEmpty()
@@ -13,6 +13,6 @@ export class SignUpRequest {
 
   @IsNotEmpty()
   @ValidateNested()
-  @Type(() => Address)
-  address: Address;
+  @Type(() => AddressRequest)
+  address: AddressRequest;
 }
