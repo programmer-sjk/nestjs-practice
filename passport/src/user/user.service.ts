@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { SignUpRequest } from './dtos/sign-up.request';
 
 @Injectable()
 export class UserService {
@@ -14,5 +15,9 @@ export class UserService {
       name: '외계인',
       password: 'password',
     };
+  }
+
+  signUp(dto: SignUpRequest) {
+    return { accessToken: 'testAccessToken', address: dto.address };
   }
 }
