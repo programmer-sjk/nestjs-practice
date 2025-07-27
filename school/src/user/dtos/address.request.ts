@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
-
+import { Address } from '../entities/address.entity';
 export class AddressRequest {
   @IsNotEmpty()
   @IsString()
@@ -12,4 +12,8 @@ export class AddressRequest {
   @IsNotEmpty()
   @IsString()
   zipCode: string;
+
+  toEntity() {
+    return Address.of(this.street, this.city, this.zipCode);
+  }
 }
