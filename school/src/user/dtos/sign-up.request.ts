@@ -14,7 +14,7 @@ export class SignUpRequest {
 
   @IsNotEmpty()
   @IsString()
-  passWord: string;
+  password: string;
 
   @IsNotEmpty()
   @ValidateNested()
@@ -25,7 +25,7 @@ export class SignUpRequest {
     return User.of(
       this.name,
       this.email,
-      this.passWord,
+      this.password,
       this.address.toEntity(),
     );
   }
