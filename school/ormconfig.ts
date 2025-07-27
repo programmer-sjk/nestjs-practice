@@ -1,6 +1,6 @@
-import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 
-export const connectionOptions: TypeOrmModuleOptions = {
+export const connectionOptions: DataSourceOptions = {
   type: 'postgres',
   host: 'localhost',
   port: 5433,
@@ -13,3 +13,5 @@ export const connectionOptions: TypeOrmModuleOptions = {
   migrations: [__dirname + '/src/migrations/*.{js,ts}'],
   migrationsTableName: 'migrations',
 };
+
+export default new DataSource(connectionOptions);
