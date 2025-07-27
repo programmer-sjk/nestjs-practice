@@ -16,5 +16,5 @@ export function setNestApp(app: INestApplication) {
     new SnakeToCamelPipe(),
     new ValidationPipe({ transform: true }),
   );
-  app.setGlobalPrefix('/v1/api'); // glit-dev load 밸런서와 통신하기 위해 설정. 추후엔 /v1으로 수정되어야 함.
+  app.setGlobalPrefix('/v1');
 }
