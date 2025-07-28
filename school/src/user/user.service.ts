@@ -7,16 +7,8 @@ export class UserService {
 
   constructor(private readonly userRepository: UserRepository) {}
 
-  findOneByName(name: string) {
-    if (name !== this.CORRECT_NAME) {
-      return;
-    }
-
-    return {
-      id: 1,
-      name: '외계인',
-      password: 'password',
-    };
+  async findOneByEmail(email: string) {
+    return this.userRepository.findOneBy({ email });
   }
 
   signUp(dto: SignUpRequest) {
