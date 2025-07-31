@@ -1,4 +1,5 @@
 import { Controller, Post, Request, UseGuards } from '@nestjs/common';
+import { ResponseEntity } from '../common/response-entity';
 import { AuthService } from './auth.service';
 import { AccountAuthGuard } from './guards/account-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -10,7 +11,7 @@ export class AuthController {
   @UseGuards(AccountAuthGuard)
   @Post('/login')
   login(@Request() req) {
-    return req.user;
+    return ResponseEntity.OK({ accessToken: req.user.accessToken });
   }
 
   @UseGuards(AccountAuthGuard)
