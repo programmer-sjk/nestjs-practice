@@ -2,11 +2,12 @@ import {
   Column,
   CreateDateColumn,
   DeleteDateColumn,
+  Entity,
   Index,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-// @Entity()
+@Entity()
 export class Instructor {
   @PrimaryGeneratedColumn()
   id: number;

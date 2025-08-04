@@ -12,8 +12,7 @@ export class Course1754302488556 implements MigrationInterface {
         "description" character varying NOT NULL, 
         "createdAt" TIMESTAMP NOT NULL DEFAULT now(), 
         "deletedAt" TIMESTAMP, 
-        CONSTRAINT "PK_bf95180dd756fd204fb01ce4916" 
-        PRIMARY KEY ("id"))`,
+        CONSTRAINT "PK_bf95180dd756fd204fb01ce4916" PRIMARY KEY ("id"))`,
     );
   }
 
