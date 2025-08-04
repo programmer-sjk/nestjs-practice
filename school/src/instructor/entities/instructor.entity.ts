@@ -27,4 +27,12 @@ export class Instructor {
 
   @DeleteDateColumn()
   deletedAt: Date;
+
+  static of(name: string, email: string, password: string) {
+    const instructor = new Instructor();
+    instructor.name = name;
+    instructor.email = email;
+    instructor.password = password;
+    return instructor;
+  }
 }
