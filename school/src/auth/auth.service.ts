@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InstructorService } from '../instructor/instructor.service';
 import { Student } from '../user/entities/student.entity';
 import { StudentService } from '../user/student.service';
 
@@ -7,10 +8,11 @@ import { StudentService } from '../user/student.service';
 export class AuthService {
   constructor(
     private studentService: StudentService,
+    private instructorService: InstructorService,
     private jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string) {
+  async validateStudent(email: string, password: string) {
     const student = await this.studentService.findOneByEmail(email);
     if (student && student.password === password) {
       return student;
