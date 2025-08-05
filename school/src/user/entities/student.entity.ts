@@ -9,7 +9,7 @@ import {
 import { Address } from './address.entity';
 
 @Entity()
-export class User {
+export class Student {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -33,12 +33,12 @@ export class User {
   deletedAt: Date;
 
   static of(name: string, email: string, password: string, address: Address) {
-    const user = new User();
-    user.name = name;
-    user.email = email;
-    user.password = password;
-    user.address = address;
+    const student = new Student();
+    student.name = name;
+    student.email = email;
+    student.password = password;
+    student.address = address;
 
-    return user;
+    return student;
   }
 }

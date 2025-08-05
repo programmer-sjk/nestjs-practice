@@ -1,15 +1,15 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { ResponseEntity } from '../common/response-entity';
 import { SignUpRequest } from './dtos/sign-up.request';
-import { UserService } from './user.service';
+import { StudentService } from './student.service';
 
-@Controller('users')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+@Controller('students')
+export class StudentController {
+  constructor(private readonly studentService: StudentService) {}
 
   @Post()
   async signUp(@Body() request: SignUpRequest) {
-    await this.userService.signUp(request);
+    await this.studentService.signUp(request);
     return ResponseEntity.OK();
   }
 }

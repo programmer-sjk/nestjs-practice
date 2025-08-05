@@ -1,6 +1,6 @@
 import { Type } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsString, ValidateNested } from 'class-validator';
-import { User } from '../entities/user.entity';
+import { Student } from '../entities/student.entity';
 import { AddressRequest } from './address.request';
 
 export class SignUpRequest {
@@ -22,7 +22,7 @@ export class SignUpRequest {
   address: AddressRequest;
 
   toEntity() {
-    return User.of(
+    return Student.of(
       this.name,
       this.email,
       this.password,
