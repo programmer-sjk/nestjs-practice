@@ -1,4 +1,5 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { ResponseEntity } from '../common/response-entity';
 import { InstructorSignUpRequest } from './dtos/instructor-sign-up.request';
 import { InstructorService } from './instructor.service';
 
@@ -8,6 +9,7 @@ export class InstructorController {
 
   @Post()
   async signUp(@Body() body: InstructorSignUpRequest) {
-    return this.instructorService.signUp(body);
+    await this.instructorService.signUp(body);
+    return ResponseEntity.OK();
   }
 }

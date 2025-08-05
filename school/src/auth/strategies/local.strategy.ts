@@ -20,7 +20,6 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     }
 
     const payload = { name: user.name, sub: user.id };
-    console.log(this.jwtService.sign(payload));
     return {
       accessToken: this.jwtService.sign(payload),
     };
