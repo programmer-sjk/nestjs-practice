@@ -19,6 +19,13 @@ export class AuthService {
     }
   }
 
+  async validateInstructor(email: string, password: string) {
+    const instructor = await this.instructorService.findOneByEmail(email);
+    if (instructor && instructor.password === password) {
+      return instructor;
+    }
+  }
+
   login(student: Student) {
     const payload = { name: student.name, sub: student.id };
     return {
