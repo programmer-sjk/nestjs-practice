@@ -9,10 +9,7 @@ export class InstructorLocalStrategy extends PassportStrategy(
   'instructor',
 ) {
   constructor(private authService: AuthService) {
-    super({
-      usernameField: 'email', // 또는 employeeId 등
-      passwordField: 'password',
-    });
+    super({ usernameField: 'email' });
   }
 
   async validate(email: string, password: string): Promise<any> {
