@@ -4,7 +4,7 @@ import { connectionOptions } from '../ormconfig';
 import { AuthModule } from './auth/auth.module';
 import { CourseModule } from './course/course.module';
 import { InstructorModule } from './instructor/instructor.module';
-import { StudentModule } from './user/student.module';
+import { StudentModule } from './student/student.module';
 
 @Module({
   imports: [
