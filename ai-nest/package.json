@@ -20,9 +20,13 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@langchain/core": "^0.3.68",
+    "@langchain/openai": "^0.6.6",
     "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "langchain": "^0.3.30",
     "ollama": "^0.5.17",
     "openai": "^5.12.1",
     "reflect-metadata": "^0.2.2",
