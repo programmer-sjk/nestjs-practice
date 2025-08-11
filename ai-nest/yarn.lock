@@ -864,6 +864,33 @@
     zod "^3.25.32"
     zod-to-json-schema "^3.22.3"
 
+"@langchain/langgraph-checkpoint@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@langchain/langgraph-checkpoint/-/langgraph-checkpoint-0.1.0.tgz#d2a8bd9eb831f47cfe8b74bc196004388a6083bb"
+  integrity sha512-7oY5b0VQSxcV3DgoHdXiCgBhEzml/ZjZfKNeuq6oZ3ggcdUICa/fzrIBbFju6gxPU8ly93s0OsjF4yURnHw70Q==
+  dependencies:
+    uuid "^10.0.0"
+
+"@langchain/langgraph-sdk@~0.0.105":
+  version "0.0.105"
+  resolved "https://registry.yarnpkg.com/@langchain/langgraph-sdk/-/langgraph-sdk-0.0.105.tgz#cfed3483f9ae249d65813f68566667407e6e3c4e"
+  integrity sha512-3DD1W1wnbP48807qq+5gY248mFcwwNGqKdmZt05P3zeLpfP5Sfm6ELzVvqHGpr+qumP0yGRZs/7qArYGXRRfcQ==
+  dependencies:
+    "@types/json-schema" "^7.0.15"
+    p-queue "^6.6.2"
+    p-retry "4"
+    uuid "^9.0.0"
+
+"@langchain/langgraph@^0.4.3":
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/@langchain/langgraph/-/langgraph-0.4.3.tgz#ee7dfbf4815afa6e5172b7878b6b47ba86749ba4"
+  integrity sha512-wYi0LsJ+VQMpOHradx0apZtDXR5iINLus9mtvaVwT2qS78wd9Ic/XWKHHpVUNGDpO2KalTkmJWWXVjYKW5C3Rw==
+  dependencies:
+    "@langchain/langgraph-checkpoint" "^0.1.0"
+    "@langchain/langgraph-sdk" "~0.0.105"
+    uuid "^10.0.0"
+    zod "^3.25.32"
+
 "@langchain/openai@>=0.1.0 <0.7.0", "@langchain/openai@^0.6.6":
   version "0.6.6"
   resolved "https://registry.yarnpkg.com/@langchain/openai/-/openai-0.6.6.tgz#fe31fbd6e672669eb0dd8d41adc354550aca3da3"
@@ -5631,6 +5658,11 @@ uuid@^10.0.0:
   version "10.0.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-10.0.0.tgz#5a95aa454e6e002725c79055fd42aaba30ca6294"
   integrity sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==
+
+uuid@^9.0.0:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.1.tgz#e188d4c8853cc722220392c424cd637f32293f30"
+  integrity sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"
