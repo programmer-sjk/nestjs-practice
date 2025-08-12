@@ -21,6 +21,7 @@ import { Body, Controller, Post } from '@nestjs/common';
 
 import ollama from 'ollama';
 import OpenAI from 'openai';
+import { AppService } from './app.service';
 
 interface ChatHistory {
   role: 'system' | 'user' | 'assistant';
@@ -65,7 +66,7 @@ export class AppController {
   // LangGraph 실제 체크포인터 (메모리 세이버)
   private readonly checkpointer = new MemorySaver();
 
-  constructor() {
+  constructor(private readonly appService: AppService) {
     this.openaiClient = new OpenAI();
     this.model = new ChatOpenAI({
       modelName: 'gpt-4o',
@@ -135,19 +136,7 @@ export class AppController {
 
   @Post('openai')
   async getOpenAi(@Body('prompt') prompt: string) {
-    const completion = await this.openaiClient.chat.completions.create({
-      model: 'gpt-4o',
-      messages: [...this.histories, { role: 'user', content: prompt }],
-    });
-
-    const aiMessage = completion.choices[0].message.content;
-
-    this.histories.push(
-      { role: 'user', content: prompt },
-      { role: 'assistant', content: aiMessage ?? '' },
-    );
-
-    return aiMessage;
+    return this.appService.openai(prompt);
   }
 
   @Post('composition')
