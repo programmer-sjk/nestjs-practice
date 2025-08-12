@@ -3,10 +3,6 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { GoogleGenAI } from '@google/genai';
-import { StringOutputParser } from '@langchain/core/output_parsers';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
-import { RunnableLambda } from '@langchain/core/runnables';
 import {
   Annotation,
   END,
@@ -56,12 +52,6 @@ interface CompositionState {
 export class AppController {
   private readonly openaiClient: OpenAI;
   private readonly model: ChatOpenAI;
-  private readonly gemini: GoogleGenAI;
-  private readonly histories: ChatHistory[] = [];
-  private readonly langChainHistories: LangChainChatHistory[] = [];
-
-  // 세션별 상태 저장소 (체크포인트)
-  private readonly sessionStates = new Map<string, CompositionState>();
 
   // LangGraph 실제 체크포인터 (메모리 세이버)
   private readonly checkpointer = new MemorySaver();
@@ -70,12 +60,6 @@ export class AppController {
     this.openaiClient = new OpenAI();
     this.model = new ChatOpenAI({
       modelName: 'gpt-4o',
-    });
-    this.gemini = new GoogleGenAI({});
-
-    this.histories.push({
-      role: 'system',
-      content: 'You are a helpful assistant.',
     });
   }
 
@@ -89,105 +73,9 @@ export class AppController {
     return response.message.content;
   }
 
-  @Post('image')
-  async getImageByAi(@Body('prompt') prompt: string) {
-    try {
-      const response = await this.gemini.models.generateImages({
-        model: 'imagen-4.0-generate-preview-06-06',
-        prompt,
-        config: {
-          numberOfImages: 2,
-          aspectRatio: '1:1',
-        },
-      });
-
-      console.log('Gemini response structure:', Object.keys(response));
-      console.log('Generated images count:', response.generatedImages?.length);
-
-      const imageBytes = response.generatedImages?.[0].image?.imageBytes;
-
-      if (imageBytes) {
-        // Base64 데이터를 Data URL로 변환
-        const base64Image = `data:image/png;base64,${imageBytes}`;
-
-        return {
-          success: true,
-          prompt,
-          imageUrl: base64Image,
-          imageSize: imageBytes.length,
-          totalImages: response.generatedImages?.length || 0,
-        };
-      } else {
-        return {
-          success: false,
-          error: 'No image data received',
-          rawResponse: response,
-        };
-      }
-    } catch (error) {
-      console.error('Image generation error:', error);
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
-        prompt: prompt,
-      };
-    }
-  }
-
   @Post('openai')
   async getOpenAi(@Body('prompt') prompt: string) {
     return this.appService.openai(prompt);
-  }
-
-  @Post('composition')
-  async compositoin(@Body('prompt') prompt: string) {
-    const promptTemplate = ChatPromptTemplate.fromMessages([
-      ...this.langChainHistories.map(
-        (history) => [history.role, history.content] as [string, string],
-      ),
-      ['human', prompt] as [string, string], // user → human 변경
-    ]);
-
-    const chain = promptTemplate
-      .pipe(this.model)
-      .pipe(new StringOutputParser())
-      .pipe(this.addHistory(prompt))
-      .pipe(this.requestAnotherLlm());
-
-    const response = await chain.invoke({});
-    return response;
-  }
-
-  private addHistory(prompt: string) {
-    return new RunnableLambda({
-      func: (input: string) => {
-        this.langChainHistories.push(
-          {
-            role: 'human', // user → human 변경
-            content: prompt,
-          },
-          {
-            role: 'ai',
-            content: input,
-          },
-        );
-
-        return input;
-      },
-    });
-  }
-
-  private requestAnotherLlm() {
-    return new RunnableLambda({
-      func: async (input: string) => {
-        const completion = await this.openaiClient.chat.completions.create({
-          model: 'gpt-4o',
-          messages: [...this.histories, { role: 'user', content: input }],
-        });
-
-        return completion.choices[0].message.content;
-      },
-    });
   }
 
   @Post('real-langgraph')
