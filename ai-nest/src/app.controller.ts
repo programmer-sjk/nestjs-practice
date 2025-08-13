@@ -13,40 +13,11 @@ import {
 import { ChatOpenAI } from '@langchain/openai';
 // LangGraph imports - 이미 위에서 가져옴
 
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 
 import ollama from 'ollama';
 import OpenAI from 'openai';
 import { AppService } from './app.service';
-
-interface ChatHistory {
-  role: 'system' | 'user' | 'assistant';
-  content: string;
-}
-
-interface LangChainChatHistory {
-  role: 'system' | 'human' | 'ai'; // user → human 변경
-  content: string;
-}
-
-// LangGraph State 인터페이스
-interface CompositionState {
-  prompt: string;
-  history: LangChainChatHistory[];
-  firstLlmResponse: string;
-  secondLlmResponse: string;
-  currentStep:
-    | typeof START
-    | 'first_llm'
-    | 'save_history'
-    | 'second_llm'
-    | typeof END;
-  error?: string;
-  // 체크포인트 정보 추가
-  completedSteps: string[];
-  sessionId: string;
-  lastSuccessfulStep?: string;
-}
 
 @Controller()
 export class AppController {
@@ -63,6 +34,20 @@ export class AppController {
     });
   }
 
+  @Post('test')
+  test2(@Body('prompt') prompt: string) {
+    return this.appService.test2(prompt);
+  }
+
+  @Post()
+  async test(
+    @Body('prompt') prompt: string,
+    @Query('userId') userId: number,
+    @Query('isErr') isErr: boolean,
+  ) {
+    return this.appService.test(prompt, userId, isErr);
+  }
+
   @Post()
   async getOllama(@Body('prompt') prompt: string) {
     const response = await ollama.chat({
@@ -76,6 +61,11 @@ export class AppController {
   @Post('openai')
   async getOpenAi(@Body('prompt') prompt: string) {
     return this.appService.openai(prompt);
+  }
+
+  @Post('search-ai')
+  async serachInternetOnAi(@Body('prompt') prompt: string) {
+    return this.appService.searchInternet(prompt);
   }
 
   @Post('real-langgraph')
