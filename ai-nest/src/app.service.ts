@@ -12,7 +12,9 @@ import {
   StateGraph,
 } from '@langchain/langgraph';
 import { MemorySaver } from '@langchain/langgraph-checkpoint';
+import { ToolNode } from '@langchain/langgraph/prebuilt';
 import { ChatOpenAI } from '@langchain/openai';
+import { TavilySearch } from '@langchain/tavily';
 import { Injectable } from '@nestjs/common';
 import crypto from 'crypto';
 
@@ -238,5 +240,25 @@ export class AppService {
       .pipe(this.model)
       .pipe(new StringOutputParser())
       .invoke({ prompt });
+  }
+
+  async searchInternet(prompt: string) {
+    const tools = [new TavilySearch({ maxResults: 3 })];
+
+    const modelWithTools = this.model.bindTools(tools);
+    const llmResponse = await modelWithTools.invoke(
+      `Search for information about: ${prompt}`,
+    );
+
+    if (llmResponse.tool_calls?.length) {
+      const toolNode = new ToolNode(tools);
+      const toolResults = await toolNode.invoke({
+        messages: [llmResponse],
+      });
+
+      return toolResults.messages as any;
+    }
+
+    return llmResponse.content as any;
   }
 }
