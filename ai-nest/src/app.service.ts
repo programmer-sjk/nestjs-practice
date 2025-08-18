@@ -261,4 +261,12 @@ export class AppService {
 
     return llmResponse.content as any;
   }
+
+  // ✅ Delay 함수 (초 단위)
+  private async delay(seconds: number): Promise<void> {
+    console.log(`⏳ Delaying for ${seconds} seconds...`);
+    return new Promise((resolve) => {
+      setTimeout(resolve, seconds * 1000);
+    });
+  }
 }
