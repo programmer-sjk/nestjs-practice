@@ -1,6 +1,7 @@
 import { Controller, Post, Request, UseGuards } from '@nestjs/common';
 import { ResponseEntity } from '../common/response-entity';
 import { AuthService } from './auth.service';
+import { InstructortAuthGuard } from './guards/instructor-auth.guard';
 import { StudentAuthGuard } from './guards/student-auth.guard';
 
 @Controller('auth')
@@ -13,7 +14,7 @@ export class AuthController {
     return ResponseEntity.OK({ accessToken: req.user.accessToken as string });
   }
 
-  @UseGuards(StudentAuthGuard)
+  @UseGuards(InstructortAuthGuard)
   @Post('/instructor/login')
   instructorLogin(@Request() req) {
     return ResponseEntity.OK({ accessToken: req.user.accessToken as string });

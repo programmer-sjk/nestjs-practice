@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { InstructorModule } from '../instructor/instructor.module';
-import { StudentModule } from '../user/student.module';
+import { StudentModule } from '../student/student.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { InstructorLocalStrategy } from './strategies/instructor.strategy';
