@@ -32,7 +32,7 @@ export class AppService {
     // this.checkpointer = new CustomRedisCheckpointSaver(new Redis());
   }
 
-  async test(userId: number, isErr: boolean, prompt: string) {
+  async recoverFromFailPoint(userId: number, isErr: boolean, prompt: string) {
     const config = { configurable: { thread_id: userId } };
 
     const node1 = async (state: typeof MessagesAnnotation.State) => {
