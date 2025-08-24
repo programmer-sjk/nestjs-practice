@@ -14,9 +14,9 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Post()
-  async test() {
-    return this.appService.test();
+  @Post('multi-chain')
+  async multipleChain() {
+    return this.appService.multipleChain();
   }
 
   @Post('prompt')
