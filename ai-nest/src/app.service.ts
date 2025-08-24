@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
 import {
@@ -9,14 +6,13 @@ import {
   START,
   StateGraph,
 } from '@langchain/langgraph';
-import {
-  BaseCheckpointSaver,
-  MemorySaver,
-} from '@langchain/langgraph-checkpoint';
+import { BaseCheckpointSaver } from '@langchain/langgraph-checkpoint';
 import { ToolNode } from '@langchain/langgraph/prebuilt';
 import { ChatOpenAI } from '@langchain/openai';
 import { TavilySearch } from '@langchain/tavily';
 import { Injectable } from '@nestjs/common';
+import Redis from 'ioredis';
+import { CustomRedisCheckpointSaver } from './utils/custom-redis-check-pointer';
 
 @Injectable()
 export class AppService {
@@ -28,8 +24,18 @@ export class AppService {
       modelName: 'gpt-4.1-mini',
     });
 
-    this.checkpointer = new MemorySaver();
-    // this.checkpointer = new CustomRedisCheckpointSaver(new Redis());
+    // this.checkpointer = new MemorySaver();
+    this.checkpointer = new CustomRedisCheckpointSaver(new Redis());
+  }
+
+  async simplePrompt() {
+    return ChatPromptTemplate.fromMessages([
+      ['system', '결과만 리턴해주세요.'],
+      ['human', '3곱하기 {number}은?'],
+    ])
+      .pipe(this.model)
+      .pipe(new StringOutputParser())
+      .invoke({ number: 10 });
   }
 
   async recoverFromFailPoint(userId: number, isErr: boolean, prompt: string) {

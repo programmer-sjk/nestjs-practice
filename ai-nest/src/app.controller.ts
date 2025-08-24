@@ -15,6 +15,16 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post()
+  async test() {
+    return this.appService.test();
+  }
+
+  @Post('prompt')
+  async prompt() {
+    return this.appService.simplePrompt();
+  }
+
+  @Post('langgraph')
   async recoverFromFailPoint(
     @Query('userId') userId: number,
     @Query('isErr') isErr: boolean,
