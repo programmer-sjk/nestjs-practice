@@ -1,4 +1,17 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
+import { PromptService } from './prompt.service';
 
 @Controller('prompt')
-export class PromptController {}
+export class PromptController {
+  constructor(private readonly promptService: PromptService) {}
+
+  @Post('few-shot')
+  async fewShot(@Body('prompt') prompt: string) {
+    return this.promptService.fewShotExample(prompt);
+  }
+
+  @Post('simple')
+  async simplePrompt(@Body('prompt') prompt: string) {
+    return this.promptService.simplePrompt(prompt);
+  }
+}
