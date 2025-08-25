@@ -33,11 +33,6 @@ export class AppController {
     return this.appService.recoverFromFailPoint(userId, isErr, prompt);
   }
 
-  @Post('few-shot')
-  async fewShot(@Body('prompt') prompt: string) {
-    return this.appService.fewShotExample(prompt);
-  }
-
   @Post()
   async getOllama(@Body('prompt') prompt: string) {
     const response = await ollama.chat({
