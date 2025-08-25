@@ -1,5 +1,5 @@
 import { StringOutputParser } from '@langchain/core/output_parsers';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
 import { ChatOpenAI } from '@langchain/openai';
 import { Injectable } from '@nestjs/common';
 
@@ -31,5 +31,16 @@ export class PromptService {
       .pipe(this.model)
       .pipe(new StringOutputParser())
       .invoke({ prompt });
+  }
+
+  async simplePrompt(prompt: string) {
+    const chatPrompt = PromptTemplate.fromTemplate(
+      '안녕하세요 제 이름은 {name}입니다',
+    );
+
+    return chatPrompt
+      .pipe(this.model)
+      .pipe(new StringOutputParser())
+      .invoke({ name: '정국' });
   }
 }
