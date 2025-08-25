@@ -22,6 +22,7 @@
   "dependencies": {
     "@langchain/core": "^0.3.68",
     "@langchain/langgraph": "^0.4.3",
+    "@langchain/langgraph-checkpoint-mongodb": "^0.1.0",
     "@langchain/openai": "^0.6.6",
     "@langchain/tavily": "^0.1.5",
     "@nestjs/common": "^11.0.1",
@@ -30,6 +31,7 @@
     "@nestjs/platform-express": "^11.0.1",
     "ioredis": "^5.7.0",
     "langchain": "^0.3.30",
+    "mongodb": "^6.18.0",
     "ollama": "^0.5.17",
     "openai": "^5.12.1",
     "reflect-metadata": "^0.2.2",
