@@ -5,9 +5,10 @@ import { AppService } from './app.service';
 import { PromptModule } from './prompt/prompt.module';
 import { LangchainModule } from './langchain/langchain.module';
 import { LanggraphModule } from './langgraph/langgraph.module';
+import { RagModule } from './rag/rag.module';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }), PromptModule, LangchainModule, LanggraphModule],
+  imports: [ConfigModule.forRoot({ isGlobal: true }), PromptModule, LangchainModule, LanggraphModule, RagModule],
   controllers: [AppController],
   providers: [AppService],
 })
