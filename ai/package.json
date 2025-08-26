@@ -20,7 +20,8 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
-    "@langchain/core": "^0.3.68",
+    "@langchain/community": "^0.3.53",
+    "@langchain/core": "^0.3.72",
     "@langchain/langgraph": "^0.4.3",
     "@langchain/langgraph-checkpoint-mongodb": "^0.1.0",
     "@langchain/openai": "^0.6.6",
@@ -29,6 +30,8 @@
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
     "@nestjs/platform-express": "^11.0.1",
+    "cheerio": "^1.1.2",
+    "chromadb": "^3.0.14",
     "ioredis": "^5.7.0",
     "langchain": "^0.3.30",
     "mongodb": "^6.18.0",
