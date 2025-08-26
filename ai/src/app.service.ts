@@ -8,12 +8,12 @@ import {
   StateGraph,
 } from '@langchain/langgraph';
 import { BaseCheckpointSaver } from '@langchain/langgraph-checkpoint';
+import { MongoDBSaver } from '@langchain/langgraph-checkpoint-mongodb';
 import { ToolNode } from '@langchain/langgraph/prebuilt';
 import { ChatOpenAI } from '@langchain/openai';
 import { TavilySearch } from '@langchain/tavily';
 import { Injectable } from '@nestjs/common';
-import Redis from 'ioredis';
-import { CustomRedisCheckpointSaver } from './utils/custom-redis-check-pointer';
+import { MongoClient } from 'mongodb';
 
 @Injectable()
 export class AppService {
@@ -25,8 +25,19 @@ export class AppService {
       modelName: 'gpt-4.1-mini',
     });
 
+    // Option 1: MemorySaver (개발용)
     // this.checkpointer = new MemorySaver();
-    this.checkpointer = new CustomRedisCheckpointSaver(new Redis());
+
+    // Option 2: CustomRedisCheckpointSaver (직접 구현)
+    // this.checkpointer = new CustomRedisCheckpointSaver(new Redis());
+
+    // Option 3: MongoDBSaver (공식 패키지 - 실무 권장)
+    this.checkpointer = new MongoDBSaver({
+      client: new MongoClient(process.env.MONGODB_CONNECTION_STRING ?? ''),
+      dbName: 'glit',
+      checkpointCollectionName: 'checkpoints',
+      checkpointWritesCollectionName: 'checkpoint_writes',
+    });
   }
 
   async multipleChain() {
