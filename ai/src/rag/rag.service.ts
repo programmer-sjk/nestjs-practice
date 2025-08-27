@@ -23,30 +23,9 @@ export class RagService {
     });
   }
 
-  async test() {
-    const url =
-      'https://ko.wikipedia.org/wiki/%EC%9C%84%ED%82%A4%EB%B0%B1%EA%B3%BC:%EC%A0%95%EC%B1%85%EA%B3%BC_%EC%A7%80%EC%B9%A8#:~:text=%EC%9C%84%ED%82%A4%EB%B0%B1%EA%B3%BC%EC%9D%98%20%EC%A0%95%EC%B1%85(Policy,%EC%9E%88%EB%8A%94%20%EB%B0%B1%EA%B3%BC%EC%82%AC%EC%A0%84%20%EC%9E%91%EC%84%B1%EC%9D%B4%EC%A7%80%EC%9A%94.';
-
-    const loader = new CheerioWebBaseLoader(url);
-    const docs = await loader.load();
-
-    const splitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 500,
-      chunkOverlap: 50,
-    });
-
-    const chunks = await splitter.splitDocuments(docs);
-    const embeddings = new OpenAIEmbeddings({
-      model: 'text-embedding-3-small',
-    });
-
-    const vectorStore = new Chroma(embeddings, {
-      collectionName: `test-collection-${Date.now()}`,
-      clientParams: {
-        host: 'localhost',
-        port: 8000,
-      },
-    });
+  async simpleRag() {
+    const chunks = await this.splitDocumentsFromDocuments();
+    const vectorStore = this.getVectorStore();
     await vectorStore.addDocuments(chunks);
 
     const prompt = ChatPromptTemplate.fromMessages([
@@ -69,7 +48,35 @@ export class RagService {
       new StringOutputParser(),
     ]).invoke(question);
 
-    console.log(result);
     return result;
+  }
+
+  private async splitDocumentsFromDocuments() {
+    const url =
+      'https://ko.wikipedia.org/wiki/%EC%9C%84%ED%82%A4%EB%B0%B1%EA%B3%BC:%EC%A0%95%EC%B1%85%EA%B3%BC_%EC%A7%80%EC%B9%A8#:~:text=%EC%9C%84%ED%82%A4%EB%B0%B1%EA%B3%BC%EC%9D%98%20%EC%A0%95%EC%B1%85(Policy,%EC%9E%88%EB%8A%94%20%EB%B0%B1%EA%B3%BC%EC%82%AC%EC%A0%84%20%EC%9E%91%EC%84%B1%EC%9D%B4%EC%A7%80%EC%9A%94.';
+
+    const loader = new CheerioWebBaseLoader(url);
+    const docs = await loader.load();
+
+    const splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 500,
+      chunkOverlap: 50,
+    });
+
+    return splitter.splitDocuments(docs);
+  }
+
+  private getVectorStore() {
+    const embeddings = new OpenAIEmbeddings({
+      model: 'text-embedding-3-small',
+    });
+
+    return new Chroma(embeddings, {
+      collectionName: `test-collection-${Date.now()}`,
+      clientParams: {
+        host: 'localhost',
+        port: 8000,
+      },
+    });
   }
 }

@@ -6,7 +6,7 @@ export class RagController {
   constructor(private readonly ragService: RagService) {}
 
   @Post()
-  async test() {
-    return this.ragService.test();
+  async simple() {
+    return this.ragService.simpleRag();
   }
 }
