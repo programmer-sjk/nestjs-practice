@@ -1,4 +1,10 @@
-import { Annotation, END, START, StateGraph } from '@langchain/langgraph';
+import {
+  Annotation,
+  CompiledStateGraph,
+  END,
+  START,
+  StateGraph,
+} from '@langchain/langgraph';
 import { ChatOpenAI } from '@langchain/openai';
 import { Injectable } from '@nestjs/common';
 
@@ -38,4 +44,11 @@ export class LanggraphService {
     const aiMessage = await this.model.invoke(state.messages);
     return { messages: [aiMessage] };
   };
+
+  private async displayMermaidGraph(
+    graph: CompiledStateGraph<any, any, any, any, any, any>,
+  ) {
+    const representation = await graph.getGraphAsync();
+    console.log(representation.drawMermaid());
+  }
 }
