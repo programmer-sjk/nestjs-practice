@@ -33,14 +33,18 @@ export class PromptService {
       .invoke({ prompt });
   }
 
-  async simplePrompt(prompt: string) {
-    const chatPrompt = PromptTemplate.fromTemplate(
-      '안녕하세요 제 이름은 {name}입니다',
-    );
-
-    return chatPrompt
+  async simplePrompt() {
+    return ChatPromptTemplate.fromMessages([
+      ['system', '결과만 리턴해주세요.'],
+      ['human', '3곱하기 {number}은?'],
+    ])
       .pipe(this.model)
       .pipe(new StringOutputParser())
-      .invoke({ name: '정국' });
+      .invoke({ number: 10 });
+  }
+
+  async simplePrompt2(prompt: string) {
+    const chatPrompt = PromptTemplate.fromTemplate(prompt);
+    return chatPrompt.pipe(this.model).pipe(new StringOutputParser()).invoke();
   }
 }

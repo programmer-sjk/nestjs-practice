@@ -11,7 +11,12 @@ export class PromptController {
   }
 
   @Post('simple')
-  async simplePrompt(@Body('prompt') prompt: string) {
-    return this.promptService.simplePrompt(prompt);
+  async simplePrompt() {
+    return this.promptService.simplePrompt();
+  }
+
+  @Post('simple2')
+  async simplePrompt2(@Body('prompt') prompt: string) {
+    return this.promptService.simplePrompt2(prompt);
   }
 }

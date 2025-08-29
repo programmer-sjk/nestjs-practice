@@ -65,16 +65,6 @@ export class AppService {
     });
   }
 
-  async simplePrompt() {
-    return ChatPromptTemplate.fromMessages([
-      ['system', '결과만 리턴해주세요.'],
-      ['human', '3곱하기 {number}은?'],
-    ])
-      .pipe(this.model)
-      .pipe(new StringOutputParser())
-      .invoke({ number: 10 });
-  }
-
   async recoverFromFailPoint(userId: number, isErr: boolean, prompt: string) {
     const config = { configurable: { thread_id: userId } };
 

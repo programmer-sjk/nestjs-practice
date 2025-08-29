@@ -19,11 +19,6 @@ export class AppController {
     return this.appService.multipleChain();
   }
 
-  @Post('prompt')
-  async prompt() {
-    return this.appService.simplePrompt();
-  }
-
   @Post('langgraph')
   async recoverFromFailPoint(
     @Query('userId') userId: number,
