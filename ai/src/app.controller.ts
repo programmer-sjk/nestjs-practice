@@ -14,11 +14,6 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Post('multi-chain')
-  async multipleChain() {
-    return this.appService.multipleChain();
-  }
-
   @Post('langgraph')
   async recoverFromFailPoint(
     @Query('userId') userId: number,

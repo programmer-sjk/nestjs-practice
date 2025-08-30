@@ -1,5 +1,6 @@
 import { StringOutputParser } from '@langchain/core/output_parsers';
 import { ChatPromptTemplate, PromptTemplate } from '@langchain/core/prompts';
+import { RunnableSequence } from '@langchain/core/runnables';
 import { ChatOpenAI } from '@langchain/openai';
 import { Injectable } from '@nestjs/common';
 
@@ -46,5 +47,30 @@ export class PromptService {
   async simplePrompt2(prompt: string) {
     const chatPrompt = PromptTemplate.fromTemplate(prompt);
     return chatPrompt.pipe(this.model).pipe(new StringOutputParser()).invoke();
+  }
+
+  async multipleChain() {
+    const multiplyChain1 = ChatPromptTemplate.fromMessages([
+      [
+        'system',
+        '결과만 리턴해주세요. 예를 들어 3곱하기 3은 9입니다. 에서 9만 리턴하세요',
+      ],
+      ['human', '3곱하기 {number}은?'],
+    ])
+      .pipe(this.model)
+      .pipe(new StringOutputParser());
+
+    const multiplyChain2 = ChatPromptTemplate.fromMessages([
+      ['human', '5곱하기 {number}은?'],
+    ])
+      .pipe(this.model)
+      .pipe(new StringOutputParser());
+
+    return RunnableSequence.from([
+      { number: multiplyChain1 },
+      multiplyChain2,
+    ]).invoke({
+      number: 1,
+    });
   }
 }

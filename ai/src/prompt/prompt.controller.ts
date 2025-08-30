@@ -19,4 +19,9 @@ export class PromptController {
   async simplePrompt2(@Body('prompt') prompt: string) {
     return this.promptService.simplePrompt2(prompt);
   }
+
+  @Post('multi-chain')
+  async multipleChain() {
+    return this.promptService.multipleChain();
+  }
 }
