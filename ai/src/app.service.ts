@@ -107,14 +107,12 @@ export class AppService {
       .compile({ checkpointer: this.checkpointer });
 
     const state = await workflow.getState(config);
-    console.log(state);
 
     if (
       state.next.length > 0 ||
       (state.next.length === 0 &&
         (state.values as typeof MessagesAnnotation.State).messages?.length > 0)
     ) {
-      console.log(state.values.messages);
       const result = await workflow.invoke(null, config);
       return result.messages.map((v) => v.content);
     }
