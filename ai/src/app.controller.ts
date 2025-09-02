@@ -5,7 +5,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 // LangGraph imports - 이미 위에서 가져옴
 
-import { Body, Controller, Post, Query } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 
 import ollama from 'ollama';
 import { AppService } from './app.service';
@@ -13,15 +13,6 @@ import { AppService } from './app.service';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
-
-  @Post('langgraph')
-  async recoverFromFailPoint(
-    @Query('userId') userId: number,
-    @Query('isErr') isErr: boolean,
-    @Body('prompt') prompt: string,
-  ) {
-    return this.appService.recoverFromFailPoint(userId, isErr, prompt);
-  }
 
   @Post()
   async getOllama(@Body('prompt') prompt: string) {

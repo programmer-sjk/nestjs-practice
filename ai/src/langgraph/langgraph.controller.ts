@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { LanggraphService } from './langgraph.service';
 
 @Controller('langgraph')
@@ -8,5 +8,14 @@ export class LanggraphController {
   @Get()
   async test() {
     return this.langgraphService.test();
+  }
+
+  @Post('langgraph')
+  async graphWithCheckPoint(
+    @Query('userId') userId: number,
+    @Query('isErr') isErr: boolean,
+    @Body('prompt') prompt: string,
+  ) {
+    return this.langgraphService.recoverFromFailPoint(userId, isErr, prompt);
   }
 }
