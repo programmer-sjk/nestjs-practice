@@ -5,11 +5,6 @@ import { PromptService } from './prompt.service';
 export class PromptController {
   constructor(private readonly promptService: PromptService) {}
 
-  @Post('few-shot')
-  async fewShot(@Body('prompt') prompt: string) {
-    return this.promptService.fewShotExample(prompt);
-  }
-
   @Post('simple')
   async simplePrompt() {
     return this.promptService.simplePrompt();
@@ -23,5 +18,10 @@ export class PromptController {
   @Post('multi-chain')
   async multipleChain() {
     return this.promptService.multipleChain();
+  }
+
+  @Post('few-shot')
+  async fewShot(@Body('prompt') prompt: string) {
+    return this.promptService.fewShotExample(prompt);
   }
 }
