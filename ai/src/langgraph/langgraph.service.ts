@@ -38,7 +38,7 @@ export class LanggraphService {
     });
   }
 
-  async test() {
+  async simpleGraph() {
     const graphBuilder = new StateGraph(AgentState);
     const graph = graphBuilder
       .addNode('generate', this.generate)

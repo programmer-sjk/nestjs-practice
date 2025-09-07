@@ -6,8 +6,8 @@ export class LanggraphController {
   constructor(private readonly langgraphService: LanggraphService) {}
 
   @Get()
-  async test() {
-    return this.langgraphService.test();
+  async simpleGraph() {
+    return this.langgraphService.simpleGraph();
   }
 
   @Post('langgraph')
