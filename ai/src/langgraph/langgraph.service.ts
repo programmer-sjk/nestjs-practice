@@ -59,7 +59,7 @@ export class LanggraphService {
     return { messages: [aiMessage] };
   };
 
-  async recoverFromFailPoint(userId: number, isErr: boolean, prompt: string) {
+  async recoverFromFailPoint(userId: number, isErr: boolean) {
     const config = { configurable: { thread_id: userId } };
 
     const node1 = async (state: typeof MessagesAnnotation.State) => {

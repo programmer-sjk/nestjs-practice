@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { LanggraphService } from './langgraph.service';
 import { LanggraphController } from './langgraph.controller';
+import { LanggraphService } from './langgraph.service';
 
 @Module({
   providers: [LanggraphService],
-  controllers: [LanggraphController]
+  controllers: [LanggraphController],
 })
 export class LanggraphModule {}

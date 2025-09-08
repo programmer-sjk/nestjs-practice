@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { LangchainService } from './langchain.service';
 import { LangchainController } from './langchain.controller';
+import { LangchainService } from './langchain.service';
 
 @Module({
   providers: [LangchainService],
-  controllers: [LangchainController]
+  controllers: [LangchainController],
 })
 export class LangchainModule {}
