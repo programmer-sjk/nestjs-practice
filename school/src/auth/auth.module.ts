@@ -6,7 +6,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { InstructorLocalStrategy } from './strategies/instructor.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
-import { LocalStrategy } from './strategies/local.strategy';
+import { StudentStrategy } from './strategies/student.strategy';
 
 @Module({
   imports: [
@@ -17,7 +17,12 @@ import { LocalStrategy } from './strategies/local.strategy';
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  providers: [AuthService, LocalStrategy, JwtStrategy, InstructorLocalStrategy],
+  providers: [
+    AuthService,
+    StudentStrategy,
+    JwtStrategy,
+    InstructorLocalStrategy,
+  ],
   controllers: [AuthController],
 })
 export class AuthModule {}
