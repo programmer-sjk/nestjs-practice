@@ -1,3 +1,4 @@
+import { BadRequestException } from '@nestjs/common';
 import { MemberStatus } from '../enums/member-status.enum';
 
 export class Member {
@@ -11,5 +12,17 @@ export class Member {
     this.nickname = nickname;
     this.passwordHash = passwordHash;
     this.status = MemberStatus.PENDING;
+  }
+
+  activate() {
+    if (this.status !== MemberStatus.PENDING) {
+      throw new BadRequestException('pending 상태가 아닙니다.');
+    }
+
+    this.status = MemberStatus.ACTIVE;
+  }
+
+  deactivate() {
+    this.status = MemberStatus.DEACTIVATED;
   }
 }
