@@ -1,5 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { MemberStatus } from '../enums/member-status.enum';
+import { PasswordEncoder } from '../interfaces/password-encoder.interface';
 
 export class Member {
   email: string;
@@ -7,11 +8,20 @@ export class Member {
   passwordHash: string;
   status: MemberStatus;
 
-  constructor(email: string, nickname: string, passwordHash: string) {
+  private constructor(email: string, nickname: string, passwordHash: string) {
     this.email = email;
     this.nickname = nickname;
     this.passwordHash = passwordHash;
     this.status = MemberStatus.PENDING;
+  }
+
+  static create(
+    email: string,
+    nickname: string,
+    password: string,
+    PasswordEncoder: PasswordEncoder,
+  ) {
+    return new Member(email, nickname, PasswordEncoder.encode(password));
   }
 
   activate() {
@@ -23,6 +33,14 @@ export class Member {
   }
 
   deactivate() {
+    if (this.status !== MemberStatus.ACTIVE) {
+      throw new BadRequestException('active 상태가 아닙니다.');
+    }
+
     this.status = MemberStatus.DEACTIVATED;
+  }
+
+  verifyPassword(password: string, passwordEncoder: PasswordEncoder) {
+    return passwordEncoder.verify(password, this.passwordHash);
   }
 }
