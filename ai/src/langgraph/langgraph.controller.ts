@@ -10,7 +10,7 @@ export class LanggraphController {
     return this.langgraphService.simpleGraph();
   }
 
-  @Post('langgraph')
+  @Post()
   async graphWithCheckPoint(
     @Query('userId') userId: number,
     @Query('isErr') isErr: boolean,
