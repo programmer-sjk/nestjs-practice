@@ -46,7 +46,10 @@ export class PromptService {
 
   async simplePrompt2(prompt: string) {
     const chatPrompt = PromptTemplate.fromTemplate(prompt);
-    return chatPrompt.pipe(this.model).pipe(new StringOutputParser()).invoke();
+    return chatPrompt
+      .pipe(this.model)
+      .pipe(new StringOutputParser())
+      .invoke({ prompt });
   }
 
   async multipleChain() {
