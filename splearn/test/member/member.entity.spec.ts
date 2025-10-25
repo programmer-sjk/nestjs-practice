@@ -8,9 +8,7 @@ describe('Member', () => {
 
   beforeEach(() => {
     member = Member.create(
-      'test@example.com',
-      'test',
-      'password',
+      { email: 'test@example.com', nickname: 'test', password: 'password' },
       new PasswordEncoderDomainService(),
     );
   });
