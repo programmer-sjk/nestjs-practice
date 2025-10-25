@@ -10,9 +10,7 @@ export class MemberService {
 
   signUp(email: string, nickname: string, password: string) {
     return Member.create(
-      email,
-      nickname,
-      password,
+      { email, nickname, password },
       this.passwordEncoderDomainService,
     );
   }

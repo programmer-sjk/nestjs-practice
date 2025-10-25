@@ -1,5 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
 import { MemberStatus } from '../enums/member-status.enum';
+import { MemberProps } from '../interfaces/member-props.interface';
 import { PasswordEncoder } from '../interfaces/password-encoder.interface';
 
 export class Member {
@@ -15,13 +16,12 @@ export class Member {
     this.status = MemberStatus.PENDING;
   }
 
-  static create(
-    email: string,
-    nickname: string,
-    password: string,
-    PasswordEncoder: PasswordEncoder,
-  ) {
-    return new Member(email, nickname, PasswordEncoder.encode(password));
+  static create(props: MemberProps, PasswordEncoder: PasswordEncoder) {
+    return new Member(
+      props.email,
+      props.nickname,
+      PasswordEncoder.encode(props.password),
+    );
   }
 
   activate() {
