@@ -2,14 +2,15 @@ import { BadRequestException } from '@nestjs/common';
 import { MemberStatus } from '../enums/member-status.enum';
 import { MemberProps } from '../interfaces/member-props.interface';
 import { PasswordEncoder } from '../interfaces/password-encoder.interface';
+import { Email } from './vo/email.vo';
 
 export class Member {
-  email: string;
+  email: Email;
   nickname: string;
   passwordHash: string;
   status: MemberStatus;
 
-  private constructor(email: string, nickname: string, passwordHash: string) {
+  private constructor(email: Email, nickname: string, passwordHash: string) {
     this.email = email;
     this.nickname = nickname;
     this.passwordHash = passwordHash;
@@ -17,8 +18,10 @@ export class Member {
   }
 
   static create(props: MemberProps, PasswordEncoder: PasswordEncoder) {
+    const email = new Email(props.email);
+
     return new Member(
-      props.email,
+      email,
       props.nickname,
       PasswordEncoder.encode(props.password),
     );
