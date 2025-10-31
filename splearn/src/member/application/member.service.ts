@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PasswordEncoderDomainService } from './domain-services/password-encoder.domain-service';
-import { Member } from './entities/member.entity';
+import { PasswordEncoderDomainService } from '../domain-services/password-encoder.domain-service';
+import { Member } from '../entities/member.entity';
 
 @Injectable()
 export class MemberService {
