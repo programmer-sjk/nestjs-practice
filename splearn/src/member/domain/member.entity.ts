@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { MemberStatus } from '../enums/member-status.enum';
 import { MemberProps } from '../interfaces/member-props.interface';
 import { PasswordEncoder } from '../interfaces/password-encoder.interface';
-import { Email } from './vo/email.vo';
+import { Email } from './email.vo';
 
 export class Member {
   id: number;
