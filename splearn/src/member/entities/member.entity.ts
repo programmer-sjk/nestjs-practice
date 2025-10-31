@@ -5,6 +5,7 @@ import { PasswordEncoder } from '../interfaces/password-encoder.interface';
 import { Email } from './vo/email.vo';
 
 export class Member {
+  id: number;
   email: Email;
   nickname: string;
   passwordHash: string;
