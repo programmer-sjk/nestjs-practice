@@ -1,5 +1,5 @@
 export class Email {
-  private readonly value: string;
+  private readonly _value: string;
 
   constructor(value: string) {
     if (!value) {
@@ -10,6 +10,10 @@ export class Email {
       throw new Error('Email is invalid');
     }
 
-    this.value = value;
+    this._value = value;
+  }
+
+  get value(): string {
+    return this._value;
   }
 }

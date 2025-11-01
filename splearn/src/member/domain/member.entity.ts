@@ -4,14 +4,15 @@ import { MemberStatus } from '../enums/member-status.enum';
 import { MemberProps } from '../interfaces/member-props.interface';
 import { PasswordEncoder } from '../interfaces/password-encoder.interface';
 import { Email } from './email.vo';
+import { valueObjectTransformer } from '../../common/transformers/value-object.transformer';
 
 @Entity()
 export class Member {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  email: string;
+  @Column({ type: 'varchar', transformer: valueObjectTransformer(Email) })
+  email: Email;
 
   @Column()
   nickname: string;
@@ -23,7 +24,7 @@ export class Member {
   status: MemberStatus;
 
   private constructor(email: Email, nickname: string, passwordHash: string) {
-    this.email = email?.value;
+    this.email = email;
     this.nickname = nickname;
     this.passwordHash = passwordHash;
     this.status = MemberStatus.PENDING;
