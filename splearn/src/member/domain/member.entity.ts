@@ -1,18 +1,29 @@
 import { BadRequestException } from '@nestjs/common';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { MemberStatus } from '../enums/member-status.enum';
 import { MemberProps } from '../interfaces/member-props.interface';
 import { PasswordEncoder } from '../interfaces/password-encoder.interface';
 import { Email } from './email.vo';
 
+@Entity()
 export class Member {
+  @PrimaryGeneratedColumn()
   id: number;
-  email: Email;
+
+  @Column()
+  email: string;
+
+  @Column()
   nickname: string;
+
+  @Column()
   passwordHash: string;
+
+  @Column()
   status: MemberStatus;
 
   private constructor(email: Email, nickname: string, passwordHash: string) {
-    this.email = email;
+    this.email = email?.value;
     this.nickname = nickname;
     this.passwordHash = passwordHash;
     this.status = MemberStatus.PENDING;
