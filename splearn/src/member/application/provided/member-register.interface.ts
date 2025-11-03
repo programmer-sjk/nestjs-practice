@@ -2,5 +2,6 @@ import { MemberRegisterRequest } from '../../domain/member-register.request';
 import { Member } from '../../domain/member.entity';
 
 export interface MemberRegister {
-  register(dto: MemberRegisterRequest): Member;
+  register(dto: MemberRegisterRequest): Promise<Member>;
+  activate(id: number): Promise<Member>;
 }
