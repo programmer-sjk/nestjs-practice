@@ -1,10 +1,11 @@
 import { BadRequestException } from '@nestjs/common';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { valueObjectTransformer } from '../../common/transformers/value-object.transformer';
 import { MemberStatus } from '../enums/member-status.enum';
 import { MemberProps } from '../interfaces/member-props.interface';
 import { PasswordEncoder } from '../interfaces/password-encoder.interface';
 import { Email } from './email.vo';
-import { valueObjectTransformer } from '../../common/transformers/value-object.transformer';
+import { MemberDetail } from './member-detail.entity';
 
 @Entity()
 export class Member {
@@ -22,6 +23,9 @@ export class Member {
 
   @Column()
   status: MemberStatus;
+
+  // @OneToOne(() => MemberDetail, (detail) => detail.member)
+  detail: MemberDetail;
 
   private constructor(email: Email, nickname: string, passwordHash: string) {
     this.email = email;
