@@ -1,6 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
-import { PasswordEncoderDomainService } from '../../src/member/domain-services/password-encoder.domain-service';
 import { Member } from '../../src/member/domain/member.entity';
+import { PasswordEncoderDomainService } from '../../src/member/domain/password-encoder.domain-service';
 import { MemberStatus } from '../../src/member/enums/member-status.enum';
 
 describe('Member', () => {

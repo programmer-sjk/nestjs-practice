@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PasswordEncoderDomainService } from '../domain-services/password-encoder.domain-service';
 import { MemberRegisterRequest } from '../domain/member-register.request';
 import { Member } from '../domain/member.entity';
+import { PasswordEncoderDomainService } from '../domain/password-encoder.domain-service';
 import { MemberRegister } from './provided/member-register.interface';
 import { MemberRepository } from './required/member.repository';
 
