@@ -1,6 +1,6 @@
 import { DataSource } from 'typeorm';
 import { Seeder, SeederFactoryManager } from 'typeorm-extension';
-import { SearchDailySum } from './../../suggestion/entities/search-daily-sum.entity';
+import { SearchDailySum } from '../../suggestion/entities/search-daily-sum.entity';
 
 export default class SuggestionDailySumSeeder implements Seeder {
   public async run(
