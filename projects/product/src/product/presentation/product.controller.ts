@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
-import { ProductService } from '../application/product.service';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ProductRegisterRequest } from '../application/dto/product-register.request';
+import { ProductService } from '../application/services/product.service';
 
 @Controller('products')
 export class ProductController {
@@ -13,5 +14,10 @@ export class ProductController {
   @Get()
   async findAll() {
     return this.productService.findAll();
+  }
+
+  @Post()
+  async register(@Body() dto: ProductRegisterRequest) {
+    return this.productService.register(dto);
   }
 }

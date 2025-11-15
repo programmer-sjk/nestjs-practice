@@ -42,4 +42,24 @@ export class Product {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  static of(
+    storeId: number,
+    name: string,
+    basePrice: number,
+    description?: string,
+    thumbnailUrl?: string,
+    categoryId?: number,
+  ) {
+    const product = new Product();
+    product.storeId = storeId;
+    product.name = name;
+    product.basePrice = basePrice;
+    product.description = description;
+    product.thumbnailUrl = thumbnailUrl;
+    product.categoryId = categoryId;
+    product.status = ProductStatus.DRAFT;
+
+    return product;
+  }
 }

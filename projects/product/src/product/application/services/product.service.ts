@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ProductRepository } from '../infrastructure/persistence/product.repository';
+import { ProductRepository } from '../../infrastructure/persistence/product.repository';
+import { ProductRegisterRequest } from '../dto/product-register.request';
 
 @Injectable()
 export class ProductService {
@@ -11,5 +12,9 @@ export class ProductService {
 
   async findAll() {
     return this.productRepository.findAll();
+  }
+
+  async register(dto: ProductRegisterRequest) {
+    return this.productRepository.save(dto.toEntity());
   }
 }
