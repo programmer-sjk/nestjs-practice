@@ -1,4 +1,5 @@
 import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { ResponseEntity } from '../../common/response-entity';
 import { ProductRegisterRequest } from '../application/dto/product-register.request';
 import { ProductService } from '../application/services/product.service';
 
@@ -8,16 +9,19 @@ export class ProductController {
 
   @Get(':id')
   async find(@Param('id') id: number) {
-    return this.productService.find(id);
+    const result = await this.productService.find(id);
+    return ResponseEntity.OK(result);
   }
 
   @Get()
   async findAll() {
-    return this.productService.findAll();
+    const result = await this.productService.findAll();
+    return ResponseEntity.OK(result);
   }
 
   @Post()
   async register(@Body() dto: ProductRegisterRequest) {
-    return this.productService.register(dto);
+    await this.productService.register(dto);
+    return ResponseEntity.OK();
   }
 }
