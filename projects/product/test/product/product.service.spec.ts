@@ -55,4 +55,24 @@ describe('ProductService', () => {
       );
     });
   });
+
+  describe('findAll', () => {
+    it('상품 목록을 조회할 수 있다.', async () => {
+      // given
+      const storeId = 1;
+      const basePrice = 10000;
+      const productName = '2025년 신상 패딩';
+
+      const product = await productRepository.save(
+        ProductFactory.create(storeId, productName, basePrice),
+      );
+
+      // when
+      const result = await service.findAll();
+      expect(result.length).toBe(1);
+      expect(result[0].id).toBe(product.id);
+      expect(result[0].name).toBe(productName);
+      expect(result[0].basePrice).toBe(basePrice);
+    });
+  });
 });
