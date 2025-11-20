@@ -14,10 +14,11 @@ import { testConnectionOptions } from '../test-ormconfig';
 
 describe('Product E2E', () => {
   let app: INestApplication;
+  let module: TestingModule;
   let productRepository: ProductRepository;
 
   beforeAll(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(testConnectionOptions), ProductModule],
     }).compile();
 
@@ -34,6 +35,7 @@ describe('Product E2E', () => {
 
   afterAll(async () => {
     await app.close();
+    await module.close();
   });
 
   describe('GET /v1/products/:id', () => {

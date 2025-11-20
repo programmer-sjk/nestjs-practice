@@ -7,16 +7,21 @@ import { ProductModule } from '../../src/product/product.module';
 import { ProductFactory } from '../fixtures/product.factory';
 import { testConnectionOptions } from '../test-ormconfig';
 describe('ProductService', () => {
+  let module: TestingModule;
   let service: ProductService;
   let productRepository: ProductRepository;
 
   beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
+    module = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(testConnectionOptions), ProductModule],
     }).compile();
 
     service = module.get<ProductService>(ProductService);
     productRepository = module.get<ProductRepository>(ProductRepository);
+  });
+
+  afterAll(async () => {
+    await module.close();
   });
 
   it('should be defined', () => {
