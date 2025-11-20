@@ -1,3 +1,4 @@
+import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductService } from '../../src/product/application/services/product.service';
@@ -40,6 +41,13 @@ describe('ProductService', () => {
       expect(result.id).toBe(product.id);
       expect(result.name).toBe(productName);
       expect(result.basePrice).toBe(basePrice);
+    });
+
+    it('상품이 없다면 예외가 발생한다.', async () => {
+      // when
+      await expect(service.find(-1)).rejects.toThrow(
+        new NotFoundException('Product not found'),
+      );
     });
   });
 });
