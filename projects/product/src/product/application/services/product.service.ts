@@ -17,7 +17,8 @@ export class ProductService {
   }
 
   async findAll() {
-    return this.productRepository.findAll();
+    const products = await this.productRepository.findAll();
+    return products.map((product) => ProductResponse.from(product));
   }
 
   async register(dto: ProductRegisterRequest) {
