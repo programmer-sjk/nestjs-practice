@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductRepository } from '../../infrastructure/persistence/product.repository';
 import { ProductRegisterRequest } from '../dto/product-register.request';
+import { ProductResponse } from '../dto/product.response';
 
 @Injectable()
 export class ProductService {
@@ -12,7 +13,7 @@ export class ProductService {
       throw new NotFoundException('Product not found');
     }
 
-    return product;
+    return ProductResponse.from(product);
   }
 
   async findAll() {
