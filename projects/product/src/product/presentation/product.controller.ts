@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { ResponseEntity } from '../../common/response-entity';
 import { ProductRegisterRequest } from '../application/dto/product-register.request';
 import { ProductService } from '../application/services/product.service';
@@ -22,6 +22,12 @@ export class ProductController {
   @Post()
   async register(@Body() dto: ProductRegisterRequest) {
     await this.productService.register(dto);
+    return ResponseEntity.OK();
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: number) {
+    await this.productService.remove(id);
     return ResponseEntity.OK();
   }
 }

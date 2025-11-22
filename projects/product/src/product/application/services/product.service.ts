@@ -9,7 +9,6 @@ export class ProductService {
 
   async find(id: number) {
     const product = await this.findOneOrThrow(id);
-
     return ProductResponse.from(product);
   }
 
@@ -24,7 +23,6 @@ export class ProductService {
 
   async remove(id: number) {
     const product = await this.findOneOrThrow(id);
-
     await this.productRepository.remove(product);
   }
 
