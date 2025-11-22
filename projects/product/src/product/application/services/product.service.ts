@@ -8,10 +8,7 @@ export class ProductService {
   constructor(private readonly productRepository: ProductRepository) {}
 
   async find(id: number) {
-    const product = await this.productRepository.findOneById(id);
-    if (!product) {
-      throw new NotFoundException('Product not found');
-    }
+    const product = await this.findOneOrThrow(id);
 
     return ProductResponse.from(product);
   }
@@ -23,5 +20,20 @@ export class ProductService {
 
   async register(dto: ProductRegisterRequest) {
     return this.productRepository.save(dto.toEntity());
+  }
+
+  async remove(id: number) {
+    const product = await this.findOneOrThrow(id);
+
+    await this.productRepository.remove(product);
+  }
+
+  private async findOneOrThrow(id: number) {
+    const product = await this.productRepository.findOneById(id);
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product;
   }
 }
