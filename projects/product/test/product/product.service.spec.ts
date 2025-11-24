@@ -1,6 +1,7 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ProductUpdateRequest } from '../../src/product/application/dto/product-update.request';
 import { ProductService } from '../../src/product/application/services/product.service';
 import { ProductStatus } from '../../src/product/domain/enums/product-status.enum';
 import { ProductRepository } from '../../src/product/infrastructure/persistence/product.repository';
@@ -106,6 +107,31 @@ describe('ProductService', () => {
       expect(product[0].name).toBe(productName);
       expect(product[0].basePrice).toBe(basePrice);
       expect(product[0].status).toBe(ProductStatus.DRAFT);
+    });
+  });
+
+  describe('update', () => {
+    it('상품을 수정할 수 있다.', async () => {
+      // given
+      const storeId = 1;
+      const basePrice = 10000;
+      const productName = '2025년 신상 패딩';
+
+      const product = await productRepository.save(
+        ProductFactory.create(storeId, productName, basePrice),
+      );
+
+      const dto = new ProductUpdateRequest();
+      dto.name = '2025년 신상 패딩 2';
+      dto.basePrice = 15000;
+
+      // when
+      await service.update(product.id, dto);
+
+      // then
+      const result = await productRepository.findOneById(product.id);
+      expect(result?.name).toBe('2025년 신상 패딩 2');
+      expect(result?.basePrice).toBe(15000);
     });
   });
 

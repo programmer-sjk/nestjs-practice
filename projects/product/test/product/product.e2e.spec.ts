@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import request from 'supertest';
 import { ResponseEntity } from '../../src/common/response-entity';
 import { setNestApp } from '../../src/common/set-nest-app';
+import { ProductUpdateRequest } from '../../src/product/application/dto/product-update.request';
 import { Product } from '../../src/product/domain/entities/product.entity';
 import { ProductStatus } from '../../src/product/domain/enums/product-status.enum';
 import { ProductRepository } from '../../src/product/infrastructure/persistence/product.repository';
@@ -124,6 +125,34 @@ describe('Product E2E', () => {
       expect(product[0].name).toBe(productName);
       expect(product[0].basePrice).toBe(basePrice);
       expect(product[0].status).toBe(ProductStatus.DRAFT);
+    });
+  });
+
+  describe('PATCH /v1/products/:id', () => {
+    it('상품을 수정할 수 있다.', async () => {
+      // given
+      const storeId = 1;
+      const basePrice = 10000;
+      const productName = '2025년 신상 패딩';
+
+      const product = await productRepository.save(
+        ProductFactory.create(storeId, productName, basePrice),
+      );
+
+      const requestDto = new ProductUpdateRequest();
+      requestDto.name = '2025년 신상 패딩 2';
+      requestDto.basePrice = 15000;
+
+      // when
+      await request(app.getHttpServer())
+        .patch(`/v1/products/${product.id}`)
+        .send(requestDto)
+        .expect(HttpStatus.OK);
+
+      // then
+      const result = await productRepository.findOneById(product.id);
+      expect(result?.name).toBe('2025년 신상 패딩 2');
+      expect(result?.basePrice).toBe(15000);
     });
   });
 
