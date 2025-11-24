@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductRepository } from '../../infrastructure/persistence/product.repository';
 import { ProductRegisterRequest } from '../dto/product-register.request';
+import { ProductUpdateRequest } from '../dto/product-update.request';
 import { ProductResponse } from '../dto/product.response';
 
 @Injectable()
@@ -19,6 +20,19 @@ export class ProductService {
 
   async register(dto: ProductRegisterRequest) {
     return this.productRepository.save(dto.toEntity());
+  }
+
+  async update(id: number, dto: ProductUpdateRequest) {
+    const product = await this.findOneOrThrow(id);
+    product.update(
+      dto.name,
+      dto.basePrice,
+      dto.description,
+      dto.thumbnailUrl,
+      dto.categoryId,
+    );
+
+    await this.productRepository.save(product);
   }
 
   async remove(id: number) {

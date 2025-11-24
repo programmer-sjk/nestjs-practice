@@ -1,6 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { ResponseEntity } from '../../common/response-entity';
 import { ProductRegisterRequest } from '../application/dto/product-register.request';
+import { ProductUpdateRequest } from '../application/dto/product-update.request';
 import { ProductService } from '../application/services/product.service';
 
 @Controller('products')
@@ -22,6 +31,12 @@ export class ProductController {
   @Post()
   async register(@Body() dto: ProductRegisterRequest) {
     await this.productService.register(dto);
+    return ResponseEntity.OK();
+  }
+
+  @Patch(':id')
+  async update(@Param('id') id: number, @Body() dto: ProductUpdateRequest) {
+    await this.productService.update(id, dto);
     return ResponseEntity.OK();
   }
 
