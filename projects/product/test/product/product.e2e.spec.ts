@@ -126,4 +126,26 @@ describe('Product E2E', () => {
       expect(product[0].status).toBe(ProductStatus.DRAFT);
     });
   });
+
+  describe('DELETE /v1/products/:id', () => {
+    it('상품을 삭제할 수 있다.', async () => {
+      // given
+      const storeId = 1;
+      const basePrice = 10000;
+      const productName = '2025년 신상 패딩';
+
+      const product = await productRepository.save(
+        ProductFactory.create(storeId, productName, basePrice),
+      );
+
+      // when
+      await request(app.getHttpServer())
+        .delete(`/v1/products/${product.id}`)
+        .expect(HttpStatus.OK);
+
+      // then
+      const result = await productRepository.find();
+      expect(result).toHaveLength(0);
+    });
+  });
 });
