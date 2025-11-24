@@ -62,4 +62,18 @@ export class Product {
 
     return product;
   }
+
+  update(
+    name: string,
+    basePrice: number,
+    description?: string,
+    thumbnailUrl?: string,
+    categoryId?: number,
+  ) {
+    this.name = name;
+    this.basePrice = basePrice;
+    this.description = description;
+    this.thumbnailUrl = thumbnailUrl;
+    this.categoryId = categoryId;
+  }
 }
