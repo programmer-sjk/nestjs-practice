@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 
 export class ResponseEntity<T> {
@@ -26,16 +27,22 @@ export class ResponseEntity<T> {
     return new ResponseEntity(ResponseEntity.FAIL, message, data);
   }
 
+  @ApiProperty()
   @Expose()
   get success(): boolean {
     return this._success;
   }
 
+  @ApiProperty({
+    example: '',
+    description: '성공시 빈 문자열, 실패시 에러 메시지',
+  })
   @Expose()
   get message(): string {
     return this._message;
   }
 
+  @ApiProperty()
   @Expose()
   get data(): T {
     return this._data;

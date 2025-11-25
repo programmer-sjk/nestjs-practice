@@ -26,12 +26,12 @@ export function createResponseSchema<T>(dataType: Type<T> | 'string') {
 
 export const MutationResponseSchema: ApiResponseOptions = {
   status: 200,
-  description: '주문 영수증 조회 성공',
+  description: '쓰기 작업 성공',
   schema: {
-    allOf: [
-      {
-        $ref: getSchemaPath(ResponseEntity),
-      },
-    ],
+    properties: {
+      success: { type: 'boolean', example: false },
+      message: { type: 'string', example: '실패한 이유에 대한 메시지' },
+      data: { type: 'string', example: '' },
+    },
   },
 };
