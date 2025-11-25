@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
 import { Product } from '../../domain/entities/product.entity';
 import { ProductStatus } from '../../domain/enums/product-status.enum';
@@ -45,41 +46,49 @@ export class ProductResponse {
     );
   }
 
+  @ApiProperty()
   @Expose()
   get id(): number {
     return this._id;
   }
 
+  @ApiProperty()
   @Expose()
   get storeId(): number {
     return this._storeId;
   }
 
+  @ApiProperty()
   @Expose()
   get name(): string {
     return this._name;
   }
 
+  @ApiProperty()
   @Expose()
   get basePrice(): number {
     return this._basePrice;
   }
 
+  @ApiProperty()
   @Expose()
   get description(): string {
     return this._description ?? '';
   }
 
+  @ApiProperty()
   @Expose()
   get thumbnailUrl(): string {
     return this._thumbnailUrl ?? '';
   }
 
+  @ApiProperty({ enum: ProductStatus })
   @Expose()
   get status(): ProductStatus {
     return this._status;
   }
 
+  @ApiProperty()
   @Expose()
   get createdAt(): Date {
     return this._createdAt;
