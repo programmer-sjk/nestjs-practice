@@ -19,7 +19,10 @@ import { ProductRegisterRequest } from '../application/dto/product-register.requ
 import { ProductUpdateRequest } from '../application/dto/product-update.request';
 import { ProductResponse } from '../application/dto/product.response';
 import { ProductService } from '../application/services/product.service';
-import { ProductSuccessResponse } from '../swagger/product-schema';
+import {
+  ProductListSuccessResponse,
+  ProductSuccessResponse,
+} from '../swagger/product-schema';
 
 @ApiTags('products')
 @ApiExtraModels(ResponseEntity, ProductResponse)
@@ -36,7 +39,7 @@ export class ProductController {
   }
 
   @ApiOperation({ summary: '상품 목록 조회' })
-  @ApiResponse({ status: 200, type: [ProductResponse] })
+  @ApiResponse(ProductListSuccessResponse)
   @Get()
   async findAll() {
     const result = await this.productService.findAll();
