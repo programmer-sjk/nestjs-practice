@@ -1,14 +1,14 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ProductUpdateRequest } from '../../src/product/application/dto/product-update.request';
-import { ProductService } from '../../src/product/application/services/product.service';
-import { ProductStatus } from '../../src/product/domain/enums/product-status.enum';
-import { ProductRepository } from '../../src/product/infrastructure/persistence/product.repository';
-import { ProductModule } from '../../src/product/product.module';
-import { ProductRegisterRequestFactory } from '../fixtures/product-register-request.factory';
-import { ProductFactory } from '../fixtures/product.factory';
-import { testConnectionOptions } from '../test-ormconfig';
+import { ProductUpdateRequest } from '../../../../src/product/application/dto/product-update.request';
+import { ProductService } from '../../../../src/product/application/services/product.service';
+import { ProductStatus } from '../../../../src/product/domain/enums/product-status.enum';
+import { ProductRepository } from '../../../../src/product/infrastructure/persistence/product.repository';
+import { ProductModule } from '../../../../src/product/product.module';
+import { ProductRegisterRequestFactory } from '../../../fixtures/product-register-request.factory';
+import { ProductFactory } from '../../../fixtures/product.factory';
+import { testConnectionOptions } from '../../../test-ormconfig';
 
 describe('ProductService', () => {
   let module: TestingModule;
