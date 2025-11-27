@@ -1,22 +1,29 @@
 import { Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { Product } from '../../domain/entities/product.entity';
 import { IProductRepository } from '../../domain/repositories/product-repository.interface';
 
 @Injectable()
-export class ProductRepository
-  extends Repository<Product>
-  implements IProductRepository
-{
-  constructor(dataSource: DataSource) {
-    super(Product, dataSource.createEntityManager());
+export class ProductRepository implements IProductRepository {
+  constructor(
+    @InjectRepository(Product)
+    private readonly repository: Repository<Product>,
+  ) {}
+
+  async findOneById(id: number) {
+    return await this.repository.findOneBy({ id });
   }
 
-  async findOneById(id: number): Promise<Product | null> {
-    return super.findOneBy({ id });
+  async findAll() {
+    return await this.repository.find();
   }
 
-  async findAll(): Promise<Product[]> {
-    return super.find();
+  async save(product: Product) {
+    return await this.repository.save(product);
+  }
+
+  async remove(product: Product) {
+    return await this.repository.remove(product);
   }
 }
