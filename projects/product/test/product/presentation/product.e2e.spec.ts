@@ -2,28 +2,30 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import request from 'supertest';
-import { ResponseEntity } from '../../src/common/response-entity';
-import { setNestApp } from '../../src/common/set-nest-app';
-import { ProductUpdateRequest } from '../../src/product/application/dto/product-update.request';
-import { Product } from '../../src/product/domain/entities/product.entity';
-import { ProductStatus } from '../../src/product/domain/enums/product-status.enum';
-import { ProductRepository } from '../../src/product/infrastructure/persistence/product.repository';
-import { ProductModule } from '../../src/product/product.module';
-import { ProductRegisterRequestFactory } from '../fixtures/product-register-request.factory';
-import { ProductFactory } from '../fixtures/product.factory';
-import { testConnectionOptions } from '../test-ormconfig';
+import { DataSource, Repository } from 'typeorm';
+import { ResponseEntity } from '../../../src/common/response-entity';
+import { setNestApp } from '../../../src/common/set-nest-app';
+import { ProductUpdateRequest } from '../../../src/product/application/dto/product-update.request';
+import { Product } from '../../../src/product/domain/entities/product.entity';
+import { ProductStatus } from '../../../src/product/domain/enums/product-status.enum';
+import { ProductModule } from '../../../src/product/product.module';
+import { ProductRegisterRequestFactory } from '../../fixtures/product-register-request.factory';
+import { ProductFactory } from '../../fixtures/product.factory';
+import { testConnectionOptions } from '../../test-ormconfig';
 
 describe('Product E2E', () => {
   let app: INestApplication;
   let module: TestingModule;
-  let productRepository: ProductRepository;
+  let productRepository: Repository<Product>;
+  let dataSource: DataSource;
 
   beforeAll(async () => {
     module = await Test.createTestingModule({
       imports: [TypeOrmModule.forRoot(testConnectionOptions), ProductModule],
     }).compile();
 
-    productRepository = module.get<ProductRepository>(ProductRepository);
+    dataSource = module.get<DataSource>(DataSource);
+    productRepository = dataSource.getRepository(Product);
 
     app = module.createNestApplication();
     setNestApp(app);

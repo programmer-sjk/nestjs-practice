@@ -80,6 +80,8 @@ describe('ProductService', () => {
 
       // when
       const result = await service.findAll();
+
+      // then
       expect(result.length).toBe(1);
       expect(result[0].id).toBe(product.id);
       expect(result[0].name).toBe(productName);
