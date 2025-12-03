@@ -38,4 +38,23 @@ export class Merchant {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  static of(
+    email: string,
+    password: string,
+    businessNumber: string,
+    businessType: BusinessType,
+    representativeName: string,
+    phoneNumber: string,
+  ) {
+    const merchant = new Merchant();
+    merchant.email = email;
+    merchant.password = password;
+    merchant.businessNumber = businessNumber;
+    merchant.businessType = businessType;
+    merchant.representativeName = representativeName;
+    merchant.phoneNumber = phoneNumber;
+
+    return merchant;
+  }
 }
