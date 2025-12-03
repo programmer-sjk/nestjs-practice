@@ -11,19 +11,7 @@ export class MerchantRepository implements IMerchantRepository {
     private readonly repository: Repository<Merchant>,
   ) {}
 
-  async findOneById(id: number) {
-    return await this.repository.findOneBy({ id });
-  }
-
-  async findAll() {
-    return await this.repository.find();
-  }
-
   async save(merchant: Merchant) {
     return await this.repository.save(merchant);
-  }
-
-  async remove(merchant: Merchant) {
-    return await this.repository.remove(merchant);
   }
 }
