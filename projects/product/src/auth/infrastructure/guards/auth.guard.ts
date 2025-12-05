@@ -8,9 +8,9 @@ import { ConfigService } from '@nestjs/config';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
-import { ROLE_KEY } from './decorators/roles.decorator';
-import { Role } from './enums/role.enum';
-import { JwtPayload } from './interfaces/jwt-payload.interface';
+import { Role } from '../../domain/enums/role.enum';
+import { JwtPayload } from '../../interfaces/jwt-payload.interface';
+import { ROLE_KEY } from '../decorators/roles.decorator';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -21,9 +21,7 @@ export class AuthGuard implements CanActivate {
     private readonly configService: ConfigService,
     private readonly reflector: Reflector,
   ) {
-    this.jwtSecret = this.configService.getOrThrow<string>(
-      'JWT_SECRET',
-    ) as string;
+    this.jwtSecret = this.configService.getOrThrow<string>('JWT_SECRET');
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
