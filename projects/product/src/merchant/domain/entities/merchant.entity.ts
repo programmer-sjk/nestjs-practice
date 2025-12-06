@@ -60,7 +60,7 @@ export class Merchant {
   }
 
   verifyPassword(password: string) {
-    if (this.password === password) {
+    if (this.password !== password) {
       throw new UnauthorizedException('Invalid password');
     }
   }

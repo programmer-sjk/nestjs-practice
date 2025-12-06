@@ -1,4 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { bcryptHash } from '../../../utils/bcrypt-hash';
 import type { IMerchantRepository } from '../../domain/repositories/merchant-repository.interface';
 import { MerchantSignUpRequest } from '../dto/merchant-signup.request';
 
@@ -14,6 +15,7 @@ export class MerchantService {
   }
 
   async signUp(dto: MerchantSignUpRequest) {
-    await this.merchantRepository.save(dto.toEntity());
+    const hashedPassword = await bcryptHash(dto.password);
+    await this.merchantRepository.save(dto.toEntity(hashedPassword));
   }
 }

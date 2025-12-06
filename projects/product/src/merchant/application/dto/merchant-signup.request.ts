@@ -6,8 +6,8 @@ import {
   Length,
   MaxLength,
 } from 'class-validator';
-import { BusinessType } from '../../domain/enums/business-type.enum';
 import { Merchant } from '../../domain/entities/merchant.entity';
+import { BusinessType } from '../../domain/enums/business-type.enum';
 
 export class MerchantSignUpRequest {
   @ApiProperty()
@@ -43,10 +43,10 @@ export class MerchantSignUpRequest {
   @IsString()
   phoneNumber: string;
 
-  toEntity() {
+  toEntity(hashedPassword: string) {
     return Merchant.of(
       this.email,
-      this.password,
+      hashedPassword,
       this.businessNumber,
       this.businessType,
       this.representativeName,
