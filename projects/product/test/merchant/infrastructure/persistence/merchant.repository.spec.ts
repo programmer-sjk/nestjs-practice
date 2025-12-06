@@ -31,6 +31,22 @@ describe('MerchantRepository', () => {
     await module.close();
   });
 
+  describe('findOneByEmail', () => {
+    it('email로 상점 관리자를 조회할 수 있다.', async () => {
+      // given
+      const email = 'test@example.com';
+      const merchant = await merchantRepository.save(
+        MerchantFactory.create(email),
+      );
+
+      // when
+      const result = await repository.findOneByEmail(email);
+
+      // then
+      expect(result?.id).toBe(merchant.id);
+    });
+  });
+
   describe('save', () => {
     it('상점 관리자를 저장할 수 있다.', async () => {
       // given
