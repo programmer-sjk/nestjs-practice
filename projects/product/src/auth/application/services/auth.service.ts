@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { MerchantService } from '../../../merchant/application/services/merchant.service';
+import { bcryptHash } from '../../../utils/bcrypt-hash';
 import { Role } from '../../domain/enums/role.enum';
 import { JwtPayload } from '../../infrastructure/interfaces/jwt-payload.interface';
 import { LoginResponse } from '../dto/login.response';
@@ -25,7 +26,8 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
-    merchant.verifyPassword(dto.password);
+    const hashedPassword = await bcryptHash(dto.password);
+    merchant.verifyPassword(hashedPassword);
 
     const payload: JwtPayload = {
       userRole: Role.MERCHANT,
