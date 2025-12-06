@@ -5,6 +5,7 @@ import { MerchantService } from '../../../../src/merchant/application/services/m
 import { Merchant } from '../../../../src/merchant/domain/entities/merchant.entity';
 import { MerchantModule } from '../../../../src/merchant/merchant.module';
 import { MerchantSignupRequestFactory } from '../../../fixtures/merchant-signup-request.factory';
+import { MerchantFactory } from '../../../fixtures/merchant.factory';
 import { testConnectionOptions } from '../../../test-ormconfig';
 
 describe('MerchantService', () => {
@@ -33,6 +34,21 @@ describe('MerchantService', () => {
 
   it('should be defined', () => {
     expect(service).toBeDefined();
+  });
+
+  describe('findByEmail', () => {
+    it('email로 상점 관리자를 조회할 수 있다.', async () => {
+      // given
+      const merchant = await merchantRepository.save(
+        MerchantFactory.create('test@example.com'),
+      );
+
+      // when
+      const result = await service.findByEmail('test@example.com');
+
+      // then
+      expect(result?.id).toBe(merchant.id);
+    });
   });
 
   describe('signUp', () => {
