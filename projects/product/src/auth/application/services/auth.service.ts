@@ -4,6 +4,7 @@ import { JwtService } from '@nestjs/jwt';
 import { MerchantService } from '../../../merchant/application/services/merchant.service';
 import { Role } from '../../domain/enums/role.enum';
 import { JwtPayload } from '../../infrastructure/interfaces/jwt-payload.interface';
+import { LoginResponse } from '../dto/login.response';
 import { MerchantLoginRequest } from '../dto/merchant-login.request';
 
 @Injectable()
@@ -31,11 +32,11 @@ export class AuthService {
       merchantId: merchant.id,
     };
 
-    return {
-      accessToken: await this.jwtService.signAsync(payload, {
-        secret: this.jwtSecret,
-        expiresIn: '7d',
-      }),
-    };
+    const accessToken = await this.jwtService.signAsync(payload, {
+      secret: this.jwtSecret,
+      expiresIn: '7d',
+    });
+
+    return new LoginResponse(accessToken);
   }
 }
