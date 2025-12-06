@@ -1,7 +1,7 @@
 # NestJS 저장소
 
 - projects
-  - 실제 프로젝트라고 가정
-  - API, 테스트 코드, Open API 제공
+  - 실제 프로젝트라고 가정 (API, 테스트 코드, Open API 제공)
+  - 추후 진행: 선착순 티켓 시스템, web socket
 - practices
   - 특정 개념이나 기술을 공부하고자 실습하는 일회성 프로젝트.
