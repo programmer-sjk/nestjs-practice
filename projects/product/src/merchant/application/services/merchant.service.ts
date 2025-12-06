@@ -9,6 +9,10 @@ export class MerchantService {
     private readonly merchantRepository: IMerchantRepository,
   ) {}
 
+  async findByEmail(email: string) {
+    return await this.merchantRepository.findOneByEmail(email);
+  }
+
   async signUp(dto: MerchantSignUpRequest) {
     await this.merchantRepository.save(dto.toEntity());
   }
