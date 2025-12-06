@@ -1,3 +1,4 @@
+import { UnauthorizedException } from '@nestjs/common';
 import {
   Column,
   CreateDateColumn,
@@ -56,5 +57,11 @@ export class Merchant {
     merchant.phoneNumber = phoneNumber;
 
     return merchant;
+  }
+
+  verifyPassword(password: string) {
+    if (this.password === password) {
+      throw new UnauthorizedException('Invalid password');
+    }
   }
 }
