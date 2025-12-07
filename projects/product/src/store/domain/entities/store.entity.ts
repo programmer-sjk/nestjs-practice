@@ -4,9 +4,12 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Merchant } from '../../../merchant/domain/entities/merchant.entity';
 import { StoreStatus } from '../enums/store-status.enum';
 
 @Entity()
@@ -41,6 +44,10 @@ export class Store {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  @ManyToOne(() => Merchant, (merchant) => merchant.stores)
+  @JoinColumn({ name: 'merchant_id' })
+  merchant: Merchant;
 
   static of(
     merchantId: number,

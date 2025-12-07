@@ -3,11 +3,13 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
 import { BusinessType } from '../enums/business-type.enum';
+import { Store } from '../../../store/domain/entities/store.entity';
 
 @Unique('UQ_MERCHANT_EMAIL', ['email'])
 @Unique('UQ_MERCHANT_BUSINESS_NUMBER', ['businessNumber'])
@@ -39,6 +41,9 @@ export class Merchant {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @OneToMany(() => Store, (store) => store.merchant)
+  stores: Store[];
 
   static of(
     email: string,
