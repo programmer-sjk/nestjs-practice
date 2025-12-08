@@ -52,7 +52,7 @@ export class Store {
   static of(
     merchantId: number,
     name: string,
-    address: string,
+    address?: string,
     addressDetail?: string,
     zipCode?: string,
   ) {
