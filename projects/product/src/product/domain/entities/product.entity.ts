@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
+  Index,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ProductStatus } from '../enums/product-status.enum';
 
+@Index('IDX_PRODUCT_STORE_ID_CATEGORY_ID', ['storeId', 'categoryId'])
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
