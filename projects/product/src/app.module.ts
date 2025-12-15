@@ -5,6 +5,7 @@ import { connectionOptions } from '../ormconfig';
 import { AuthModule } from './auth/auth.module';
 import { MerchantModule } from './merchant/merchant.module';
 import { ProductModule } from './product/product.module';
+import { StoreModule } from './store/store.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { ProductModule } from './product/product.module';
     ProductModule,
     MerchantModule,
     AuthModule,
+    StoreModule,
   ],
 })
 export class AppModule {}
