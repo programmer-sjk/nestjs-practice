@@ -22,8 +22,8 @@ describe('StoreService', () => {
     module = await Test.createTestingModule({
       imports: [
         TypeOrmModule.forRoot(testConnectionOptions),
-        MerchantModule,
         StoreModule,
+        MerchantModule,
       ],
     }).compile();
 
