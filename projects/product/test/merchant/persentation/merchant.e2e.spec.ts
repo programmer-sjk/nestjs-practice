@@ -8,6 +8,7 @@ import { Merchant } from '../../../src/merchant/domain/entities/merchant.entity'
 import { MerchantModule } from '../../../src/merchant/merchant.module';
 import { MerchantSignupRequestFactory } from '../../fixtures/merchant-signup-request.factory';
 import { testConnectionOptions } from '../../test-ormconfig';
+import { DatabaseCleaner } from '../../utils/database-cleaner';
 
 describe('Merchant E2E', () => {
   let app: INestApplication;
@@ -29,7 +30,8 @@ describe('Merchant E2E', () => {
   });
 
   beforeEach(async () => {
-    await merchantRepository.clear();
+    const dataSource = module.get<DataSource>(DataSource);
+    await DatabaseCleaner.cleanDatabase(dataSource);
   });
 
   afterAll(async () => {

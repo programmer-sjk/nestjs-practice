@@ -6,6 +6,7 @@ import { MerchantRepository } from '../../../../src/merchant/infrastructure/pers
 import { MerchantModule } from '../../../../src/merchant/merchant.module';
 import { MerchantFactory } from '../../../fixtures/merchant.factory';
 import { testConnectionOptions } from '../../../test-ormconfig';
+import { DatabaseCleaner } from '../../../utils/database-cleaner';
 
 describe('MerchantRepository', () => {
   let module: TestingModule;
@@ -24,7 +25,8 @@ describe('MerchantRepository', () => {
   });
 
   beforeEach(async () => {
-    await merchantRepository.clear();
+    const dataSource = module.get<DataSource>(DataSource);
+    await DatabaseCleaner.cleanDatabase(dataSource);
   });
 
   afterAll(async () => {
