@@ -1,8 +1,7 @@
+import { IBaseRepository } from '../../../common/base-repository.interface';
 import { Product } from '../entities/product.entity';
 
-export interface IProductRepository {
+export interface IProductRepository extends IBaseRepository<Product> {
   findOneById(id: number): Promise<Product | null>;
-  findAll(): Promise<Product[]>;
-  save(entity: Product | Product[]);
   remove(entity: Product);
 }

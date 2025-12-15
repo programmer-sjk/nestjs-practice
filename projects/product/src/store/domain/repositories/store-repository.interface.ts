@@ -1,5 +1,4 @@
+import { IBaseRepository } from '../../../common/base-repository.interface';
 import { Store } from '../entities/store.entity';
 
-export interface IStoreRepository {
-  save(entity: Store | Store[]);
-}
+export type IStoreRepository = IBaseRepository<Store>;

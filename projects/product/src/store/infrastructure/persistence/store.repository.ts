@@ -11,6 +11,10 @@ export class StoreRepository implements IStoreRepository {
     private readonly repository: Repository<Store>,
   ) {}
 
+  async findAll() {
+    return await this.repository.find();
+  }
+
   async save(store: Store) {
     return await this.repository.save(store);
   }

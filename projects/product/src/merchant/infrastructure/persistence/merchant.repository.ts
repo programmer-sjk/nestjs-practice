@@ -15,6 +15,10 @@ export class MerchantRepository implements IMerchantRepository {
     return await this.repository.findOneBy({ email });
   }
 
+  async findAll() {
+    return await this.repository.find();
+  }
+
   async save(merchant: Merchant) {
     return await this.repository.save(merchant);
   }
