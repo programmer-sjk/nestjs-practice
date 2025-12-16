@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { ProductStatus } from '../enums/product-status.enum';
 import { ProductOptionGroup } from './product-option-group.entity';
+import { ProductVariant } from './product-variant.entity';
 
 @Index('IDX_PRODUCT_STORE_ID_CATEGORY_ID', ['storeId', 'categoryId'])
 @Entity()
@@ -49,6 +50,9 @@ export class Product {
 
   @OneToMany(() => ProductOptionGroup, (optionGroup) => optionGroup.product)
   optionGroups: ProductOptionGroup[];
+
+  @OneToMany(() => ProductVariant, (variant) => variant.product)
+  variants: ProductVariant[];
 
   static of(
     storeId: number,

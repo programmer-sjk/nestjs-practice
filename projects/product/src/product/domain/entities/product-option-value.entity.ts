@@ -4,10 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ProductOptionGroup } from './product-option-group.entity';
+import { ProductVariantOptionValue } from './product-variant-option-value.entity';
 
 @Entity()
 export class ProductOptionValue {
@@ -38,6 +40,12 @@ export class ProductOptionValue {
   )
   @JoinColumn({ name: 'option_group_id' })
   optionGroup: ProductOptionGroup;
+
+  @OneToMany(
+    () => ProductVariantOptionValue,
+    (variantOptionValue) => variantOptionValue.optionValue,
+  )
+  variantOptionValues: ProductVariantOptionValue[];
 
   static of(
     optionGroupId: number,
