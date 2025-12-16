@@ -2,12 +2,15 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  Index,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ProductOptionValue } from './product-option-value.entity';
+import { Product } from './product.entity';
 
-@Index('IDX_PRODUCT_OPTION_GROUP_PRODUCT_ID', ['productId'])
 @Entity()
 export class ProductOptionGroup {
   @PrimaryGeneratedColumn()
@@ -30,6 +33,13 @@ export class ProductOptionGroup {
 
   @UpdateDateColumn()
   updatedAt: Date;
+
+  @ManyToOne(() => Product, (product) => product.optionGroups)
+  @JoinColumn({ name: 'productId' })
+  product: Product;
+
+  @OneToMany(() => ProductOptionValue, (optionValue) => optionValue.optionGroup)
+  optionValues: ProductOptionValue[];
 
   static of(
     productId: number,

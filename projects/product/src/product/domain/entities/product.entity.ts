@@ -4,10 +4,12 @@ import {
   DeleteDateColumn,
   Entity,
   Index,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { ProductStatus } from '../enums/product-status.enum';
+import { ProductOptionGroup } from './product-option-group.entity';
 
 @Index('IDX_PRODUCT_STORE_ID_CATEGORY_ID', ['storeId', 'categoryId'])
 @Entity()
@@ -44,6 +46,9 @@ export class Product {
 
   @DeleteDateColumn()
   deletedAt?: Date;
+
+  @OneToMany(() => ProductOptionGroup, (optionGroup) => optionGroup.product)
+  optionGroups: ProductOptionGroup[];
 
   static of(
     storeId: number,
