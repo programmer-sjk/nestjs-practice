@@ -35,7 +35,7 @@ export class ProductOptionGroup {
   updatedAt: Date;
 
   @ManyToOne(() => Product, (product) => product.optionGroups)
-  @JoinColumn({ name: 'productId' })
+  @JoinColumn({ name: 'product_id' })
   product: Product;
 
   @OneToMany(() => ProductOptionValue, (optionValue) => optionValue.optionGroup)

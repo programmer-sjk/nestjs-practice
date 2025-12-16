@@ -36,7 +36,7 @@ export class ProductOptionValue {
     () => ProductOptionGroup,
     (optionGroup) => optionGroup.optionValues,
   )
-  @JoinColumn({ name: 'optionGroupId' })
+  @JoinColumn({ name: 'option_group_id' })
   optionGroup: ProductOptionGroup;
 
   static of(
