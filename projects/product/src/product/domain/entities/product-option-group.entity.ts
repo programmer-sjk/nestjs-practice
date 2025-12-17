@@ -42,16 +42,19 @@ export class ProductOptionGroup {
   optionValues: ProductOptionValue[];
 
   static of(
-    productId: number,
     name: string,
     displayOrder: number = 0,
     isRequired: boolean = true,
+    optionValues?: ProductOptionValue[],
   ) {
     const optionGroup = new ProductOptionGroup();
-    optionGroup.productId = productId;
     optionGroup.name = name;
     optionGroup.displayOrder = displayOrder;
     optionGroup.isRequired = isRequired;
+
+    if (optionValues) {
+      optionGroup.optionValues = optionValues;
+    }
 
     return optionGroup;
   }

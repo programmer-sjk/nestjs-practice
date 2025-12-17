@@ -48,13 +48,11 @@ export class ProductOptionValue {
   variantOptionValues: ProductVariantOptionValue[];
 
   static of(
-    optionGroupId: number,
     value: string,
     additionalPrice: number = 0,
     displayOrder: number = 0,
   ) {
     const optionValue = new ProductOptionValue();
-    optionValue.optionGroupId = optionGroupId;
     optionValue.value = value;
     optionValue.additionalPrice = additionalPrice;
     optionValue.displayOrder = displayOrder;

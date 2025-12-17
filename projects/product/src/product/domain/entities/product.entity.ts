@@ -61,6 +61,7 @@ export class Product {
     description?: string,
     thumbnailUrl?: string,
     categoryId?: number,
+    optionGroups?: ProductOptionGroup[],
   ) {
     const product = new Product();
     product.storeId = storeId;
@@ -70,6 +71,10 @@ export class Product {
     product.thumbnailUrl = thumbnailUrl;
     product.categoryId = categoryId;
     product.status = ProductStatus.DRAFT;
+
+    if (optionGroups) {
+      product.optionGroups = optionGroups;
+    }
 
     return product;
   }
