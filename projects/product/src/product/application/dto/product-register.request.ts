@@ -13,39 +13,6 @@ import { ProductOptionGroup } from '../../domain/entities/product-option-group.e
 import { ProductOptionValue } from '../../domain/entities/product-option-value.entity';
 import { Product } from '../../domain/entities/product.entity';
 
-export class OptionGroupRegisterInputs {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  name: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  displayOrder?: number;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsBoolean()
-  isRequired?: boolean;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @ValidateNested({ each: true })
-  @Type(() => OptionValueRegisterInputs)
-  @IsArray()
-  optionValues?: OptionValueRegisterInputs[];
-
-  toEntity() {
-    return ProductOptionGroup.of(
-      this.name,
-      this.displayOrder,
-      this.isRequired,
-      this.optionValues?.map((optionValue) => optionValue.toEntity()),
-    );
-  }
-}
-
 export class ProductRegisterRequest {
   @ApiProperty()
   @IsNotEmpty()
@@ -93,6 +60,39 @@ export class ProductRegisterRequest {
       this.thumbnailUrl,
       this.categoryId,
       this.optionGroups?.map((option) => option.toEntity()),
+    );
+  }
+}
+
+export class OptionGroupRegisterInputs {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  name: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  displayOrder?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsBoolean()
+  isRequired?: boolean;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @ValidateNested({ each: true })
+  @Type(() => OptionValueRegisterInputs)
+  @IsArray()
+  optionValues?: OptionValueRegisterInputs[];
+
+  toEntity() {
+    return ProductOptionGroup.of(
+      this.name,
+      this.displayOrder,
+      this.isRequired,
+      this.optionValues?.map((optionValue) => optionValue.toEntity()),
     );
   }
 }
