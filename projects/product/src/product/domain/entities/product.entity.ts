@@ -48,7 +48,9 @@ export class Product {
   @DeleteDateColumn()
   deletedAt?: Date;
 
-  @OneToMany(() => ProductOptionGroup, (optionGroup) => optionGroup.product)
+  @OneToMany(() => ProductOptionGroup, (optionGroup) => optionGroup.product, {
+    cascade: ['insert', 'update'],
+  })
   optionGroups: ProductOptionGroup[];
 
   @OneToMany(() => ProductVariant, (variant) => variant.product)

@@ -38,7 +38,13 @@ export class ProductOptionGroup {
   @JoinColumn({ name: 'product_id' })
   product: Product;
 
-  @OneToMany(() => ProductOptionValue, (optionValue) => optionValue.optionGroup)
+  @OneToMany(
+    () => ProductOptionValue,
+    (optionValue) => optionValue.optionGroup,
+    {
+      cascade: ['insert', 'update'],
+    },
+  )
   optionValues: ProductOptionValue[];
 
   static of(
