@@ -13,32 +13,7 @@ import { ProductOptionGroup } from '../../domain/entities/product-option-group.e
 import { ProductOptionValue } from '../../domain/entities/product-option-value.entity';
 import { Product } from '../../domain/entities/product.entity';
 
-class OptionValueRegisterInputs {
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsString()
-  value: string;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  additionalPrice?: number;
-
-  @ApiPropertyOptional()
-  @IsOptional()
-  @IsNumber()
-  displayOrder?: number;
-
-  toEntity() {
-    return ProductOptionValue.of(
-      this.value,
-      this.additionalPrice,
-      this.displayOrder,
-    );
-  }
-}
-
-class OptionGroupRegisterInputs {
+export class OptionGroupRegisterInputs {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
@@ -118,6 +93,31 @@ export class ProductRegisterRequest {
       this.thumbnailUrl,
       this.categoryId,
       this.optionGroups?.map((option) => option.toEntity()),
+    );
+  }
+}
+
+export class OptionValueRegisterInputs {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsString()
+  value: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  additionalPrice?: number;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsNumber()
+  displayOrder?: number;
+
+  toEntity() {
+    return ProductOptionValue.of(
+      this.value,
+      this.additionalPrice,
+      this.displayOrder,
     );
   }
 }
