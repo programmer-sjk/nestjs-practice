@@ -3,5 +3,7 @@ import { Product } from '../entities/product.entity';
 
 export interface IProductRepository extends IBaseRepository<Product> {
   findOneById(id: number): Promise<Product | null>;
-  remove(entity: Product);
+  findOneWithRelations(id: number): Promise<Product | null>;
+  remove(entity: Product): Promise<Product>;
+  softRemove(entity: Product): Promise<Product>;
 }

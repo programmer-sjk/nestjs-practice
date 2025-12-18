@@ -15,6 +15,13 @@ export class ProductRepository implements IProductRepository {
     return await this.repository.findOneBy({ id });
   }
 
+  async findOneWithRelations(id: number) {
+    return await this.repository.findOne({
+      where: { id },
+      relations: ['optionGroups', 'optionGroups.optionValues'],
+    });
+  }
+
   async findAll() {
     return await this.repository.find();
   }
@@ -25,5 +32,9 @@ export class ProductRepository implements IProductRepository {
 
   async remove(product: Product) {
     return await this.repository.remove(product);
+  }
+
+  async softRemove(product: Product) {
+    return await this.repository.softRemove(product);
   }
 }
