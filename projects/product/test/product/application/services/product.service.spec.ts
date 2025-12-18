@@ -7,9 +7,14 @@ import { ProductService } from '../../../../src/product/application/services/pro
 import { Product } from '../../../../src/product/domain/entities/product.entity';
 import { ProductStatus } from '../../../../src/product/domain/enums/product-status.enum';
 import { ProductModule } from '../../../../src/product/product.module';
-import { ProductRegisterRequestFactory } from '../../../fixtures/product-register-request.factory';
+import {
+  OptionGroupRegisterFactory,
+  OptionValueRegisterFactory,
+  ProductRegisterRequestFactory,
+} from '../../../fixtures/product-register-request.factory';
 import { ProductFactory } from '../../../fixtures/product.factory';
 import { testConnectionOptions } from '../../../test-ormconfig';
+import { DatabaseCleaner } from '../../../utils/database-cleaner';
 
 describe('ProductService', () => {
   let module: TestingModule;
@@ -28,7 +33,8 @@ describe('ProductService', () => {
   });
 
   beforeEach(async () => {
-    await productRepository.clear();
+    const dataSource = module.get<DataSource>(DataSource);
+    await DatabaseCleaner.cleanDatabase(dataSource);
   });
 
   afterAll(async () => {
@@ -112,6 +118,48 @@ describe('ProductService', () => {
       expect(product[0].name).toBe(productName);
       expect(product[0].basePrice).toBe(basePrice);
       expect(product[0].status).toBe(ProductStatus.DRAFT);
+    });
+
+    it('상품 등록시 옵션 그룹과 값을 같이 등록할 수 있다.', async () => {
+      // given
+      const storeId = 1;
+      const productName = '2025년 신상 패딩';
+      const basePrice = 10000;
+
+      const optionGroup = OptionGroupRegisterFactory.create('색상');
+      optionGroup.optionValues = [
+        OptionValueRegisterFactory.create('레드'),
+        OptionValueRegisterFactory.create('블랙'),
+        OptionValueRegisterFactory.create('화이트'),
+      ];
+
+      const requestDto = ProductRegisterRequestFactory.createWithOptionGroups(
+        storeId,
+        productName,
+        basePrice,
+        [optionGroup],
+      );
+
+      // when
+      await service.register(requestDto);
+
+      // then
+      const product = await productRepository.find({
+        relations: ['optionGroups', 'optionGroups.optionValues'],
+      });
+      expect(product.length).toBe(1);
+      expect(product[0].storeId).toBe(storeId);
+      expect(product[0].name).toBe(productName);
+      expect(product[0].basePrice).toBe(basePrice);
+      expect(product[0].status).toBe(ProductStatus.DRAFT);
+
+      expect(product[0].optionGroups.length).toBe(1);
+      expect(product[0].optionGroups[0].name).toBe('색상');
+
+      expect(product[0].optionGroups[0].optionValues.length).toBe(3);
+      expect(product[0].optionGroups[0].optionValues[0].value).toBe('레드');
+      expect(product[0].optionGroups[0].optionValues[1].value).toBe('블랙');
+      expect(product[0].optionGroups[0].optionValues[2].value).toBe('화이트');
     });
   });
 
