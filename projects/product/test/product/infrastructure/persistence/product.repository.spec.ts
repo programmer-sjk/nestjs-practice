@@ -6,6 +6,7 @@ import { ProductRepository } from '../../../../src/product/infrastructure/persis
 import { ProductModule } from '../../../../src/product/product.module';
 import { ProductFactory } from '../../../fixtures/product.factory';
 import { testConnectionOptions } from '../../../test-ormconfig';
+import { DatabaseCleaner } from '../../../utils/database-cleaner';
 
 describe('ProductRepository', () => {
   let module: TestingModule;
@@ -24,7 +25,8 @@ describe('ProductRepository', () => {
   });
 
   beforeEach(async () => {
-    await productRepository.clear();
+    const dataSource = module.get<DataSource>(DataSource);
+    await DatabaseCleaner.cleanDatabase(dataSource);
   });
 
   afterAll(async () => {

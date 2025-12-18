@@ -12,6 +12,7 @@ import { ProductModule } from '../../../src/product/product.module';
 import { ProductRegisterRequestFactory } from '../../fixtures/product-register-request.factory';
 import { ProductFactory } from '../../fixtures/product.factory';
 import { testConnectionOptions } from '../../test-ormconfig';
+import { DatabaseCleaner } from '../../utils/database-cleaner';
 
 describe('Product E2E', () => {
   let app: INestApplication;
@@ -33,7 +34,8 @@ describe('Product E2E', () => {
   });
 
   beforeEach(async () => {
-    await productRepository.clear();
+    const dataSource = module.get<DataSource>(DataSource);
+    await DatabaseCleaner.cleanDatabase(dataSource);
   });
 
   afterAll(async () => {
