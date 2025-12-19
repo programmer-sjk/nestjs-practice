@@ -39,12 +39,28 @@ export class ProductService {
   }
 
   async remove(id: number) {
-    const product = await this.findOneOrThrow(id);
-    await this.productRepository.remove(product);
+    const product = await this.findOneWithRelationsOrThrow(id);
+
+    product.deletedAt = new Date();
+    for (const group of product.optionGroups) {
+      group.deletedAt = product.deletedAt;
+      group.optionValues.map((value) => (value.deletedAt = product.deletedAt));
+    }
+
+    await this.productRepository.save(product);
   }
 
   private async findOneOrThrow(id: number) {
     const product = await this.productRepository.findOneById(id);
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+
+    return product;
+  }
+
+  private async findOneWithRelationsOrThrow(id: number) {
+    const product = await this.productRepository.findOneWithRelations(id);
     if (!product) {
       throw new NotFoundException('Product not found');
     }
