@@ -7,6 +7,8 @@ import { ProductService } from '../../../../src/product/application/services/pro
 import { Product } from '../../../../src/product/domain/entities/product.entity';
 import { ProductStatus } from '../../../../src/product/domain/enums/product-status.enum';
 import { ProductModule } from '../../../../src/product/product.module';
+import { ProductOptionGroupFactory } from '../../../fixtures/product-option-group.factory';
+import { ProductOptionValueFactory } from '../../../fixtures/product-option-value.factory';
 import {
   OptionGroupRegisterFactory,
   OptionValueRegisterFactory,
@@ -205,6 +207,42 @@ describe('ProductService', () => {
       // then
       const result = await productRepository.find();
       expect(result).toHaveLength(0);
+    });
+
+    it('상품을 삭제할 때 옵션 그룹과 값도 삭제된다.', async () => {
+      // given
+      const storeId = 1;
+      const basePrice = 10000;
+      const productName = '2025년 신상 패딩';
+
+      const optionGroup = ProductOptionGroupFactory.create('색상');
+      optionGroup.optionValues = [
+        ProductOptionValueFactory.create('레드'),
+        ProductOptionValueFactory.create('블랙'),
+        ProductOptionValueFactory.create('화이트'),
+      ];
+
+      const product = await productRepository.save(
+        ProductFactory.createWithOptionGroups(storeId, productName, basePrice, [
+          optionGroup,
+        ]),
+      );
+
+      // when
+      await service.remove(product.id);
+
+      // then
+      const result = await productRepository.find({
+        withDeleted: true,
+        relations: ['optionGroups', 'optionGroups.optionValues'],
+      });
+      expect(result).toHaveLength(1);
+      expect(result[0].deletedAt).toBeDefined();
+
+      expect(result[0].optionGroups[0].deletedAt).toBeDefined();
+      expect(result[0].optionGroups[0].optionValues[0].deletedAt).toBeDefined();
+      expect(result[0].optionGroups[0].optionValues[1].deletedAt).toBeDefined();
+      expect(result[0].optionGroups[0].optionValues[2].deletedAt).toBeDefined();
     });
   });
 });
